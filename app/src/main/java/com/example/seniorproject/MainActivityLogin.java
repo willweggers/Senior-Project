@@ -1,5 +1,5 @@
 package com.example.seniorproject;
-//too access TI enter TI into username/ M enter M/ A enter A/ leave pass blank
+//too access TI enter TI into username/ M enter M/ A enter A/ leave pass blank (Password)
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
