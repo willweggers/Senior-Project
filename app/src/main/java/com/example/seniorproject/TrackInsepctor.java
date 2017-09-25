@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,11 +37,14 @@ import java.io.Writer;
  */
 
 public class TrackInsepctor extends BaseDriveActivitys {
-
+    //Tag used for log
     private String TAG = "Google Drive Activity";
-
-
+    //title for generated report
+    private String documentTitle = "A title";
+    //button that generate report and stores that report into root folder of google drive specified
     private Button endInspectionButton;
+    //button that changes gmail accout of google drive to be used
+    private Button changeGDAcc;
 
 
     @Override
@@ -48,19 +52,31 @@ public class TrackInsepctor extends BaseDriveActivitys {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_inspector);
         endInspectionButton = (Button) findViewById(R.id.endInspection);
-        setEndInspectionButton();
+        changeGDAcc = (Button) findViewById(R.id.changeDriveAcc);
 
+        setButtons();
     }
-    public void setEndInspectionButton(){
+
+    public void setButtons(){
+        //
         endInspectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Drive.DriveApi.newDriveContents(getGoogleApi())
                         .setResultCallback(driveContentsCallback);
+
             }
         });
-    }
+        changeGDAcc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDriveAccount();
+            }
+        });
 
+    }
+    //https://developers.google.com/drive/android/create-file
+    //above link for specifics on what is going on below
     final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback = new
             ResultCallback<DriveApi.DriveContentsResult>() {
                 @Override
@@ -79,14 +95,16 @@ public class TrackInsepctor extends BaseDriveActivitys {
                             OutputStream outputStream = driveContents.getOutputStream();
                             Writer writer = new OutputStreamWriter(outputStream);
                             try {
-                                writer.write("Hello World!");
+                                //what is written
+                                //might use something that can help format the report properly
+                                writer.write("hey");
                                 writer.close();
                             } catch (IOException e) {
                                 Log.e(TAG, e.getMessage());
                             }
 
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                    .setTitle("New file")
+                                    .setTitle(documentTitle)
                                     .setMimeType("text/plain")
                                     .setStarred(true).build();
 

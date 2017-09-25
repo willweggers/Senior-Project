@@ -18,7 +18,7 @@ public class MainActivityLogin extends AppCompatActivity {
     private String actualUserName;
     private String actualPassWord;
     //below store temp un and pass for each account
-    //might change depending on what client wants
+
     //current one account accesses certain UI instead of individual
     //expected un/pass for Track Inspectors
     private String expUserNameTI = "ti";

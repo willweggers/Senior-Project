@@ -16,34 +16,32 @@ import com.google.android.gms.drive.DriveFile;
 
 /**
  * Created by willw on 9/15/2017.
+ * Implements and specifiys base activities used when connecting to a google drive through gmail.
  */
 
 public class BaseDriveActivitys extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
-
+    //tag used for log errors
     private String TAG = "Google Drive Activity";
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CODE_RESOLUTION = 3;
     public DriveFile file;
-
     @Override
     protected void onResume() {
-        super.onResume();
-        if (mGoogleApiClient == null) {
-            // Create the API client and bind it to an instance variable.
-            // We use this instance as the callback for connection and connection
-            // failures.
-            // Since no account name is passed, the user is prompted to choose.
+        if(mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
+                    .useDefaultAccount() //causes user to always sign in.
+                   // .setAccountName("account name here") //can be used so track inspectors doesnt have to sign into gmail  needs testing
                     .build();
+            mGoogleApiClient.connect();
         }
-        // Connect the client. Once connected, the camera is launched.
-        mGoogleApiClient.connect();
+
+        super.onResume();
     }
 
     @Override
@@ -63,7 +61,8 @@ public class BaseDriveActivitys extends Activity implements
     }
     @Override
     public void onConnected(Bundle connectionHint) {
-        showMessage("Connected To Drive.");
+            showMessage("Connected To Drive.");
+
     }
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -93,7 +92,12 @@ public class BaseDriveActivitys extends Activity implements
     public GoogleApiClient getGoogleApi(){
         return mGoogleApiClient;
     }
+    //method to show user what is happening on screen
     public void showMessage(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
+    //clears default gmail used and prompts user to select either same one or another
+    public void changeDriveAccount(){
+        mGoogleApiClient.clearDefaultAccountAndReconnect();
     }
 }
