@@ -6,12 +6,13 @@ import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,12 +28,15 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-/**
+/*
  * Created by willw on 9/11/2017.
  */
 
@@ -45,6 +49,14 @@ public class TrackInsepctor extends BaseDriveActivitys {
     private Button endInspectionButton;
     //button that changes gmail accout of google drive to be used
     private Button changeGDAcc;
+    // button that opens camera app
+    private Button cameraBtn;
+    // thumbnail image returned by camera app
+    private ImageView thumbnail;
+    // activity result key for camera
+    static final int REQUEST_TAKE_PHOTO = 1;
+    // absolute path for camera images
+    String myPicPath;
 
 
     @Override
@@ -53,6 +65,8 @@ public class TrackInsepctor extends BaseDriveActivitys {
         setContentView(R.layout.activity_track_inspector);
         endInspectionButton = (Button) findViewById(R.id.endInspection);
         changeGDAcc = (Button) findViewById(R.id.changeDriveAcc);
+        cameraBtn = (Button)findViewById(R.id.cameraBtn);
+        thumbnail = (ImageView)findViewById(R.id.thumbnail);
 
         setButtons();
     }
@@ -75,6 +89,52 @@ public class TrackInsepctor extends BaseDriveActivitys {
         });
 
     }
+
+    private void dispatchTakePictureIntent() {
+        // check for camera hardware (optional)
+
+        // create Camera intent
+        Intent takePicIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // check that there is an installed camera app
+        if (takePicIntent.resolveActivity(getPackageManager()) != null) {
+            // create file where picture will be stored
+            File picFile = null;
+            try {
+                picFile = createImageFile();
+            } catch (IOException io) {
+                Log.e(TAG, "unable to create image file for picture");
+            }
+
+            // if file successfully created
+            if (picFile != null) {
+                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
+                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+                startActivityForResult(takePicIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String picFileName = "defect_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File picImage = File.createTempFile(picFileName, ".jpg", storageDir);
+
+        myPicPath = picImage.getAbsolutePath();
+        return picImage;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            thumbnail.setImageBitmap(imageBitmap);
+        }
+
+    }
+
     //https://developers.google.com/drive/android/create-file
     //above link for specifics on what is going on below
     final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback = new

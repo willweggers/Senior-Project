@@ -7,4 +7,5 @@
     <string name="location">Track Inspection for ABC Company
  	1234 North Main Street
 	Crown Point, IN 46307</string>
+    <string name="take_pic_btn">Camera</string>
 </resources>
