@@ -28,6 +28,7 @@ import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class TrackInsepctor extends BaseDriveActivitys {
     // button that opens camera app
     private Button cameraBtn;
     // thumbnail image returned by camera app
-    private ImageView thumbnail;
+    public static ImageView thumbnail;
     // activity result key for camera
     static final int REQUEST_TAKE_PHOTO = 1;
     // absolute path for camera images
@@ -68,6 +69,10 @@ public class TrackInsepctor extends BaseDriveActivitys {
         changeGDAcc = (Button) findViewById(R.id.changeDriveAcc);
         cameraBtn = (Button)findViewById(R.id.cameraBtn);
         thumbnail = (ImageView)findViewById(R.id.thumbnail);
+        //for map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         setButtons();
     }
@@ -88,6 +93,12 @@ public class TrackInsepctor extends BaseDriveActivitys {
                 changeDriveAccount();
             }
         });
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
 
     }
 
@@ -104,13 +115,13 @@ public class TrackInsepctor extends BaseDriveActivitys {
             try {
                 picFile = createImageFile();
             } catch (IOException io) {
-                Log.e(TAG, "unable to create image file for picture");
+                showMessage("unable to create image file for picture");
             }
 
             // if file successfully created
             if (picFile != null) {
-                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
-                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+//                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
+//                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
                 startActivityForResult(takePicIntent, REQUEST_TAKE_PHOTO);
             }
         }
@@ -126,15 +137,16 @@ public class TrackInsepctor extends BaseDriveActivitys {
         return picImage;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            thumbnail.setImageBitmap(imageBitmap);
-        }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            thumbnail.setImageBitmap(imageBitmap);
+//        }
+//
+//    }
 
-    }
 
     //https://developers.google.com/drive/android/create-file
     //above link for specifics on what is going on below

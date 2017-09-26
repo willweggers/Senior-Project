@@ -8,4 +8,5 @@
  	1234 North Main Street
 	Crown Point, IN 46307</string>
     <string name="take_pic_btn">Camera</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
