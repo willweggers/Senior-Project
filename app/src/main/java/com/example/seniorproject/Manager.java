@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by willw on 9/12/2017.
  */
 
-public class Manager extends AppCompatActivity {
+public class Manager extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

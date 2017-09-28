@@ -4,13 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Build;
@@ -33,20 +35,24 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -58,48 +64,123 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by willw on 9/15/2017.
  * Implements and specifiys base activities used when connecting to a google drive through gmail and google maps.
  */
 
-public class BaseDriveActivitys extends AppCompatActivity implements
+public class BaseDriveActivitys extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
     //tag used for log errors
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-    private boolean mPermissionDenied = false;
-    static final int REQUEST_TAKE_PHOTO = 1;
-    private static final int FINE_LOCATION_PERMISSION_REQUEST = 1;
-    private static final int CONNECTION_RESOLUTION_REQUEST = 2;
-    private Location mLastLocation;
-    private LocationRequest mLocationRequest;
-    Marker mCurrLocationMarker;
     private String TAG = "Google Drive Activity";
+    //apicliend for drive
     private GoogleApiClient mGoogleApiClient;
 
-    private static final int REQUEST_CODE_RESOLUTION = 3;
+    public static final int REQUEST_CODE_RESOLUTION = 3;
     public DriveFile file;
-    private GoogleMap mMap;
+    public GoogleMap mMap;
+//    LocationRequest locationRequest;
+
+
+//    GoogleApiClient mGoogleApiClientMap;
+//    public FusedLocationProviderApi mFusedLocationClient;
+
+    //list of pins that are currently on map could be usedful for later
+    //might change data structure to soemthing that suites our use with it later
+    ArrayList<LatLng> listOfPins = new ArrayList<>();
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            mMap.setMyLocationEnabled(true);
+//        }
+//        mMap.setOnMyLocationButtonClickListener(this);
+//        mMap.setOnMyLocationClickListener(this);
+        //  moveMapCurrLoc(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
+        setOnTouchMap();
 
     }
+//    @Override
+//    public void onMyLocationClick(@NonNull Location location) {
+//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public boolean onMyLocationButtonClick() {
+//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+//        // Return false so that we don't consume the event and the default behavior still occurs
+//        // (the camera animates to the user's current position).
+//        return false;
+//    }
+
+
+
+    public void checkGPSOn() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            enableGPS();
+        } else {
+//            showMessage("GPS enabled");
+        }
+    }
+
+    public void enableGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("GPS is disabled. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    //method for what happens when map is touched
+    public void setOnTouchMap() {
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                listOfPins.add(point);
+                mMap.addMarker(new MarkerOptions().position(point));
+            }
+        });
+    }
+
+    //move map and place marker input is lattitude coord and longitude coord
+    public void moveMapCurrLoc(double lat, double lng) {
+        LatLng latLng = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
 
     @Override
     protected void onResume() {
-        if(mGoogleApiClient == null) {
+        if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
-                    //.useDefaultAccount() //causes user to always sign in.
-                   // .setAccountName("account name here") //can be used so track inspectors doesnt have to sign into gmail  needs testing
+                    //.useDefaultAccount() //causes user to always sign in from default acc.
+                    // .setAccountName("account name here") //can be used so track inspectors doesnt have to sign into gmail  needs testing
                     .build();
             mGoogleApiClient.connect();
         }
@@ -122,17 +203,12 @@ public class BaseDriveActivitys extends AppCompatActivity implements
         if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
         }
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            TrackInsepctor.thumbnail.setImageBitmap(imageBitmap);
-        }
     }
     @Override
     public void onConnected(Bundle connectionHint) {
-
+        checkGPSOn();
+        moveMapCurrLoc(31.271041,-83.285154);
         showMessage("Connected To Drive.");
-
     }
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -143,10 +219,6 @@ public class BaseDriveActivitys extends AppCompatActivity implements
             GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
             return;
         }
-        // The failure has a resolution. Resolve it.
-        // Called typically when the app is not yet authorized, and an
-        // authorization
-        // dialog is displayed to the user.
         try {
             result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
@@ -162,6 +234,7 @@ public class BaseDriveActivitys extends AppCompatActivity implements
     public GoogleApiClient getGoogleApi(){
         return mGoogleApiClient;
     }
+
     //method to show user what is happening on screen
     public void showMessage(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
