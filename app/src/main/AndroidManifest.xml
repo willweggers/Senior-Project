@@ -14,23 +14,31 @@ package="com.example.seniorproject">
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.AppCompat.NoActionBar">
-    <activity android:name=".MenuTI">
+    <!--lists activitys the user will go through-->
+    <!--currently the menu for track inspector is starting acitvity, will be changed for demo or later-->
+    <activity android:name=".TrackInspector.MenuTI">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".TrackInsepctor">
+    <activity android:name=".TrackInspector.MapTI">
 
     </activity>
     <activity android:name=".MainActivityLogin">
 
     </activity>
-    <activity android:name=".Manager">
+    <activity android:name=".TrackInspector.HeaderData">
 
     </activity>
-    <activity android:name=".Admin">
+    <activity android:name=".TrackInspector.DefectReport">
+
+    </activity>
+    <activity android:name=".Manager.Manager">
+
+    </activity>
+    <activity android:name=".Admin.Admin">
 
     </activity>
 <!--api key-->

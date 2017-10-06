@@ -1,4 +1,5 @@
 package com.example.seniorproject;
+
 //too access TI enter TI into username/ M enter M/ A enter A/ leave pass blank (Password)
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,6 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.seniorproject.Admin.Admin;
+import com.example.seniorproject.Manager.Manager;
+import com.example.seniorproject.TrackInspector.MenuTI;
 
 public class MainActivityLogin extends AppCompatActivity {
     private Button submitButton;

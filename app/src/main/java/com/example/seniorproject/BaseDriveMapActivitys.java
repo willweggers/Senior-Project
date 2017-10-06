@@ -96,7 +96,7 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+       // mMap.getUiSettings().setZoomControlsEnabled(true);
 //        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
 //                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
 //                == PackageManager.PERMISSION_GRANTED) {
@@ -105,7 +105,6 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
 //        mMap.setOnMyLocationButtonClickListener(this);
 //        mMap.setOnMyLocationClickListener(this);
         //  moveMapCurrLoc(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
-        setOnTouchMap();
 
     }
 //    @Override
@@ -121,8 +120,101 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
 //        return false;
 //    }
 
+    //move map and place marker input is lattitude coord and longitude coord
+    public void moveMapCurrLoc(double lat, double lng) {
+        LatLng latLng = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
 
 
+    @Override
+    protected void onResume() {
+
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    //.setAccountName("users.account.seniroproject234@gmail.com")//needs device to have account set on it needs further research
+                    .build();
+            mGoogleApiClient.connect();
+
+//        if(mGoogleApiClientMap == null){
+//            mGoogleApiClientMap = new GoogleApiClient.Builder(this)
+//                    .addApi(LocationServices.API)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .build();
+//            mGoogleApiClientMap.connect();
+//        }
+
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+
+            mGoogleApiClient.disconnect();
+
+//        if(mGoogleApiClientMap != null){
+//            mGoogleApiClientMap.disconnect();
+//        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
+            mGoogleApiClient.connect();
+//            mGoogleApiClientMap.connect();
+        }
+    }
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        checkGPSOn();
+        moveMapCurrLoc(31.271041,-83.285154);
+        showMessage("Connected To Drive.");
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // Called whenever the API client fails to connect.
+        showMessage("GoogleApiClient connection failed: " + result.toString());
+        if (!result.hasResolution()) {
+            // show the localized error dialog.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
+            return;
+        }
+        try {
+            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
+        } catch (IntentSender.SendIntentException e) {
+            Log.e(TAG, "Exception while starting resolution activity", e);
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        showMessage("GoogleApiClient connection suspended");
+    }
+    public GoogleApiClient getGoogleApi(){
+        return mGoogleApiClient;
+    }
+//    public GoogleApiClient getmGoogleApiClientMap(){
+//        return  mGoogleApiClientMap;
+//    }
+
+    //method to show user what is happening on screen
+    public void showMessage(String msg){
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
+    //clears default gmail used and prompts user to select either same one or another
+    public void changeDriveAccount(){
+        mGoogleApiClient.clearDefaultAccountAndReconnect();
+    }
     public void checkGPSOn() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -148,114 +240,5 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
                 });
         final AlertDialog alert = builder.create();
         alert.show();
-    }
-
-
-    //method for what happens when map is touched
-    public void setOnTouchMap() {
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                listOfPins.add(point);
-                mMap.addMarker(new MarkerOptions().position(point));
-            }
-        });
-    }
-
-    //move map and place marker input is lattitude coord and longitude coord
-    public void moveMapCurrLoc(double lat, double lng) {
-        LatLng latLng = new LatLng(lat, lng);
-        mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-    }
-
-
-    @Override
-    protected void onResume() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    //.useDefaultAccount() //causes user to always sign in from default acc.
-                    // .setAccountName("account name here") //can be used so track inspectors doesnt have to sign into gmail  needs testing
-                    .build();
-            mGoogleApiClient.connect();
-        }
-//        if(mGoogleApiClientMap == null){
-//            mGoogleApiClientMap = new GoogleApiClient.Builder(this)
-//                    .addApi(LocationServices.API)
-//                    .addConnectionCallbacks(this)
-//                    .addOnConnectionFailedListener(this)
-//                    .build();
-//            mGoogleApiClientMap.connect();
-//        }
-
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-//        if(mGoogleApiClientMap != null){
-//            mGoogleApiClientMap.disconnect();
-//        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
-            mGoogleApiClient.connect();
-//            mGoogleApiClientMap.connect();
-        }
-    }
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        checkGPSOn();
-        moveMapCurrLoc(31.271041,-83.285154);
-        showMessage("Connected To Drive.");
-    }
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        // Called whenever the API client fails to connect.
-        Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
-        if (!result.hasResolution()) {
-            // show the localized error dialog.
-            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
-            return;
-        }
-        try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
-        } catch (IntentSender.SendIntentException e) {
-            Log.e(TAG, "Exception while starting resolution activity", e);
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.i(TAG, "GoogleApiClient connection suspended");
-    }
-    public GoogleApiClient getGoogleApi(){
-        return mGoogleApiClient;
-    }
-//    public GoogleApiClient getmGoogleApiClientMap(){
-//        return  mGoogleApiClientMap;
-//    }
-
-    //method to show user what is happening on screen
-    public void showMessage(String msg){
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    }
-    //clears default gmail used and prompts user to select either same one or another
-    public void changeDriveAccount(){
-        mGoogleApiClient.clearDefaultAccountAndReconnect();
     }
 }
