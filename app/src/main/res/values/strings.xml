@@ -4,9 +4,11 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="end_inspection">End Inspection</string>
-    <string name="location">Track Inspection for ABC Company
- 	1234 North Main Street
-	Crown Point, IN 46307</string>
+    <string name="start_inspection">Start Inspection</string>
+    <string name="view_inspections">View Inspections</string>
+    <string name="edit_inspection">Edit Inspections</string>
     <string name="take_pic_btn">Camera</string>
     <string name="title_activity_maps">Map</string>
+    <string name="google_api_key">AIzaSyAwQKj8kxTtuet6qAc_WjDlV5i_oDFJsE4</string>
+
 </resources>

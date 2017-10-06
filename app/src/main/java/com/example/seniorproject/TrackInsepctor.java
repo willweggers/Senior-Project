@@ -47,7 +47,7 @@ import java.util.Date;
  * Created by willw on 9/11/2017.
  */
 
-public class TrackInsepctor extends BaseDriveActivitys {
+public class TrackInsepctor extends BaseDriveMapActivitys {
     //Tag used for log
     private String TAG = "Google Drive Activity";
     //title for generated report
@@ -125,8 +125,8 @@ public class TrackInsepctor extends BaseDriveActivitys {
 
             // if file successfully created
             if (picFile != null) {
-//                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
-//                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
+                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
                 startActivityForResult(takePicIntent, REQUEST_TAKE_PHOTO);
             }
         }
@@ -152,6 +152,7 @@ public class TrackInsepctor extends BaseDriveActivitys {
         //for reconnection when changing google drive
         if (requestCode == REQUEST_CODE_RESOLUTION  && resultCode == RESULT_OK) {
             getGoogleApi().connect();
+//            getmGoogleApiClientMap().connect();
         }
     }
 

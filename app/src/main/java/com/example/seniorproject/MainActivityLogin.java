@@ -49,7 +49,7 @@ public class MainActivityLogin extends AppCompatActivity {
                 getUserNamePassWord();
                 //if UN and pass equal TI UN and pass then submit button goes to TI UI
                 if(actualUserName.equals(expUserNameTI) && actualPassWord.equals(expPassWordTI)) {
-                    Intent intent = new Intent(MainActivityLogin.this,TrackInsepctor.class);
+                    Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
                     startActivity(intent);
                 }
                 //if Un and pass equal Manager UN and pass then submit button goes to Manager UI

@@ -14,7 +14,7 @@ package="com.example.seniorproject">
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/Theme.AppCompat.NoActionBar">
-    <activity android:name=".MainActivityLogin">
+    <activity android:name=".MenuTI">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +22,9 @@ package="com.example.seniorproject">
         </intent-filter>
     </activity>
     <activity android:name=".TrackInsepctor">
+
+    </activity>
+    <activity android:name=".MainActivityLogin">
 
     </activity>
     <activity android:name=".Manager">
@@ -32,20 +35,20 @@ package="com.example.seniorproject">
     </activity>
 <!--api key-->
     <meta-data android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAwQKj8kxTtuet6qAc_WjDlV5i_oDFJsE4"  />
+        android:value="@string/google_api_key"  />
 
     <meta-data android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
 
-    <!--<provider android:name="android.support.v4.content.FileProvider"-->
-        <!--android:authorities="com.example.seniorproject"-->
-        <!--android:exported="false"-->
-        <!--android:grantUriPermissions="true">-->
-        <!--<meta-data android:name="android.support.FILE_PROVIDER_PATHS"-->
-            <!--android:resource="@xml/file_paths">-->
+    <provider android:name="android.support.v4.content.FileProvider"
+        android:authorities="com.example.seniorproject"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_paths">
 
-        <!--</meta-data>-->
-    <!--</provider>-->
+        </meta-data>
+    </provider>
 </application>
 
 </manifest>

@@ -72,7 +72,7 @@ import java.util.ArrayList;
  * Implements and specifiys base activities used when connecting to a google drive through gmail and google maps.
  */
 
-public class BaseDriveActivitys extends FragmentActivity implements
+public class BaseDriveMapActivitys extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
     //tag used for log errors
@@ -86,8 +86,8 @@ public class BaseDriveActivitys extends FragmentActivity implements
 //    LocationRequest locationRequest;
 
 
-//    GoogleApiClient mGoogleApiClientMap;
-//    public FusedLocationProviderApi mFusedLocationClient;
+//    private GoogleApiClient mGoogleApiClientMap;
+//    public FusedLocationProviderClient mFusedLocationClient;
 
     //list of pins that are currently on map could be usedful for later
     //might change data structure to soemthing that suites our use with it later
@@ -184,6 +184,14 @@ public class BaseDriveActivitys extends FragmentActivity implements
                     .build();
             mGoogleApiClient.connect();
         }
+//        if(mGoogleApiClientMap == null){
+//            mGoogleApiClientMap = new GoogleApiClient.Builder(this)
+//                    .addApi(LocationServices.API)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .build();
+//            mGoogleApiClientMap.connect();
+//        }
 
         super.onResume();
     }
@@ -194,6 +202,9 @@ public class BaseDriveActivitys extends FragmentActivity implements
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
+//        if(mGoogleApiClientMap != null){
+//            mGoogleApiClientMap.disconnect();
+//        }
         super.onPause();
     }
 
@@ -202,6 +213,7 @@ public class BaseDriveActivitys extends FragmentActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
+//            mGoogleApiClientMap.connect();
         }
     }
     @Override
@@ -234,6 +246,9 @@ public class BaseDriveActivitys extends FragmentActivity implements
     public GoogleApiClient getGoogleApi(){
         return mGoogleApiClient;
     }
+//    public GoogleApiClient getmGoogleApiClientMap(){
+//        return  mGoogleApiClientMap;
+//    }
 
     //method to show user what is happening on screen
     public void showMessage(String msg){
