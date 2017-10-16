@@ -19,12 +19,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -72,53 +79,24 @@ import java.util.ArrayList;
  * Implements and specifiys base activities used when connecting to a google drive through gmail and google maps.
  */
 
-public class BaseDriveMapActivitys extends FragmentActivity implements
+public class MapActivitys extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
     //tag used for log errors
     private String TAG = "Google Drive Activity";
     //apicliend for drive
-    private GoogleApiClient mGoogleApiClient;
 
     public static final int REQUEST_CODE_RESOLUTION = 3;
     public DriveFile file;
     public GoogleMap mMap;
-//    LocationRequest locationRequest;
 
 
-//    private GoogleApiClient mGoogleApiClientMap;
-//    public FusedLocationProviderClient mFusedLocationClient;
-
-    //list of pins that are currently on map could be usedful for later
-    //might change data structure to soemthing that suites our use with it later
-    ArrayList<LatLng> listOfPins = new ArrayList<>();
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-       // mMap.getUiSettings().setZoomControlsEnabled(true);
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            mMap.setMyLocationEnabled(true);
-//        }
-//        mMap.setOnMyLocationButtonClickListener(this);
-//        mMap.setOnMyLocationClickListener(this);
-        //  moveMapCurrLoc(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
-
     }
-//    @Override
-//    public void onMyLocationClick(@NonNull Location location) {
-//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public boolean onMyLocationButtonClick() {
-//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-//        // Return false so that we don't consume the event and the default behavior still occurs
-//        // (the camera animates to the user's current position).
-//        return false;
-//    }
+
 
     //move map and place marker input is lattitude coord and longitude coord
     public void moveMapCurrLoc(double lat, double lng) {
@@ -128,56 +106,10 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
-
-    @Override
-    protected void onResume() {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    //.setAccountName("users.account.seniroproject234@gmail.com")//needs device to have account set on it needs further research
-                    .build();
-            mGoogleApiClient.connect();
-
-//        if(mGoogleApiClientMap == null){
-//            mGoogleApiClientMap = new GoogleApiClient.Builder(this)
-//                    .addApi(LocationServices.API)
-//                    .addConnectionCallbacks(this)
-//                    .addOnConnectionFailedListener(this)
-//                    .build();
-//            mGoogleApiClientMap.connect();
-//        }
-
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-
-            mGoogleApiClient.disconnect();
-
-//        if(mGoogleApiClientMap != null){
-//            mGoogleApiClientMap.disconnect();
-//        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
-            mGoogleApiClient.connect();
-//            mGoogleApiClientMap.connect();
-        }
-    }
     @Override
     public void onConnected(Bundle connectionHint) {
         checkGPSOn();
         moveMapCurrLoc(31.271041,-83.285154);
-        showMessage("Connected To Drive.");
     }
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -200,20 +132,11 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
     public void onConnectionSuspended(int cause) {
         showMessage("GoogleApiClient connection suspended");
     }
-    public GoogleApiClient getGoogleApi(){
-        return mGoogleApiClient;
-    }
-//    public GoogleApiClient getmGoogleApiClientMap(){
-//        return  mGoogleApiClientMap;
-//    }
+
 
     //method to show user what is happening on screen
     public void showMessage(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    }
-    //clears default gmail used and prompts user to select either same one or another
-    public void changeDriveAccount(){
-        mGoogleApiClient.clearDefaultAccountAndReconnect();
     }
     public void checkGPSOn() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -241,4 +164,5 @@ public class BaseDriveMapActivitys extends FragmentActivity implements
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
 }

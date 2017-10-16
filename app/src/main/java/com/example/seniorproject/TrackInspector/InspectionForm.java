@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.seniorproject.BaseDriveMapActivitys;
 import com.example.seniorproject.R;
 
 import java.io.File;
@@ -24,7 +23,7 @@ import java.util.Date;
  * Created by willw on 10/6/2017.
  */
 
-public class DefectReport extends AppCompatActivity {
+public class InspectionForm extends AppCompatActivity {
     // button that opens camera app
     private Button cameraBtn;
     // thumbnail image returned by camera app

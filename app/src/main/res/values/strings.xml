@@ -10,8 +10,9 @@
     <string name="take_pic_btn">Camera</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_api_key">AIzaSyAwQKj8kxTtuet6qAc_WjDlV5i_oDFJsE4</string>
-    <string name="go_to_map">Save Header Data</string>
+    <string name="go_to_map">Go To Map</string>
     <string name="set_curr_location">Set Current Location</string>
     <string name="add_defect">Add Defect</string>
+    <color name="white">#FFFFFF</color>
 
 </resources>

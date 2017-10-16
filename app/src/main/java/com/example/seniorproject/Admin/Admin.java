@@ -5,14 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.seniorproject.BaseDriveMapActivitys;
 import com.example.seniorproject.R;
 
 /**
  * Created by willw on 9/12/2017.
  */
 
-public class Admin extends BaseDriveMapActivitys {
+public class Admin extends AppCompatActivity {
     private Button changeDriveAcc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class Admin extends BaseDriveMapActivitys {
         changeDriveAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeDriveAccount();
+//                changeDriveAccount();
             }
         });
     }

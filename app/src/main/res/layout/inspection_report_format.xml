@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CLInspectionReport"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="25dp">
+
+    <!--<Space-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="100dp"-->
+    <!--android:id="@+id/imageView"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--android:layout_marginTop="8dp" />-->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="437dp"
+        android:layout_height="94dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/logopng"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/companyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="[Company Name Not Inserted]"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/streetAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="[Street Address Not Inserted]"
+        android:textSize="20sp"
+        app:layout_constraintHorizontal_bias="0.541"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/companyName" />
+
+    <TextView
+        android:id="@+id/cityStateZipCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="[City,State,Zip Not Inserted]"
+        android:textSize="20sp"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streetAddress" />
+
+    <TableLayout
+        android:id="@+id/trackTable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/col1"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/col2"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/col3"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/trackdesc1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track Repairs"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/trackids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item   " />
+
+            <TextView
+                android:id="@+id/tracknumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track   " />
+
+            <TextView
+                android:id="@+id/tracklocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location" />
+
+            <TextView
+                android:id="@+id/trackdesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="   Description" />
+
+            <TextView
+                android:id="@+id/trackunit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unit   " />
+
+            <TextView
+                android:id="@+id/trackquant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity  " />
+
+            <TextView
+                android:id="@+id/trackpri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Priority" />
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/switchTable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackTable">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/scol1"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/scol2"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/scol3"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/strackdesc1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track Repairs"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/strackids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item   " />
+
+            <TextView
+                android:id="@+id/stracknumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Switch   " />
+
+            <TextView
+                android:id="@+id/stracklocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location" />
+
+            <TextView
+                android:id="@+id/strackdesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="   Description" />
+
+            <TextView
+                android:id="@+id/strackunit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unit   " />
+
+            <TextView
+                android:id="@+id/strackquant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity  " />
+
+            <TextView
+                android:id="@+id/strackpri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Priority" />
+        </TableRow>
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>

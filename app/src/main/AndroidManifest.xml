@@ -4,6 +4,7 @@ package="com.example.seniorproject">
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 <uses-feature android:name="android.hardware.camera"
@@ -16,14 +17,14 @@ package="com.example.seniorproject">
     android:theme="@style/Theme.AppCompat.NoActionBar">
     <!--lists activitys the user will go through-->
     <!--currently the menu for track inspector is starting acitvity, will be changed for demo or later-->
-    <activity android:name=".TrackInspector.MenuTI">
+    <activity android:name=".TrackInspector.MapTI">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".TrackInspector.MapTI">
+    <activity android:name=".TrackInspector.MenuTI">
 
     </activity>
     <activity android:name=".MainActivityLogin">
@@ -32,13 +33,16 @@ package="com.example.seniorproject">
     <activity android:name=".TrackInspector.HeaderData">
 
     </activity>
-    <activity android:name=".TrackInspector.DefectReport">
+    <activity android:name=".TrackInspector.InspectionForm">
 
     </activity>
     <activity android:name=".Manager.Manager">
 
     </activity>
     <activity android:name=".Admin.Admin">
+
+    </activity>
+    <activity android:name=".TrackInspector.FormatReport">
 
     </activity>
 <!--api key-->
