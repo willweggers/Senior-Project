@@ -17,14 +17,14 @@ package="com.example.seniorproject">
     android:theme="@style/Theme.AppCompat.NoActionBar">
     <!--lists activitys the user will go through-->
     <!--currently the menu for track inspector is starting acitvity, will be changed for demo or later-->
-    <activity android:name=".TrackInspector.MapTI">
+    <activity android:name=".TrackInspector.MenuTI">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".TrackInspector.MenuTI">
+    <activity android:name=".TrackInspector.MapTI">
 
     </activity>
     <activity android:name=".MainActivityLogin">

@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.BundleCompat;
 import android.support.v4.app.FragmentActivity;
@@ -38,9 +41,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.logging.LogRecord;
 
 /**
  * Created by willw on 10/11/2017.
+ * Formats viewable report at end of inspection. if id for either switch or track is entered all other columns currently have to be entered
+ * or it will give nullpointer error.
  */
 
 public class FormatReport extends DriveActivitys {
@@ -69,6 +75,8 @@ public class FormatReport extends DriveActivitys {
 
     private ConstraintLayout constraintLayout;
     public String documentTitle;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,11 +96,17 @@ public class FormatReport extends DriveActivitys {
             public void onClick(View v) {
                 Drive.DriveApi.newDriveContents(getGoogleApi())
                 .setResultCallback(driveContentsCallback);
-//                Intent intent = new Intent(FormatReport.this, MenuTI.class);
-//                startActivity(intent);
+                //adding delay
+                handler.postDelayed(mLaunchTask,1500);
             }
         });
     }
+    private Runnable mLaunchTask = new Runnable() {
+        public void run() {
+            Intent i = new Intent(FormatReport.this, MenuTI.class);
+            startActivity(i);
+        }
+    };
 
     private void addArrayLists() {
         Collections.addAll(trackArrayList,trackIDs,
@@ -120,7 +134,6 @@ public class FormatReport extends DriveActivitys {
         citystatezip.setText(theCityStateZip);
     }
     private void setDefectData(){
-
         int numOfTrackRows = trackIDs.size();
         int numOfSwitchRows = switchIDs.size();
         TableLayout tracklayout = (TableLayout) findViewById(R.id.trackTable);
@@ -134,10 +147,11 @@ public class FormatReport extends DriveActivitys {
                 TextView textView = new TextView(this);
                 textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
                 textView.setText(trackArrayList.get(j).get(i));
-                if(j == 5 || j == 1 || j == 4){
+                if(j == 5 || j == 1 || j == 4||j==6){
                     textView.setGravity(Gravity.CENTER);
                 }
-                textView.setPadding(0,0,50,0);
+                textView.setTextSize(20);
+                textView.setPadding(0,0,30,0);
                 tableRow.addView(textView);
             }
             tracklayout.addView(tableRow);
@@ -156,6 +170,7 @@ public class FormatReport extends DriveActivitys {
                 if(j == 5 || j == 1 || j == 4){
                     textView.setGravity(Gravity.CENTER);
                 }
+                textView.setTextSize(20);
                 textView.setPadding(0,0,50,0);
                 tableRow.addView(textView);
             }
@@ -236,18 +251,19 @@ public class FormatReport extends DriveActivitys {
         constraintLayout.setDrawingCacheEnabled(true);
         constraintLayout.buildDrawingCache();
         Bitmap b = constraintLayout.getDrawingCache();
+
 //        ConstraintLayout childLayout = (ConstraintLayout) findViewById(R.id.CLInspectionReport);
 //        Bitmap b;
 //        //should trigger this since inspection report format isnt ever viewed
 //        if (childLayout.getMeasuredHeight() <= 0) {
-////            childLayout.measure(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-////
-//            int specWidth = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-//            childLayout.measure(specWidth, specWidth);
-//            b = Bitmap.createBitmap(childLayout.getMeasuredWidth(), childLayout.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+//            constraintLayout.measure(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+//////
+////            int specWidth = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+////            constraintLayout.measure(specWidth, specWidth);
+//            b = Bitmap.createBitmap(constraintLayout.getMeasuredWidth(), constraintLayout.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
 //            Canvas c = new Canvas(b);
-//            childLayout.layout(0, 0, childLayout.getMeasuredWidth(), childLayout.getMeasuredHeight());
-//            childLayout.draw(c);
+//            constraintLayout.layout(0, 0, constraintLayout.getMeasuredWidth(), constraintLayout.getMeasuredHeight());
+//            constraintLayout.draw(c);
 //
 ////        ConstraintLayout view = (ConstraintLayout) inflatedFrame.findViewById(R.id.CLInspectionReport);
 ////        view.setDrawingCacheEnabled(true);
@@ -255,10 +271,10 @@ public class FormatReport extends DriveActivitys {
 ////        Bitmap bm = view.getDrawingCache();
 //        }//incase we want it to be viewed
 //        else{
-//            b = Bitmap.createBitmap(childLayout.getLayoutParams().width, childLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
+////            b = Bitmap.createBitmap(constraintLayout.getLayoutParams().width, constraintLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
 //            Canvas c = new Canvas(b);
-//            childLayout.layout(childLayout.getLeft(), childLayout.getTop(), childLayout.getRight(), childLayout.getBottom());
-//            childLayout.draw(c);
+////            constraintLayout.layout(constraintLayout.getLeft(), constraintLayout.getTop(), constraintLayout.getRight(), constraintLayout.getBottom());
+//            constraintLayout.draw(c);
 //        }
 
         return b;

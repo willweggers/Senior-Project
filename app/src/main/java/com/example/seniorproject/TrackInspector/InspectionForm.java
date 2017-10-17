@@ -38,6 +38,7 @@ public class InspectionForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.defect_report_track_inspector);
         cameraBtn = (Button) findViewById(R.id.camerabtn);
+        setButtons();
     }
     public void setButtons(){
         cameraBtn.setOnClickListener(new View.OnClickListener() {

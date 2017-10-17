@@ -35,7 +35,7 @@ public class MenuTI extends AppCompatActivity{
         startInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuTI.this, HeaderData.class);
+                Intent intent = new Intent(MenuTI.this, MapTI.class);
                 startActivity(intent);
             }
         });
