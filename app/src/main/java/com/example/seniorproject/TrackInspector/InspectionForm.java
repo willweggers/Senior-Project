@@ -30,6 +30,7 @@ public class InspectionForm extends AppCompatActivity {
     public ImageView thumbnail;
     // activity result key for camera
     static final int REQUEST_TAKE_PHOTO = 1;
+    Uri imageFileUri;
     // absolute path for camera images
     String myPicPath;
 
@@ -50,45 +51,44 @@ public class InspectionForm extends AppCompatActivity {
     }
 
     private void dispatchTakePictureIntent() {
-        // check for camera hardware (optional)
-
         // create Camera intent
         Intent takePicIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // check that there is an installed camera app
         if (takePicIntent.resolveActivity(getPackageManager()) != null) {
             // create file where picture will be stored
-            File picFile = null;
-            try {
-                picFile = createImageFile();
-            } catch (IOException io) {
-            }
+            imageFileUri = Uri.fromFile(createImageFile());
 
             // if file successfully created
-            if (picFile != null) {
-                Uri picUri = FileProvider.getUriForFile(this, "com.example.seniorproject", picFile);
-                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+            if (imageFileUri != null) {
+                takePicIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
                 startActivityForResult(takePicIntent, REQUEST_TAKE_PHOTO);
             }
         }
     }
 
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String picFileName = "defect_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File picImage = File.createTempFile(picFileName, ".jpg", storageDir);
+    private File createImageFile() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CameraTest");
 
-        myPicPath = picImage.getAbsolutePath();
-        return picImage;
+        // check if desired directory for storing the pictures exists
+        if (!mediaStorageDir.exists()) {
+            // create the directory if does not exist
+            if (!mediaStorageDir.mkdirs()) {
+                return null; // unable to create target directory
+            }
+
+        }
+        // create filename for the full-size picture
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "CameraTest_IMG_" + timeStamp + ".jpg";
+        // return the full file reference including directory
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            thumbnail.setImageBitmap(imageBitmap);
+
         }
 
     }
