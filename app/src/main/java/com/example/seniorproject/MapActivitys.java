@@ -27,6 +27,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -81,35 +83,62 @@ import java.util.ArrayList;
 
 public class MapActivitys extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
+        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, android.location.LocationListener{
     //tag used for log errors
     private String TAG = "Google Drive Activity";
     //apicliend for drive
 
     public static final int REQUEST_CODE_RESOLUTION = 3;
-    public DriveFile file;
     public GoogleMap mMap;
-
+    public static Marker marker;
+    public static double LATITUDE;
+    public static double LONGITUDE;
+    public static ArrayList<Marker> markers = new ArrayList<>();
+    public static int numMarkers=1;
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng curLoc = new LatLng(LATITUDE, LONGITUDE);
+
+        marker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Marker in curLoc"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
+        markers.add(0,marker);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latlng) {
+                if(markers.size() > numMarkers) {
+                    markers.get(numMarkers).remove();
+                }
+
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .position(latlng)
+                            .icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    markers.add(numMarkers, marker);
+
+
+            }
+        });
     }
 
 
     //move map and place marker input is lattitude coord and longitude coord
     public void moveMapCurrLoc(double lat, double lng) {
         LatLng latLng = new LatLng(lat, lng);
-        mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
         checkGPSOn();
-        moveMapCurrLoc(31.271041,-83.285154);
     }
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -163,6 +192,55 @@ public class MapActivitys extends FragmentActivity implements
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+
+    }
+    @Override
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
+
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+        //TODO Auto-generated method stub
+        LATITUDE = location.getLatitude();
+        LONGITUDE = location.getLongitude();
+
+
+//        final EditText ed=(EditText)findViewById(R.id.editText);
+//        ed.setText(Double.toString(latitude)+ "lon:"+Double.toString(longitude));
+
+
+        //Log.i("Geo_Location", "Latitude: " + latitude + ", Longitude: " + longitude);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.seniorproject.TrackInspector;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,8 @@ public class MenuTI extends AppCompatActivity{
     private Button startInspection;
     private Button viewInspection;
     private Button editInspection;
+    private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,8 @@ public class MenuTI extends AppCompatActivity{
         startInspection = (Button) findViewById(R.id.startInspection);
         viewInspection = (Button) findViewById(R.id.viewInspection);
         editInspection = (Button) findViewById(R.id.editInspection);
+        ActivityCompat.requestPermissions(MenuTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
 
     }

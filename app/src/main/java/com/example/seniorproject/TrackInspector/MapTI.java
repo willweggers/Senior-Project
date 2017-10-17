@@ -1,7 +1,13 @@
 package com.example.seniorproject.TrackInspector;
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +31,7 @@ public class MapTI extends MapActivitys {
     private Button endInspectionButton;
     private Button setCurrLoc;
     private Button addDefect;
+    private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
 
 
     @Override
@@ -39,6 +46,12 @@ public class MapTI extends MapActivitys {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+//        ActivityCompat.requestPermissions(MapTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        //final Location location = new Location(LocationManager.GPS_PROVIDER);
         setButtons();
 
     }
@@ -70,12 +83,15 @@ public class MapTI extends MapActivitys {
         setCurrLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                markers.get(0).remove();
+                moveMapCurrLoc(LATITUDE,LONGITUDE);
+                markers.add(0,marker);
             }
         });
         addDefect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                numMarkers++;
                 Intent intent = new Intent(MapTI.this, InspectionForm.class);
                 startActivity(intent);
             }

@@ -19,24 +19,40 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <!-- lists activitys the user will go through -->
         <!-- currently the menu for track inspector is starting acitvity, will be changed for demo or later -->
-        <activity android:name=".TrackInspector.MenuTI">
+        <activity android:name=".TrackInspector.MenuTI"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TrackInspector.MapTI"></activity>
-        <activity android:name=".MainActivityLogin"></activity>
-        <activity android:name=".TrackInspector.HeaderData"></activity>
-        <activity android:name=".TrackInspector.InspectionForm"></activity>
-        <activity android:name=".Manager.Manager"></activity>
-        <activity android:name=".Admin.Admin"></activity>
-        <activity android:name=".TrackInspector.FormatReport"></activity>
+        <activity android:name=".TrackInspector.MapTI"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".MainActivityLogin"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".TrackInspector.HeaderData"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".TrackInspector.InspectionForm"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".Manager.Manager"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".Admin.Admin"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+        <activity android:name=".TrackInspector.FormatReport"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
         <!-- api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

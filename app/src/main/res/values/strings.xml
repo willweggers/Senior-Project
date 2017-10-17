@@ -14,5 +14,7 @@
     <string name="set_curr_location">Set Current Location</string>
     <string name="add_defect">Add Defect</string>
     <color name="white">#FFFFFF</color>
+    <string name="action_settings">Settings</string>
+
 
 </resources>
