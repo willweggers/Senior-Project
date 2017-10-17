@@ -85,15 +85,31 @@ public class MapTI extends MapActivitys {
             public void onClick(View v) {
                 markers.get(0).remove();
                 moveMapCurrLoc(LATITUDE,LONGITUDE);
-                markers.add(0,marker);
+                markers.set(0,marker);
             }
         });
         addDefect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numMarkers++;
-                Intent intent = new Intent(MapTI.this, InspectionForm.class);
-                startActivity(intent);
+                if(!(markers.size() <=1)) {
+                    numMarkers++;
+                    Intent intent = new Intent(MapTI.this, InspectionForm.class);
+                    startActivity(intent);
+                }
+                else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(MapTI.this);
+                    builder.setMessage("A new marker needs to be added.")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                                final AlertDialog alert = builder.create();
+                                alert.show();
+
+                }
             }
         });
     }

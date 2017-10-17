@@ -53,6 +53,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -115,7 +116,6 @@ public class MapActivitys extends FragmentActivity implements
                 if(markers.size() > numMarkers) {
                     markers.get(numMarkers).remove();
                 }
-
                     marker = mMap.addMarker(new MarkerOptions()
                             .position(latlng)
                             .icon(BitmapDescriptorFactory

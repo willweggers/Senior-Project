@@ -51,7 +51,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             ></activity>
         <activity android:name=".TrackInspector.FormatReport"
-            android:theme="@style/AppTheme.NoActionBar"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
             ></activity>
         <!-- api key -->
         <meta-data
