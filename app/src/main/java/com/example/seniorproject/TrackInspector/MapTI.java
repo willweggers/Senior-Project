@@ -14,7 +14,12 @@ import android.widget.Button;
 
 import com.example.seniorproject.MapActivitys;
 import com.example.seniorproject.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 
@@ -31,6 +36,7 @@ public class MapTI extends MapActivitys {
     private Button endInspectionButton;
     private Button setCurrLoc;
     private Button addDefect;
+    private Button removeMarker;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
 
 
@@ -41,6 +47,7 @@ public class MapTI extends MapActivitys {
         endInspectionButton = (Button) findViewById(R.id.endInspection);
         setCurrLoc = (Button) findViewById(R.id.setcurrentlocation);
         addDefect = (Button) findViewById(R.id.adddefect);
+        removeMarker = (Button) findViewById(R.id.removelastmarker);
 
         //for map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -50,8 +57,10 @@ public class MapTI extends MapActivitys {
 //                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        //final Location location = new Location(LocationManager.GPS_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+
         setButtons();
 
     }
@@ -83,9 +92,12 @@ public class MapTI extends MapActivitys {
         setCurrLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markers.get(0).remove();
-                moveMapCurrLoc(LATITUDE,LONGITUDE);
-                markers.set(0,marker);
+                currLocMarker.remove();
+                LatLng curLoc = new LatLng(LATITUDE,LONGITUDE);
+                currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+
             }
         });
         addDefect.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +121,18 @@ public class MapTI extends MapActivitys {
                                 final AlertDialog alert = builder.create();
                                 alert.show();
 
+                }
+            }
+        });
+        removeMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(marker == null){
+                    showMessage("No previous markers set.");
+                }
+                else {
+                    marker.remove();
+//                    latlngMarkers.set(numMarkers, null);
                 }
             }
         });

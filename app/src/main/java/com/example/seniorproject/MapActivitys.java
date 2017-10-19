@@ -83,8 +83,7 @@ import java.util.ArrayList;
  */
 
 public class MapActivitys extends FragmentActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, android.location.LocationListener{
+        OnMapReadyCallback, android.location.LocationListener{
     //tag used for log errors
     private String TAG = "Google Drive Activity";
     //apicliend for drive
@@ -92,20 +91,23 @@ public class MapActivitys extends FragmentActivity implements
     public static final int REQUEST_CODE_RESOLUTION = 3;
     public GoogleMap mMap;
     public static Marker marker;
+    public static Marker currLocMarker;
     public static double LATITUDE;
     public static double LONGITUDE;
     public static ArrayList<Marker> markers = new ArrayList<>();
-    public static int numMarkers=1;
+    public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
+
+    public static int numMarkers=0;
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        checkGPSOn();
         mMap = googleMap;
         LatLng curLoc = new LatLng(LATITUDE, LONGITUDE);
 
-        marker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Marker in curLoc"));
+        currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Marker in curLoc"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
-        markers.add(0,marker);
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
 
 
@@ -113,53 +115,21 @@ public class MapActivitys extends FragmentActivity implements
 
             @Override
             public void onMapClick(LatLng latlng) {
-                if(markers.size() > numMarkers) {
-                    markers.get(numMarkers).remove();
-                }
+                    if(marker != null){
+                        markers.get(numMarkers).remove();
+
+                    }
                     marker = mMap.addMarker(new MarkerOptions()
                             .position(latlng)
                             .icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     markers.add(numMarkers, marker);
+                    latlngMarkers.add(numMarkers,latlng);
+
 
 
             }
         });
-    }
-
-
-    //move map and place marker input is lattitude coord and longitude coord
-    public void moveMapCurrLoc(double lat, double lng) {
-        LatLng latLng = new LatLng(lat, lng);
-        marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        checkGPSOn();
-    }
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        // Called whenever the API client fails to connect.
-        showMessage("GoogleApiClient connection failed: " + result.toString());
-        if (!result.hasResolution()) {
-            // show the localized error dialog.
-            GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
-            return;
-        }
-        try {
-            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
-        } catch (IntentSender.SendIntentException e) {
-            Log.e(TAG, "Exception while starting resolution activity", e);
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        showMessage("GoogleApiClient connection suspended");
     }
 
 

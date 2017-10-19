@@ -44,5 +44,13 @@
         android:layout_alignBottom="@+id/setcurrentlocation"
         android:layout_alignEnd="@+id/endInspection" />
 
+    <Button
+        android:id="@+id/removelastmarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove Previous Marker."
+        android:layout_above="@+id/setcurrentlocation"
+        android:layout_alignStart="@+id/setcurrentlocation" />
+
 
 </RelativeLayout>
