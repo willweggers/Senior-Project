@@ -11,7 +11,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="google_api_key">AIzaSyAwQKj8kxTtuet6qAc_WjDlV5i_oDFJsE4</string>
     <string name="go_to_map">Go To Map</string>
-    <string name="set_curr_location">Set Current Location</string>
+    <string name="set_curr_location">Show Current Location</string>
     <string name="add_defect">Add Defect</string>
     <color name="white">#FFFFFF</color>
     <string name="action_settings">Settings</string>
