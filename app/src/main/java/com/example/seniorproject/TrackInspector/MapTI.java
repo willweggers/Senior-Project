@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import com.example.seniorproject.MapActivitys;
 import com.example.seniorproject.R;
@@ -36,8 +37,9 @@ public class MapTI extends MapActivitys {
     private Button endInspectionButton;
     private Button setCurrLoc;
     private Button addDefect;
-    private Button removeMarker;
+    private ToggleButton toggleMarkerPlacement;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
+    public static boolean toggleMarkerOn = true;
 
 
     @Override
@@ -47,7 +49,7 @@ public class MapTI extends MapActivitys {
         endInspectionButton = (Button) findViewById(R.id.endInspection);
         setCurrLoc = (Button) findViewById(R.id.setcurrentlocation);
         addDefect = (Button) findViewById(R.id.adddefect);
-        removeMarker = (Button) findViewById(R.id.removelastmarker);
+        toggleMarkerPlacement = (ToggleButton) findViewById(R.id.placemarkermode);
 
         //for map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -103,8 +105,7 @@ public class MapTI extends MapActivitys {
         addDefect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(markers.size() <=1)) {
-                    numMarkers++;
+                if(currMarker != null) {
                     Intent intent = new Intent(MapTI.this, InspectionForm.class);
                     startActivity(intent);
                 }
@@ -124,18 +125,22 @@ public class MapTI extends MapActivitys {
                 }
             }
         });
-        removeMarker.setOnClickListener(new View.OnClickListener() {
+        toggleMarkerPlacement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(marker == null){
-                    showMessage("No previous markers set.");
+                if(toggleMarkerOn) {
+                    toggleMarkerPlacement.setChecked(false);
+                    toggleMarkerOn = false;
                 }
-                else {
-                    marker.remove();
-//                    latlngMarkers.set(numMarkers, null);
+                else{
+                    toggleMarkerPlacement.setChecked(true);
+                    toggleMarkerOn = true;
                 }
+
+
             }
         });
+
     }
     private void generateReport(){
         Intent intent = new Intent(MapTI.this, FormatReport.class);

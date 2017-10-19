@@ -44,13 +44,16 @@
         android:layout_alignBottom="@+id/setcurrentlocation"
         android:layout_alignEnd="@+id/endInspection" />
 
-    <Button
-        android:id="@+id/removelastmarker"
+
+    <ToggleButton
+        android:id="@+id/placemarkermode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove Previous Marker."
-        android:layout_above="@+id/setcurrentlocation"
-        android:layout_alignStart="@+id/setcurrentlocation" />
+        android:layout_alignStart="@+id/setcurrentlocation"
+        android:layout_alignTop="@+id/endInspection"
+        android:checked="true"
+        android:textOff="Marker Placement is Disabled"
+        android:textOn="Marker Placement is Enabled" />
 
 
 </RelativeLayout>

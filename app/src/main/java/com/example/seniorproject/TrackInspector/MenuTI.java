@@ -33,6 +33,7 @@ public class MenuTI extends AppCompatActivity{
         ActivityCompat.requestPermissions(MenuTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
+        setTitle("Menu");
 
     }
 
@@ -41,7 +42,7 @@ public class MenuTI extends AppCompatActivity{
         startInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuTI.this, MapTI.class);
+                Intent intent = new Intent(MenuTI.this, HeaderData.class);
                 startActivity(intent);
             }
         });

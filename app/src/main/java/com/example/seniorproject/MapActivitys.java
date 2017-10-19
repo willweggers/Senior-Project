@@ -36,6 +36,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.seniorproject.TrackInspector.InspectionForm;
+import com.example.seniorproject.TrackInspector.MapTI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -90,14 +92,14 @@ public class MapActivitys extends FragmentActivity implements
 
     public static final int REQUEST_CODE_RESOLUTION = 3;
     public GoogleMap mMap;
-    public static Marker marker;
+    public static Marker currMarker;
     public static Marker currLocMarker;
     public static double LATITUDE;
     public static double LONGITUDE;
     public static ArrayList<Marker> markers = new ArrayList<>();
     public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
+    public static int numOfMarker = 0;
 
-    public static int numMarkers=0;
 
 
     @Override
@@ -105,28 +107,46 @@ public class MapActivitys extends FragmentActivity implements
         checkGPSOn();
         mMap = googleMap;
         LatLng curLoc = new LatLng(LATITUDE, LONGITUDE);
-
+        if(currLocMarker != null){
+            currLocMarker.remove();
+        }
         currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Marker in curLoc"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        if(markers.size() !=0){
+            for(int i = 0; i < markers.size();i++){
+                if(InspectionForm.desctypeString != null) {
+                    mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.desctrypeArray.get(i)));
+                }
+                else{
+                    mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
+                }
+            }
+        }
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng latlng) {
-                    if(marker != null){
-                        markers.get(numMarkers).remove();
+                if(MapTI.toggleMarkerOn){
+
+                    if(markers.size() > numOfMarker){
+                        markers.get(numOfMarker).remove();
+                        markers.remove(numOfMarker);
 
                     }
-                    marker = mMap.addMarker(new MarkerOptions()
+                    currMarker = mMap.addMarker(new MarkerOptions()
                             .position(latlng)
                             .icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    markers.add(numMarkers, marker);
-                    latlngMarkers.add(numMarkers,latlng);
 
+                    markers.add(numOfMarker, currMarker);
 
+                }
+                else if(!MapTI.toggleMarkerOn){
+                    //could put something here idk
+                }
 
             }
         });

@@ -82,7 +82,6 @@ public class FormatReport extends DriveActivitys {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inspection_report_format);
         constraintLayout = (ConstraintLayout)findViewById(R.id.CLInspectionReport);
-        addArrayLists();
         setData();
 
     }
@@ -90,6 +89,7 @@ public class FormatReport extends DriveActivitys {
     private void setData(){
         setHeaderData();
         setDefectData();
+
 
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +126,9 @@ public class FormatReport extends DriveActivitys {
     }
 
     private void setHeaderData(){
+        theCompanyName = "Track Inspection for ".concat(HeaderData.thecompanyname);
+        theStreetAddress = HeaderData.theaddress;
+        theCityStateZip = HeaderData.thelocation;
         TextView companyname = (TextView) findViewById(R.id.companyName);
         companyname.setText(theCompanyName);
         TextView streetaddress = (TextView) findViewById(R.id.streetAddress);
@@ -134,6 +137,14 @@ public class FormatReport extends DriveActivitys {
         citystatezip.setText(theCityStateZip);
     }
     private void setDefectData(){
+        trackIDs= InspectionForm.trackIDs1;
+        trackNumber= InspectionForm.trackNumber1;
+        trackLocations= InspectionForm.trackLocations1;
+        trackDescriptions =InspectionForm.trackDescriptions1;
+        trackUnits=InspectionForm.trackUnits1;
+        trackQuantitys= InspectionForm.trackQuantitys1;
+        trackPriority= InspectionForm.trackPriority1;
+        addArrayLists();
         int numOfTrackRows = trackIDs.size();
         int numOfSwitchRows = switchIDs.size();
         TableLayout tracklayout = (TableLayout) findViewById(R.id.trackTable);
@@ -146,7 +157,12 @@ public class FormatReport extends DriveActivitys {
             for(int j = 0; j < numOfElementsPerRowTrack; j++){
                 TextView textView = new TextView(this);
                 textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-                textView.setText(trackArrayList.get(j).get(i));
+                if(trackArrayList.get(j).get(i) == null){
+                    textView.setText(null);
+                }
+                else {
+                    textView.setText(trackArrayList.get(j).get(i));
+                }
                 if(j == 5 || j == 1 || j == 4||j==6){
                     textView.setGravity(Gravity.CENTER);
                 }
@@ -157,8 +173,14 @@ public class FormatReport extends DriveActivitys {
             tracklayout.addView(tableRow);
         }
         TableLayout switchlayout = (TableLayout) findViewById(R.id.switchTable);
-
-        int numOfElementsPerRowSwitch = trackArrayList.size();
+        switchIDs= InspectionForm.switchIDs1;
+        switchNumber= InspectionForm.switchNumber1;
+        switchLocations= InspectionForm.switchLocations1;
+        switchDescriptions =InspectionForm.switchDescriptions1;
+        switchUnits=InspectionForm.switchUnits1;
+        switchQuantitys= InspectionForm.switchQuantitys1;
+        switchPriority= InspectionForm.switchPriority1;
+        int numOfElementsPerRowSwitch = switchArrayList.size();
         for(int i = 0; i < numOfSwitchRows;i++){
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
@@ -279,5 +301,6 @@ public class FormatReport extends DriveActivitys {
 
         return b;
     }
+
 
 }
