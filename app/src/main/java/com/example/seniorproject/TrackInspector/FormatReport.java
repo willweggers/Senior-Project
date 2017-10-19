@@ -89,8 +89,7 @@ public class FormatReport extends DriveActivitys {
     private void setData(){
         setHeaderData();
         setDefectData();
-
-
+        documentTitle = HeaderData.thetrackinspectorid.concat(" " + HeaderData.thedate);
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

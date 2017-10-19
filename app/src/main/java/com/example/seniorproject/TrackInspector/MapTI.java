@@ -40,7 +40,7 @@ public class MapTI extends MapActivitys {
     private ToggleButton toggleMarkerPlacement;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static boolean toggleMarkerOn = true;
-
+    public static int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,7 @@ public class MapTI extends MapActivitys {
                 if(currMarker != null) {
                     Intent intent = new Intent(MapTI.this, InspectionForm.class);
                     startActivity(intent);
+                    score++;
                 }
                 else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(MapTI.this);

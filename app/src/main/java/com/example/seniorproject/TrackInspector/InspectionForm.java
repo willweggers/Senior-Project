@@ -60,7 +60,6 @@ public class InspectionForm extends AppCompatActivity {
     Uri imageFileUri;
     // absolute path for camera images
     String myPicPath;
-    int score = 1;
 //    private ImageView imageView;
     public static ArrayList<String> trackIDs1= new ArrayList<>();
     public static ArrayList<String> trackNumber1= new ArrayList<>();
@@ -176,7 +175,7 @@ public class InspectionForm extends AppCompatActivity {
        quantityString = quantity_box.getText().toString();
                 trackQuantitys1.add(quantityString);
        priorityString = priority_box.getText().toString();
-                trackPriority1.add(priorityString);
+                trackPriority1.add(quantityString);
        unitString = unit_box.getText().toString();
                 trackUnits1.add(unitString);
 
@@ -348,17 +347,21 @@ public class InspectionForm extends AppCompatActivity {
                 unit_box.setText(null);
 
 
-                if (score <10)
-                    itemtv.setText("T 0"+ score);
-                else
-                    itemtv.setText("T " + score );
+                if (MapTI.score <10) {
+                    itemtv.setText("T 0" + MapTI.score);
+                    trackIDs1.add(itemtv.getText().toString());
+                }
+                else{
+                itemtv.setText("T " + MapTI.score);
+                trackIDs1.add(itemtv.getText().toString());
+            }
+
 
                 MapActivitys.numOfMarker++;
-                score ++;
                 if(!MapTI.toggleMarkerOn){
                     MapTI.toggleMarkerOn = true;
                 }
-                trackIDs1.add(itemtv.getText().toString());
+
                 Intent intent = new Intent(InspectionForm.this, MapTI.class);
                 startActivity(intent);
 
