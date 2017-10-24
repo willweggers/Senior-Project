@@ -9,16 +9,8 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
-    <!--<Space-->
-    <!--android:layout_width="100dp"-->
-    <!--android:layout_height="100dp"-->
-    <!--android:id="@+id/imageView"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--android:layout_marginTop="8dp" />-->
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logo"
         android:layout_width="437dp"
         android:layout_height="94dp"
         android:layout_marginLeft="16dp"
@@ -39,7 +31,7 @@
         android:layout_marginTop="8dp"
         android:text="[Company Name Not Inserted]"
         android:textSize="25sp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/logo"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +48,7 @@
         android:text="[Street Address Not Inserted]"
         android:textSize="25sp"
         app:layout_constraintHorizontal_bias="0.541"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/logo"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/companyName" />
 
@@ -73,7 +65,7 @@
         android:text="[City,State,Zip Not Inserted]"
         android:textSize="25sp"
         app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/logo"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/streetAddress" />
 
@@ -88,7 +80,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/logo">
 
         <TableRow>
 
@@ -178,6 +170,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="100dp"
+        android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trackTable">

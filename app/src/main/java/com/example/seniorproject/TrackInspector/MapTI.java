@@ -3,12 +3,16 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ToggleButton;
@@ -21,6 +25,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static java.util.Locale.getDefault;
 
 
 
@@ -41,7 +52,6 @@ public class MapTI extends MapActivitys {
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static boolean toggleMarkerOn = true;
     public static int score = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +72,6 @@ public class MapTI extends MapActivitys {
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
-
         setButtons();
 
     }
@@ -95,7 +104,14 @@ public class MapTI extends MapActivitys {
             @Override
             public void onClick(View v) {
                 currLocMarker.remove();
-                LatLng curLoc = new LatLng(LATITUDE,LONGITUDE);
+                LatLng curLoc;
+                if(LATITUDE != 0.0 && LONGITUDE != 0.0){
+                    curLoc = new LatLng(LATITUDE, LONGITUDE);
+                }
+                //remove this later
+                else{
+                    curLoc = new LatLng(33.983076, -84.562506);
+                }
                 currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
@@ -108,6 +124,28 @@ public class MapTI extends MapActivitys {
                 if(currMarker != null) {
                     Intent intent = new Intent(MapTI.this, InspectionForm.class);
                     startActivity(intent);
+                    final double lat = currMarker.getPosition().latitude;
+                    final double lng = currMarker.getPosition().longitude;
+                    Thread thread = new Thread() {
+                        @Override public void run() {
+                            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                            String result = null;
+                            try {
+                                List<Address> list = geocoder.getFromLocation(lat, lng, 1);
+                                if (list != null && list.size() > 0) {
+                                    Address address = list.get(0);
+                                    // sending back first address line and locality
+                                    result = address.getLocality();
+                                    //InspectionForm.locationSetString = result;
+                                }
+                            } catch (IOException e) {
+                                Log.e(TAG, "Impossible to connect to Geocoder", e);
+                            }
+                        }
+                    };
+                    thread.start();
+
+//
                     score++;
                 }
                 else {

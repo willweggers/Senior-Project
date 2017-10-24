@@ -27,6 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
@@ -89,46 +90,61 @@ public class InspectionForm extends AppCompatActivity {
     public static String quantityString;
     public static String priorityString;
     public static String unitString;
+    private TextView itemtv;
+    private EditText track_box;
+    private EditText labor_box;
+    private EditText loc_box;
+    private EditText category_box;
+    private EditText code_box;
+    private EditText description_box;
+    private EditText desctype_box;
+    private EditText quantity_box;
+    private EditText priority_box;
+    private EditText unit_box;
+    private Button add_defect;
+    public static String locationSetString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.defect_report_track_inspector);
         cameraBtn = (Button) findViewById(R.id.camerabtn);
+        itemtv= (TextView) findViewById(R.id.itemTV);
+        track_box= (EditText)findViewById(R.id.trackText);
+        labor_box= (EditText)findViewById(R.id.laborText);
+        loc_box= (EditText)findViewById(R.id.locationText);
+        category_box = (EditText)findViewById(R.id.categoryText);
+        code_box = (EditText)findViewById(R.id.codeText);
+        description_box = (EditText)findViewById(R.id.descriptionText);
+        desctype_box= (EditText)findViewById(R.id.desctypeText);
+        quantity_box = (EditText)findViewById(R.id.quantityText);
+        priority_box = (EditText)findViewById(R.id.priorityText);
+        unit_box = (EditText)findViewById(R.id.unit);
 //        imageView = (ImageView) findViewById(R.id.currdisplayimage);
-//        Geocoder geocoder;
-//        List<Address> addresses = new ArrayList<>();
-//        geocoder = new Geocoder(this, Locale.getDefault());
-//
-//        try {
-//            addresses = geocoder.getFromLocation(MapTI.markers.get(MapTI.numOfMarker).getPosition().latitude, MapTI.markers.get(MapTI.numOfMarker).getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        final String address = addresses.get(0).getAddressLine(0);
-//        String city = addresses.get(0).getLocality();
-//        String state = addresses.get(0).getAdminArea();
-//        String country = addresses.get(0).getCountryName();
-//        String postalCode = addresses.get(0).getPostalCode();
-//        final String knownName = addresses.get(0).getFeatureName();
-        setButtons();
+        add_defect = (Button)findViewById(R.id.button);
 
-        Button add_defect = (Button)findViewById(R.id.button);
-        add_defect.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-        final TextView itemtv = (TextView) findViewById(R.id.itemTV);
-        final EditText track_box = (EditText)findViewById(R.id.trackText);
-        final EditText labor_box = (EditText)findViewById(R.id.laborText);
-        final EditText loc_box = (EditText)findViewById(R.id.locationText);
-        final EditText category_box = (EditText)findViewById(R.id.categoryText);
-        final EditText code_box = (EditText)findViewById(R.id.codeText);
-        final EditText description_box = (EditText)findViewById(R.id.descriptionText);
-        final EditText desctype_box = (EditText)findViewById(R.id.desctypeText);
-        final EditText quantity_box = (EditText)findViewById(R.id.quantityText);
-        final EditText priority_box = (EditText)findViewById(R.id.priorityText);
-                final EditText unit_box= (EditText)findViewById(R.id.unit);
+        if (MapTI.score <10) {
+            itemtv.setText("T 0".concat(Integer.toString(MapTI.score)));
+            trackIDs1.add(itemtv.getText().toString());
+        }
+        else{
+            itemtv.setText("T ".concat(Integer.toString(MapTI.score)));
+            trackIDs1.add(itemtv.getText().toString());
+        }
+        setButtons();
+        loc_box.setText(locationSetString);
+
+
+//      final TextView itemtv = (TextView) findViewById(R.id.itemTV);
+//      final   EditText track_box = (EditText)findViewById(R.id.trackText);
+//      final   EditText labor_box = (EditText)findViewById(R.id.laborText);
+//      final   EditText loc_box = (EditText)findViewById(R.id.locationText);
+//      final   EditText category_box = (EditText)findViewById(R.id.categoryText);
+//      final   EditText code_box = (EditText)findViewById(R.id.codeText);
+//      final   EditText description_box = (EditText)findViewById(R.id.descriptionText);
+//      final   EditText desctype_box = (EditText)findViewById(R.id.desctypeText);
+//      final   EditText quantity_box = (EditText)findViewById(R.id.quantityText);
+//      final   EditText priority_box = (EditText)findViewById(R.id.priorityText);
+//      final   EditText unit_box= (EditText)findViewById(R.id.unit);
 
                 //final EditText inspectionNo_box = (EditText)findViewById(R.id.inspectionnoText);
         //final EditText inspectionD_box = (EditText)findViewById(R.id.inspectiondText);
@@ -160,175 +176,191 @@ public class InspectionForm extends AppCompatActivity {
         //String phoneString = phone_box.getText().toString();
         //String faxString = fax_box.getText().toString();
         //String emailString = email_box.getText().toString();
-       trackString = track_box.getText().toString();
-                trackNumber1.add(trackString);
-       laborString = labor_box.getText().toString();
+        //
 
-       locString = loc_box.getText().toString();
+    }
+
+    public void setButtons(){
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+        add_defect.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                trackString = track_box.getText().toString();
+                trackNumber1.add(trackString);
+                laborString = labor_box.getText().toString();
+
+                locString = loc_box.getText().toString();
                 trackLocations1.add(locString);
-       categoryString = category_box.getText().toString();
-       codeString = code_box.getText().toString();
-       descriptionString = description_box.getText().toString();
+                categoryString = category_box.getText().toString();
+                codeString = code_box.getText().toString();
+                descriptionString = description_box.getText().toString();
                 trackDescriptions1.add(descriptionString);
-       desctypeString = desctype_box.getText().toString();
+                desctypeString = desctype_box.getText().toString();
                 desctrypeArray.add(desctypeString);
-       quantityString = quantity_box.getText().toString();
-                trackQuantitys1.add(quantityString);
-       priorityString = priority_box.getText().toString();
-                trackPriority1.add(quantityString);
-       unitString = unit_box.getText().toString();
+                quantityString = quantity_box.getText().toString();
+
+                priorityString = priority_box.getText().toString();
+                trackPriority1.add(priorityString);
+                trackQuantitys1.add(priorityString);
+                unitString = unit_box.getText().toString();
                 trackUnits1.add(unitString);
 
-        final StreamResult result = new StreamResult(new File(getFilesDir(), "myFile.xml"));
-        try {
+                final StreamResult result = new StreamResult(new File(getFilesDir(), "myFile.xml"));
+                try {
 
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-            // root elements
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("inspection");
-            doc.appendChild(rootElement);
-            //Element dataTag = doc.getDocumentElement();
-            // staff elements
-            Element userID = doc.createElement("user_id");
-            rootElement.appendChild(userID);
+                    // root elements
+                    Document doc = docBuilder.newDocument();
+                    Element rootElement = doc.createElement("inspection");
+                    doc.appendChild(rootElement);
+                    //Element dataTag = doc.getDocumentElement();
+                    // staff elements
+                    Element userID = doc.createElement("user_id");
+                    rootElement.appendChild(userID);
 
-            // set attribute to staff element
-            Attr attr = doc.createAttribute("id");
-            attr.setValue("1");
-            userID.setAttributeNode(attr);
-
-
-            // shorten way
-            // staff.setAttribute("id", "1");
-
-            // firstname elements
-            //Element inspectionNumber = doc.createElement("insp_num");
-            //inspectionNumber.appendChild(doc.createTextNode(inspectionNoString));
-            //userID.appendChild(inspectionNumber);
-
-            // lastname elements
-            //Element customer = doc.createElement("customer");
-            //customer.appendChild(doc.createTextNode(nameString));
-            //userID.appendChild(customer);
-
-            // nickname elements
-            //Element address = doc.createElement("address");
-            //address.appendChild(doc.createTextNode(addressString));
-            //userID.appendChild(address);
-
-            // salary elements
-            //Element city = doc.createElement("city");
-            //city.appendChild(doc.createTextNode(cityString));
-            //userID.appendChild(city);
-
-            //Element state = doc.createElement("state");
-            //state.appendChild(doc.createTextNode(stateString));
-            //userID.appendChild(state);
-
-            //Element zipcode = doc.createElement("zip");
-            //zipcode.appendChild(doc.createTextNode(zipString));
-            //userID.appendChild(zipcode);
-
-            //Element county = doc.createElement("county");
-            //county.appendChild(doc.createTextNode(countyString));
-            //userID.appendChild(county);
-
-            //Element contact = doc.createElement("contact");
-            //contact.appendChild(doc.createTextNode(contactString));
-            //userID.appendChild(contact);
-
-            //Element telephone = doc.createElement("tele_num");
-            //telephone.appendChild(doc.createTextNode(phoneString));
-            //userID.appendChild(telephone);
-
-            //Element telefax = doc.createElement("fax_num");
-            //telefax.appendChild(doc.createTextNode(faxString));
-            //userID.appendChild(telefax);
-
-            //Element email = doc.createElement("cust_email");
-            //email.appendChild(doc.createTextNode(emailString));
-            //userID.appendChild(email);
-
-            //Element miles = doc.createElement("distance");
-            //miles.appendChild(doc.createTextNode(milesString));
-            //userID.appendChild(miles);
-
-            //Element trips = doc.createElement("trips_num");
-            //trips.appendChild(doc.createTextNode(tripsString));
-            //userID.appendChild(trips);
-
-            //Element surfacingTrips = doc.createElement("surface_trips");
-            //surfacingTrips.appendChild(doc.createTextNode(surfacingString));
-            //userID.appendChild(surfacingTrips);
-
-            //Element mobilization = doc.createElement("mobil");
-            //mobilization.appendChild(doc.createTextNode("100000"));
-            //userID.appendChild(mobilization);
-
-            //Element lineItem = doc.createElement("item_num");
-            //lineItem.appendChild(doc.createTextNode("100000"));
-            //userID.appendChild(lineItem);
-
-            Element track = doc.createElement("track_num");
-            track.appendChild(doc.createTextNode(trackString));
-            userID.appendChild(track);
-
-            Element location = doc.createElement("track_loc");
-            location.appendChild(doc.createTextNode(locString));
-            userID.appendChild(location);
-
-            Element description = doc.createElement("track_desc");
-            description.appendChild(doc.createTextNode(descriptionString));
-            userID.appendChild(description);
-
-            Element picture = doc.createElement("pic");
-            picture.appendChild(doc.createTextNode(""));
-            userID.appendChild(picture);
-
-            Element labor = doc.createElement("labor");
-            labor.appendChild(doc.createTextNode(laborString));
-            userID.appendChild(labor);
-
-            Element category = doc.createElement("category");
-            category.appendChild(doc.createTextNode(categoryString));
-            userID.appendChild(category);
-
-            Element code = doc.createElement("code");
-            code.appendChild(doc.createTextNode(codeString));
-            userID.appendChild(code);
-
-            Element codeDescription = doc.createElement("code_desc");
-            codeDescription.appendChild(doc.createTextNode(desctypeString));
-            userID.appendChild(codeDescription);
-
-            Element quantity = doc.createElement("issue_num");
-            quantity.appendChild(doc.createTextNode(quantityString));
-            userID.appendChild(quantity);
-
-            Element unit = doc.createElement("unit");
-            unit.appendChild(doc.createTextNode(unitString));
-            userID.appendChild(unit);
-
-            Element priority = doc.createElement("priority");
-            priority.appendChild(doc.createTextNode(priorityString));
-            userID.appendChild(priority);
-
-            // write the content into xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            //public File getFilesDir();
+                    // set attribute to staff element
+                    Attr attr = doc.createAttribute("id");
+                    attr.setValue("1");
+                    userID.setAttributeNode(attr);
 
 
-            transformer.transform(source, result);
+                    // shorten way
+                    // staff.setAttribute("id", "1");
 
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (TransformerException tfe) {
-            tfe.printStackTrace();
-        }
+                    // firstname elements
+                    //Element inspectionNumber = doc.createElement("insp_num");
+                    //inspectionNumber.appendChild(doc.createTextNode(inspectionNoString));
+                    //userID.appendChild(inspectionNumber);
+
+                    // lastname elements
+                    //Element customer = doc.createElement("customer");
+                    //customer.appendChild(doc.createTextNode(nameString));
+                    //userID.appendChild(customer);
+
+                    // nickname elements
+                    //Element address = doc.createElement("address");
+                    //address.appendChild(doc.createTextNode(addressString));
+                    //userID.appendChild(address);
+
+                    // salary elements
+                    //Element city = doc.createElement("city");
+                    //city.appendChild(doc.createTextNode(cityString));
+                    //userID.appendChild(city);
+
+                    //Element state = doc.createElement("state");
+                    //state.appendChild(doc.createTextNode(stateString));
+                    //userID.appendChild(state);
+
+                    //Element zipcode = doc.createElement("zip");
+                    //zipcode.appendChild(doc.createTextNode(zipString));
+                    //userID.appendChild(zipcode);
+
+                    //Element county = doc.createElement("county");
+                    //county.appendChild(doc.createTextNode(countyString));
+                    //userID.appendChild(county);
+
+                    //Element contact = doc.createElement("contact");
+                    //contact.appendChild(doc.createTextNode(contactString));
+                    //userID.appendChild(contact);
+
+                    //Element telephone = doc.createElement("tele_num");
+                    //telephone.appendChild(doc.createTextNode(phoneString));
+                    //userID.appendChild(telephone);
+
+                    //Element telefax = doc.createElement("fax_num");
+                    //telefax.appendChild(doc.createTextNode(faxString));
+                    //userID.appendChild(telefax);
+
+                    //Element email = doc.createElement("cust_email");
+                    //email.appendChild(doc.createTextNode(emailString));
+                    //userID.appendChild(email);
+
+                    //Element miles = doc.createElement("distance");
+                    //miles.appendChild(doc.createTextNode(milesString));
+                    //userID.appendChild(miles);
+
+                    //Element trips = doc.createElement("trips_num");
+                    //trips.appendChild(doc.createTextNode(tripsString));
+                    //userID.appendChild(trips);
+
+                    //Element surfacingTrips = doc.createElement("surface_trips");
+                    //surfacingTrips.appendChild(doc.createTextNode(surfacingString));
+                    //userID.appendChild(surfacingTrips);
+
+                    //Element mobilization = doc.createElement("mobil");
+                    //mobilization.appendChild(doc.createTextNode("100000"));
+                    //userID.appendChild(mobilization);
+
+                    //Element lineItem = doc.createElement("item_num");
+                    //lineItem.appendChild(doc.createTextNode("100000"));
+                    //userID.appendChild(lineItem);
+
+                    Element track = doc.createElement("track_num");
+                    track.appendChild(doc.createTextNode(trackString));
+                    userID.appendChild(track);
+
+                    Element location = doc.createElement("track_loc");
+                    location.appendChild(doc.createTextNode(locString));
+                    userID.appendChild(location);
+
+                    Element description = doc.createElement("track_desc");
+                    description.appendChild(doc.createTextNode(descriptionString));
+                    userID.appendChild(description);
+
+                    Element picture = doc.createElement("pic");
+                    picture.appendChild(doc.createTextNode(""));
+                    userID.appendChild(picture);
+
+                    Element labor = doc.createElement("labor");
+                    labor.appendChild(doc.createTextNode(laborString));
+                    userID.appendChild(labor);
+
+                    Element category = doc.createElement("category");
+                    category.appendChild(doc.createTextNode(categoryString));
+                    userID.appendChild(category);
+
+                    Element code = doc.createElement("code");
+                    code.appendChild(doc.createTextNode(codeString));
+                    userID.appendChild(code);
+
+                    Element codeDescription = doc.createElement("code_desc");
+                    codeDescription.appendChild(doc.createTextNode(desctypeString));
+                    userID.appendChild(codeDescription);
+
+                    Element quantity = doc.createElement("issue_num");
+                    quantity.appendChild(doc.createTextNode(quantityString));
+                    userID.appendChild(quantity);
+
+                    Element unit = doc.createElement("unit");
+                    unit.appendChild(doc.createTextNode(unitString));
+                    userID.appendChild(unit);
+
+                    Element priority = doc.createElement("priority");
+                    priority.appendChild(doc.createTextNode(priorityString));
+                    userID.appendChild(priority);
+
+                    // write the content into xml file
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource source = new DOMSource(doc);
+                    //public File getFilesDir();
+
+
+                    transformer.transform(source, result);
+
+                } catch (ParserConfigurationException pce) {
+                    pce.printStackTrace();
+                } catch (TransformerException tfe) {
+                    tfe.printStackTrace();
+                }
 
 
 
@@ -347,14 +379,6 @@ public class InspectionForm extends AppCompatActivity {
                 unit_box.setText(null);
 
 
-                if (MapTI.score <10) {
-                    itemtv.setText("T 0" + MapTI.score);
-                    trackIDs1.add(itemtv.getText().toString());
-                }
-                else{
-                itemtv.setText("T " + MapTI.score);
-                trackIDs1.add(itemtv.getText().toString());
-            }
 
 
                 MapActivitys.numOfMarker++;
@@ -366,14 +390,6 @@ public class InspectionForm extends AppCompatActivity {
                 startActivity(intent);
 
 
-            }
-        });
-    }
-    public void setButtons(){
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
             }
         });
     }

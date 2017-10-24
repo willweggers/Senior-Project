@@ -3,22 +3,30 @@ package com.example.seniorproject.TrackInspector;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.BundleCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.Space;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -38,6 +46,10 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,7 +101,13 @@ public class FormatReport extends DriveActivitys {
     private void setData(){
         setHeaderData();
         setDefectData();
-        documentTitle = HeaderData.thetrackinspectorid.concat(" " + HeaderData.thedate);
+        String thecurrdate = HeaderData.getDate();
+        try {
+            documentTitle = thecurrdate.concat(" - " + HeaderData.thetrackinspectorid);
+        }
+        catch (NullPointerException e){
+            documentTitle = thecurrdate.concat(" -  Track inspectorid not found.");
+        }
         constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +143,16 @@ public class FormatReport extends DriveActivitys {
     }
 
     private void setHeaderData(){
-        theCompanyName = "Track Inspection for ".concat(HeaderData.thecompanyname);
+
+
+            try {
+                theCompanyName = "Track Inspection for ".concat(HeaderData.thecompanyname);
+            }
+            catch (NullPointerException e){
+                theCompanyName = "Track Inspection for company name not entered.";
+            }
+
+
         theStreetAddress = HeaderData.theaddress;
         theCityStateZip = HeaderData.thelocation;
         TextView companyname = (TextView) findViewById(R.id.companyName);
@@ -143,6 +170,15 @@ public class FormatReport extends DriveActivitys {
         trackUnits=InspectionForm.trackUnits1;
         trackQuantitys= InspectionForm.trackQuantitys1;
         trackPriority= InspectionForm.trackPriority1;
+
+        switchIDs= InspectionForm.switchIDs1;
+        switchNumber= InspectionForm.switchNumber1;
+        switchLocations= InspectionForm.switchLocations1;
+        switchDescriptions =InspectionForm.switchDescriptions1;
+        switchUnits=InspectionForm.switchUnits1;
+        switchQuantitys= InspectionForm.switchQuantitys1;
+        switchPriority= InspectionForm.switchPriority1;
+
         addArrayLists();
         int numOfTrackRows = trackIDs.size();
         int numOfSwitchRows = switchIDs.size();
@@ -172,13 +208,7 @@ public class FormatReport extends DriveActivitys {
             tracklayout.addView(tableRow);
         }
         TableLayout switchlayout = (TableLayout) findViewById(R.id.switchTable);
-        switchIDs= InspectionForm.switchIDs1;
-        switchNumber= InspectionForm.switchNumber1;
-        switchLocations= InspectionForm.switchLocations1;
-        switchDescriptions =InspectionForm.switchDescriptions1;
-        switchUnits=InspectionForm.switchUnits1;
-        switchQuantitys= InspectionForm.switchQuantitys1;
-        switchPriority= InspectionForm.switchPriority1;
+
         int numOfElementsPerRowSwitch = switchArrayList.size();
         for(int i = 0; i < numOfSwitchRows;i++){
             TableRow tableRow = new TableRow(this);
@@ -216,29 +246,28 @@ public class FormatReport extends DriveActivitys {
                     new Thread() {
                         @Override
                         public void run() {
+//                            Drawable d = getResources().getDrawable(R.drawable.rsz_1rsz_ameritracklogoreal);
+//                            Bitmap icon = drawableToBitmap(d);
+                            Bitmap icon = layoutToImageReport();
 
-                            Bitmap bitmap = layoutToImageReport();
-//                            int bytes = bitmap.getByteCount();
-//                            java.nio.ByteBuffer byteBuffer = java.nio.ByteBuffer.allocate(bytes);
-//                            bitmap.copyPixelsToBuffer(byteBuffer);
-//                            byte[] bitMapData = byteBuffer.array();
-//
+////
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            icon.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                             byte[] bitMapData = stream.toByteArray();
-
                             OutputStream outputStream = driveContents.getOutputStream();
-//                            Writer writer = new OutputStreamWriter(outputStream);
+                            Writer writer = new OutputStreamWriter(outputStream);
                             try {
                                 //what is written
                                 //might use something that can help format the report properly
                                 outputStream.write(bitMapData);
                                 outputStream.close();
-//                                writer.write("some stuff");
+//                                writer.write(imageEncoded);
 //                                writer.close();
+
                             } catch (IOException e) {
                             }
                             //https://developers.google.com/drive/v3/web/integrate-open
+                            //https://www.sitepoint.com/mime-types-complete-list/
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                                     .setTitle(documentTitle)
                                     .setMimeType("image/jpeg")
@@ -299,6 +328,28 @@ public class FormatReport extends DriveActivitys {
 //        }
 
         return b;
+    }
+    //https://stackoverflow.com/questions/3035692/how-to-convert-a-drawable-to-a-bitmap/3035869#3035869
+    private Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
 

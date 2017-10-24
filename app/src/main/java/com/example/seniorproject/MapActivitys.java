@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -36,8 +37,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.seniorproject.TrackInspector.FormatReport;
 import com.example.seniorproject.TrackInspector.InspectionForm;
 import com.example.seniorproject.TrackInspector.MapTI;
+import com.example.seniorproject.TrackInspector.MenuTI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -99,6 +102,8 @@ public class MapActivitys extends FragmentActivity implements
     public static ArrayList<Marker> markers = new ArrayList<>();
     public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
     public static int numOfMarker = 0;
+    private LatLng curLoc;
+    private Handler handler = new Handler();
 
 
 
@@ -106,13 +111,18 @@ public class MapActivitys extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         checkGPSOn();
         mMap = googleMap;
-        LatLng curLoc = new LatLng(LATITUDE, LONGITUDE);
+        if(LATITUDE != 0.0 && LONGITUDE != 0.0){
+            curLoc = new LatLng(LATITUDE, LONGITUDE);
+        }
+        //remove this later
+        else{
+            curLoc = new LatLng(33.983076, -84.562506);
+        }
         if(currLocMarker != null){
             currLocMarker.remove();
         }
-        currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Marker in curLoc"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
+       handler.postDelayed(mLaunchTask,1500);
         if(markers.size() !=0){
             for(int i = 0; i < markers.size();i++){
                 if(InspectionForm.desctypeString != null) {
@@ -151,6 +161,12 @@ public class MapActivitys extends FragmentActivity implements
             }
         });
     }
+    private Runnable mLaunchTask = new Runnable() {
+        public void run() {
+             mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        }
+    };
 
 
     //method to show user what is happening on screen
