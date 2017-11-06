@@ -4,11 +4,16 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission
+        android:name="android.permission.USE_CREDENTIALS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -34,25 +39,40 @@
         </activity>
         <activity android:name=".TrackInspector.MapTI"
             android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
+            />
         <activity android:name=".TrackInspector.MenuTI"
             android:theme="@style/AppTheme.HeaderTextStyle"
-            ></activity>
+            />
         <activity android:name=".TrackInspector.HeaderData"
             android:theme="@style/AppTheme.HeaderTextStyle"
-            ></activity>
+            />
         <activity android:name=".TrackInspector.InspectionForm"
             android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
-        <activity android:name=".Manager.Manager"
+            />
+        <activity android:name=".Manager.MenuManager"
             android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
-        <activity android:name=".Admin.Admin"
+            />
+        <activity android:name=".Admin.MenuAdmin"
+        android:theme="@style/AppTheme.NoActionBar"
+        />
+        <activity android:name=".Admin.MenuTIAdmin"
             android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
+            />
+        <activity android:name=".Admin.MenuManagerAdmin"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".TrackInspector.FormatReport"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-            ></activity>
+            />
+        <activity android:name=".Admin.ManageAccounts"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.ModiyMasterFiles"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.AddAccount"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <!-- api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -60,16 +80,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <!--<provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.seniorproject"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>-->
 
     </application>
 

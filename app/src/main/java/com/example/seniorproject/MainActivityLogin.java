@@ -1,90 +1,172 @@
 package com.example.seniorproject;
 
-//too access TI enter TI into username/ M enter M/ A enter A/ leave pass blank (Password)
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.seniorproject.Admin.Admin;
-import com.example.seniorproject.Manager.Manager;
+import com.example.seniorproject.Admin.MenuAdmin;
+import com.example.seniorproject.Manager.MenuManager;
 import com.example.seniorproject.TrackInspector.MenuTI;
+
 
 public class MainActivityLogin extends AppCompatActivity {
     private Button submitButton;
-    private EditText userName;
-    private EditText password;
-    //stores actual un and pass inputed by user
-    private String actualUserName;
-    private String actualPassWord;
-    //below store temp un and pass for each account
+    private EditText enterUserName;
+    private EditText enterPass;
 
-    //current one account accesses certain UI instead of individual
-    //expected un/pass for Track Inspectors
-    private String expUserNameTI = "ti";
-    private String expPassWordTI = "Password";
-    //expected un/pass for Managers
-    private String expUserNameM = "m";
-    private String expPassWordM = "Password";
-    //expected un/pass for Admins
-    private String expUserNameA = "a";
-    private String expPassWordA = "Password";
+    private String userName;
+    private String passWord;
+    private SQLiteDatabase localDB;
+    private SQLiteDatabase readDB;
+
+    private Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
-        userName= (EditText) findViewById(R.id.userName);
-        password= (EditText) findViewById(R.id.passWord);
-        submitButton= (Button) findViewById(R.id.submit);
+        submitButton = (Button) findViewById(R.id.submit);
+        enterUserName = (EditText) findViewById(R.id.userName);
+        enterPass = (EditText) findViewById(R.id.passWord);
+        localDB = new CreateDB(this).getWritableDatabase();
+        readDB = new CreateDB(this).getReadableDatabase();
+        if(CreateDB.isDBEmpty(localDB)) {
+//            AccountInfo.showMessage("empty database",getApplicationContext());
+            ContentValues values = new ContentValues();
+            values.put(CreateDB.COLUMN_NAME, AccountInfo.adminUN);
+            values.put(CreateDB.COLUMN_TYPE, AccountInfo.ADMIN_PREM);
+            values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(AccountInfo.adminPass));
+            long newRowId = localDB.insert(CreateDB.TABLE_NAME, null, values);
+        }
+        else{
+//            AccountInfo.showMessage("not empty database",getApplicationContext());
+        }
+        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+//        while (cursor.moveToNext()){
+//            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
+//
+//        }
+//        if(CreateDB.isDBEmpty(readDB)){
+//                        AccountInfo.showMessage("empty database",getApplicationContext());
+//
+//        }
+//        else{
+//                        AccountInfo.showMessage("not empty database",getApplicationContext());
+//
+//        }
 
         setSubmitButton();
-
     }
-    //sets submit button to send user to either TI,Manager, or Admin UI
-    //if actual UN and pass dont equal an exp UN and pass then give user pop up that says there wrong
+
     private void setSubmitButton() {
         submitButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                getUserNamePassWord();
-                //if UN and pass equal TI UN and pass then submit button goes to TI UI
-                if(actualUserName.equals(expUserNameTI) && actualPassWord.equals(expPassWordTI)) {
-                    Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
-                    startActivity(intent);
-                }
-                //if Un and pass equal Manager UN and pass then submit button goes to Manager UI
-                else if((actualUserName.equals(expUserNameM))&& (actualPassWord.equals(expPassWordM))){
-                    Intent intent = new Intent(MainActivityLogin.this,Manager.class);
-                    startActivity(intent);
-                }
-                //if Un and pass equal Manager UN and pass then submit button goes to admin UI
-                else if(actualUserName.equals(expUserNameA) && actualPassWord.equals(expPassWordA)){
-                    Intent intent = new Intent(MainActivityLogin.this,Admin.class);
-                    startActivity(intent);
-                }
-                //dont equal show popup
-                else{
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivityLogin.this);
-                    builder.setTitle("Error")
-                            .setMessage("Either username or password is incorrect.")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                }
+            searchAccounts();
             }
         });
     }
-    //gets whatever is in edit text fields and stores it to variables specified prev
-    private void getUserNamePassWord(){
-        actualUserName = userName.getText().toString();
-        actualPassWord = password.getText().toString();
+
+    private void searchAccounts(){
+        assignUNPass();
+
+//        AccountInfo.showMessage(Integer.toString(cursor.getCount()),getApplicationContext());
+        while (cursor.moveToNext()){
+               if(userName.equals(cursor.getString(0))){
+                   if(AccountInfo.md5(passWord).equals(cursor.getString(2))){
+                           if(cursor.getString(1).equals(AccountInfo.ADMIN_PREM)){
+                               Intent intent = new Intent(MainActivityLogin.this,MenuAdmin.class);
+                               startActivity(intent);
+                               cursor.close();
+                               break;
+                           }
+                           else if(cursor.getString(1).equals(AccountInfo.MANAGER_PREM)){
+                               Intent intent = new Intent(MainActivityLogin.this,MenuManager.class);
+                               startActivity(intent);
+                               cursor.close();
+
+                               break;
+                           }
+                           else if(cursor.getString(1).equals(AccountInfo.TI_PREM)){
+                               Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
+                               startActivity(intent);
+                               cursor.close();
+
+                               break;
+                           }
+                           else{
+                               AccountInfo.showMessage("Error account doesnt have premission set.",getApplicationContext());
+                           }
+
+                   }
+                   else{
+                       AccountInfo.showMessage("Password is invalid.",getApplicationContext());
+                   }
+               }
+//               else{
+//                  // cursor.moveToNext();
+//                   continue;
+//               }
+
+           }
+//           cursor.close();
+        }
+//        else {
+//            AccountInfo.showMessage("empty database",getApplicationContext());
+//        }
+
+
+
+    //}
+    private void readDB(){
+//        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+//
+//        String[] projection = {
+//                CreateDB.COLUMN_NAME,
+//                CreateDB.COLUMN_TYPE,
+//                CreateDB.COLUMN_PASS
+//        };
+//
+//        String selection =
+//                CreateDB.COLUMN_NAME + " like ? and " +
+//                        CreateDB.COLUMN_TYPE + " like ? and " +
+//                        CreateDB.COLUMN_PASS + " like ?";
+//        String[] selectionArgs = { "My Title" };
+//
+//
+//
+//        cursor = readDB.query(
+//                CreateDB.TABLE_NAME,     // The table to query
+//                projection,                               // The columns to return
+//                selection,                               // The columns for the WHERE clause
+//                selectionArgs,                            // The values for the WHERE clause
+//                null,                                     // don't group the rows
+//                null,                                     // don't filter by row groups
+////                null                                      // don't sort
+//        );
+//
+//        Log.d(TAG, "The total cursor count is " + cursor.getCount());
+//        binding.recycleView.setAdapter(new SampleRecyclerViewCursorAdapter(this, cursor));
     }
+    private void assignUNPass(){
+        passWord = enterPass.getText().toString();
+        userName = enterUserName.getText().toString();
+    }
+
 }
+
+//        }

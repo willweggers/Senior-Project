@@ -203,18 +203,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/phoneText" />
 
-    <EditText
-        android:id="@+id/quantityText"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintLeft_toRightOf="@+id/descriptionText"
-        app:layout_constraintRight_toLeftOf="@+id/priorityText"
-        tools:layout_editor_absoluteY="221dp"
-        app:layout_constraintHorizontal_bias="0.444" />
+    <!--<EditText-->
+        <!--android:id="@+id/quantityText"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/descriptionText"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/priorityText"-->
+        <!--tools:layout_editor_absoluteY="221dp"-->
+        <!--app:layout_constraintHorizontal_bias="0.444" />-->
 
     <EditText
         android:id="@+id/priorityText"
@@ -449,33 +449,33 @@
         android:layout_marginRight="8dp"
         app:layout_constraintHorizontal_bias="0.521" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Quantity"
-        app:layout_constraintBottom_toTopOf="@+id/quantityText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856"
-        android:layout_marginLeft="296dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
-
-    <!--<ImageView-->
-        <!--android:id="@+id/currdisplayimage"-->
-        <!--android:layout_width="308dp"-->
-        <!--android:layout_height="156dp"-->
-        <!--app:srcCompat="@drawable/common_full_open_on_phone"-->
-        <!--android:layout_marginLeft="483dp"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--<TextView-->
+        <!--android:id="@+id/textView4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Quantity"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/quantityText"-->
         <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintVertical_bias="0.319"-->
+        <!--app:layout_constraintVertical_bias="0.856"-->
+        <!--android:layout_marginLeft="296dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
         <!--android:layout_marginRight="8dp"-->
         <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.217" />-->
+        <!--app:layout_constraintHorizontal_bias="0.0" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/currdisplayimage"-->
+    <!--android:layout_width="308dp"-->
+    <!--android:layout_height="156dp"-->
+    <!--app:srcCompat="@drawable/common_full_open_on_phone"-->
+    <!--android:layout_marginLeft="483dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintVertical_bias="0.319"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintHorizontal_bias="0.217" />-->
 </android.support.constraint.ConstraintLayout>

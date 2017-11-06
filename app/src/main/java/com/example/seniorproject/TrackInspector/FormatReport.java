@@ -246,13 +246,13 @@ public class FormatReport extends DriveActivitys {
                     new Thread() {
                         @Override
                         public void run() {
-//                            Drawable d = getResources().getDrawable(R.drawable.rsz_1rsz_ameritracklogoreal);
-//                            Bitmap icon = drawableToBitmap(d);
-                            Bitmap icon = layoutToImageReport();
+                            Drawable d = getResources().getDrawable(R.drawable.rsz_1rsz_ameritracklogoreal);
+                            Bitmap icon = drawableToBitmap(d);
+//                            Bitmap icon = layoutToImageReport();
 
 ////
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            icon.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
                             byte[] bitMapData = stream.toByteArray();
                             OutputStream outputStream = driveContents.getOutputStream();
                             Writer writer = new OutputStreamWriter(outputStream);
@@ -270,7 +270,7 @@ public class FormatReport extends DriveActivitys {
                             //https://www.sitepoint.com/mime-types-complete-list/
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                                     .setTitle(documentTitle)
-                                    .setMimeType("image/jpeg")
+                                    .setMimeType("application/msword")
                                     //.setStarred(true)
                                     //.setDescription("Desciptiong of file")                                    .
                                     .build();

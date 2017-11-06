@@ -61,7 +61,7 @@ public class InspectionForm extends AppCompatActivity {
     Uri imageFileUri;
     // absolute path for camera images
     String myPicPath;
-//    private ImageView imageView;
+    //    private ImageView imageView;
     public static ArrayList<String> trackIDs1= new ArrayList<>();
     public static ArrayList<String> trackNumber1= new ArrayList<>();
     public static ArrayList<String> trackLocations1= new ArrayList<>();
@@ -146,7 +146,7 @@ public class InspectionForm extends AppCompatActivity {
 //      final   EditText priority_box = (EditText)findViewById(R.id.priorityText);
 //      final   EditText unit_box= (EditText)findViewById(R.id.unit);
 
-                //final EditText inspectionNo_box = (EditText)findViewById(R.id.inspectionnoText);
+        //final EditText inspectionNo_box = (EditText)findViewById(R.id.inspectionnoText);
         //final EditText inspectionD_box = (EditText)findViewById(R.id.inspectiondText);
         //final EditText zip_box = (EditText)findViewById(R.id.zipText);
         //final EditText name_box = (EditText)findViewById(R.id.nameText);
