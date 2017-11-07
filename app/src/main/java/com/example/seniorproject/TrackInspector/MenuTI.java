@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.CreateDB;
+import com.example.seniorproject.MainActivityLogin;
 import com.example.seniorproject.R;
 
 
@@ -35,6 +36,7 @@ public class MenuTI extends AppCompatActivity{
     private SQLiteDatabase readDB;
     public static String userNameTI;
     private Cursor cursor;
+    private Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,31 +44,34 @@ public class MenuTI extends AppCompatActivity{
         setContentView(R.layout.menu_track_inspector);
         localDB = new CreateDB(this).getWritableDatabase();
         readDB = new CreateDB(this).getReadableDatabase();
-        cursor = readDB.rawQuery("SELECT " + CreateDB.TABLE_NAME + " FROM username WHERE username=?", new String[] {userNameTI});
-        cursor.moveToFirst();
-        if(cursor.getString(2).equals("")){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("New Account set your password below: ");
-
-            final EditText input = new EditText(this);
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            builder.setView(input);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String newPass = input.getText().toString();
-                    ContentValues values = new ContentValues();
-                    values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(newPass));
-                    localDB.update(CreateDB.TABLE_NAME, values, "username=?",new String[]{userNameTI});
-
-                }
-            });
-
-            builder.show();
-        }
         startInspection = (Button) findViewById(R.id.startInspection);
         viewInspection = (Button) findViewById(R.id.viewInspection);
         editInspection = (Button) findViewById(R.id.editInspection);
+        logout = (Button) findViewById(R.id.logoutti);
+            cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME + " WHERE username = ?", new String[]{userNameTI});
+            cursor.moveToFirst();
+            if (cursor.getString(2).equals(AccountInfo.md5(""))) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("New Account set your password below: ");
+
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newPass = input.getText().toString();
+                        ContentValues values = new ContentValues();
+                        values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(newPass));
+                        localDB.update(CreateDB.TABLE_NAME, values, "username=?", new String[]{userNameTI});
+
+                    }
+                });
+
+                builder.show();
+            }
+
+
         ActivityCompat.requestPermissions(MenuTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
@@ -95,6 +100,13 @@ public class MenuTI extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(MenuTI.this, MainActivityLogin.class);
+                startActivity(intent);
             }
         });
     }

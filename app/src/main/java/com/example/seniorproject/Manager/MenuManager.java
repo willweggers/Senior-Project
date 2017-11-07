@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.CreateDB;
+import com.example.seniorproject.MainActivityLogin;
 import com.example.seniorproject.R;
 import com.example.seniorproject.TrackInspector.HeaderData;
 import com.example.seniorproject.TrackInspector.MenuTI;
@@ -35,20 +36,23 @@ public class MenuManager extends AppCompatActivity{
     private Cursor cursor;
     private SQLiteDatabase localDB;
     private SQLiteDatabase readDB;
+    private Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_track_inspector);
+        setContentView(R.layout.acitvity_manager);
         startInspection = (Button) findViewById(R.id.startInspectionmanager);
         viewyourInspection = (Button) findViewById(R.id.viewInspectionmanagermanager);
         viewTIInspections =  (Button) findViewById(R.id.viewInspectionmanager);
         editInspection = (Button) findViewById(R.id.editInspectionmanager);
+        logout = (Button) findViewById(R.id.logoutmanager);
+
         localDB = new CreateDB(this).getWritableDatabase();
         readDB = new CreateDB(this).getReadableDatabase();
-//        cursor = readDB.rawQuery(CreateDB.TABLE_NAME, "username=?", new String[]{userNameManager});;
+        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME + " WHERE username = ?", new String[]{userNameManager});
         cursor.moveToFirst();
-        if(cursor.getString(2).equals("")){
+        if(cursor.getString(2).equals(AccountInfo.md5(""))){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("New Account set your password below: ");
 
@@ -68,11 +72,10 @@ public class MenuManager extends AppCompatActivity{
 
             builder.show();
         }
+
         ActivityCompat.requestPermissions(MenuManager.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
-        setTitle("Menu");
-
     }
 
     private void setButtons(){
@@ -89,6 +92,7 @@ public class MenuManager extends AppCompatActivity{
         viewTIInspections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ListTrackInspectors.userUsing = userNameManager;
                 Intent intent = new Intent(MenuManager.this, ListTrackInspectors.class);
                 startActivity(intent);
             }
@@ -104,6 +108,13 @@ public class MenuManager extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(MenuManager.this, MainActivityLogin.class);
+                startActivity(intent);
             }
         });
     }

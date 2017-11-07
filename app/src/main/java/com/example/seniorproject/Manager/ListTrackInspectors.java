@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.Admin.AddAccount;
 import com.example.seniorproject.Admin.ManageAccounts;
 import com.example.seniorproject.Admin.MenuAdmin;
@@ -38,6 +39,9 @@ public class ListTrackInspectors extends AppCompatActivity {
     private String lastUN;
     private String lastType;
     private ArrayList<String> types = new ArrayList<>();
+    public static String userUsing;
+    public static String userViewing;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +76,7 @@ public class ListTrackInspectors extends AppCompatActivity {
     private void addRows(){
         cursor = writeDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
         cursor.moveToFirst();
-        accountTable = (TableLayout) findViewById(R.id.accounttable);
+        accountTable = (TableLayout) findViewById(R.id.trackinspectortable);
         accountTable.removeAllViews();
         do {
 
@@ -86,9 +90,6 @@ public class ListTrackInspectors extends AppCompatActivity {
                 TextView textView = new TextView(this);
                 if (j == 0) {
                     textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 10.0f));
-                } else if (j == 1) {
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT, 2.9f));
-
                 }
 //                    AccountInfo.showMessage(cursor.getString(j),getApplicationContext());
                 textView.setText(cursor.getString(j));
@@ -96,26 +97,28 @@ public class ListTrackInspectors extends AppCompatActivity {
 
                 textView.setTextSize(25f);
                 textView.setPadding(10,0,0,0);
-                if (j == 0) {
-                    lastUN = cursor.getString(j);
-                }
-                else if(j == 1){
-                    lastType = cursor.getString(j);
-                }
-                tableRow.addView(textView);
+
+                    lastUN = cursor.getString(0);
+                    lastType = cursor.getString(1);
+
+
+                    tableRow.addView(textView);
+
             }
             final String lastTypeFinal = lastType;
             tableRow.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-
                     if(lastTypeFinal.equals("Track Inspector")){
                         Intent intent = new Intent(ListTrackInspectors.this, MenuTIManager.class);
+                        if(userUsing.equals("Admin")) {
+                            intent = new Intent(ListTrackInspectors.this, MenuTIAdmin.class);
+                        }
                         startActivity(intent);
                     }
                 }
             });
-            if(!lastType.equals("Administrator") || !lastType.equals("Manager")) {
+            if(!lastTypeFinal.equals(AccountInfo.ADMIN_PREM) && (!lastTypeFinal.equals(AccountInfo.MANAGER_PREM))) {
                 accountTable.addView(tableRow);
             }
         } while (cursor.moveToNext());

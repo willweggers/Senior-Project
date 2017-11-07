@@ -336,7 +336,7 @@ public class InspectionForm extends AppCompatActivity {
                     userID.appendChild(codeDescription);
 
                     Element quantity = doc.createElement("issue_num");
-                    quantity.appendChild(doc.createTextNode(quantityString));
+                    quantity.appendChild(doc.createTextNode(priorityString));
                     userID.appendChild(quantity);
 
                     Element unit = doc.createElement("unit");
@@ -374,7 +374,7 @@ public class InspectionForm extends AppCompatActivity {
                 code_box.setText(null);
                 description_box.setText(null);
                 desctype_box.setText(null);
-                quantity_box.setText(null);
+//                quantity_box.setText(null);
                 priority_box.setText(null);
                 unit_box.setText(null);
 

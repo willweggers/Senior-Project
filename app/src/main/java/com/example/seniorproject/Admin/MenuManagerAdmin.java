@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.seniorproject.Manager.ListTrackInspectors;
 import com.example.seniorproject.Manager.MenuManager;
 import com.example.seniorproject.R;
 import com.example.seniorproject.TrackInspector.HeaderData;
@@ -61,7 +62,9 @@ public class MenuManagerAdmin extends AppCompatActivity {
         viewTIInspections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ListTrackInspectors.userUsing = "Admin";
+                Intent intent = new Intent(MenuManagerAdmin.this, ListTrackInspectors.class);
+                startActivity(intent);
             }
         });
         viewyourInspection.setOnClickListener(new View.OnClickListener() {

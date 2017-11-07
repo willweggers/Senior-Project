@@ -25,13 +25,14 @@ public class MenuTIManager extends AppCompatActivity {
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static String currentUserName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_ti_admin);
-        startInspection = (Button) findViewById(R.id.startInspectionadmin);
-        viewInspection = (Button) findViewById(R.id.viewInspectionadmin);
-        editInspection = (Button) findViewById(R.id.editInspectionadmin);
+        setContentView(R.layout.menu_ti_manager);
+        startInspection = (Button) findViewById(R.id.startInspectionmanager);
+        viewInspection = (Button) findViewById(R.id.viewInspectionmanager);
+        editInspection = (Button) findViewById(R.id.editInspectionmanager);
         back = (Button) findViewById(R.id.backadminmenu5) ;
         ActivityCompat.requestPermissions(MenuTIManager.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);

@@ -56,6 +56,8 @@ public class MainActivityLogin extends AppCompatActivity {
 //            AccountInfo.showMessage("not empty database",getApplicationContext());
         }
         cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+        cursor.moveToFirst();
+//        cursor.moveToFirst();
 //        while (cursor.moveToNext()){
 //            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
 //
@@ -84,14 +86,19 @@ public class MainActivityLogin extends AppCompatActivity {
     private void searchAccounts(){
         assignUNPass();
         cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+
         cursor.moveToFirst();
+//        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+//        cursor.moveToFirst();
 //        AccountInfo.showMessage(Integer.toString(cursor.getCount()),getApplicationContext());
-        while (cursor.moveToNext()){
+        do{
                if(userName.equals(cursor.getString(0))){
                    if(AccountInfo.md5(passWord).equals(cursor.getString(2))){
                            if(cursor.getString(1).equals(AccountInfo.ADMIN_PREM)){
                                Intent intent = new Intent(MainActivityLogin.this,MenuAdmin.class);
                                startActivity(intent);
+                               enterUserName.setText(null);
+                               enterPass.setText(null);
                                cursor.close();
                                break;
                            }
@@ -99,6 +106,8 @@ public class MainActivityLogin extends AppCompatActivity {
                                MenuManager.userNameManager = cursor.getString(0);
                                Intent intent = new Intent(MainActivityLogin.this,MenuManager.class);
                                startActivity(intent);
+                               enterUserName.setText(null);
+                               enterPass.setText(null);
                                cursor.close();
 
                                break;
@@ -107,6 +116,8 @@ public class MainActivityLogin extends AppCompatActivity {
                                MenuTI.userNameTI = cursor.getString(0);
                                Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
                                startActivity(intent);
+                               enterUserName.setText(null);
+                               enterPass.setText(null);
                                cursor.close();
 
                                break;
@@ -125,7 +136,7 @@ public class MainActivityLogin extends AppCompatActivity {
 //                   continue;
 //               }
 
-           }
+           }while (cursor.moveToNext());
 //           cursor.close();
         }
 //        else {

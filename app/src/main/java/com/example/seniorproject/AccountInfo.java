@@ -21,7 +21,7 @@ public class AccountInfo{
     //diff premissons
     public static final String ADMIN_PREM = "Administrator";
     public static final String MANAGER_PREM = "Manager";
-    public static final String TI_PREM = "TrackInspector";
+    public static final String TI_PREM = "Track Inspector";
     //Admin info
     public static final String adminUN = "Admin";
     public static final String adminPass = "adminpass";

@@ -41,7 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".TrackInspector.MenuTI"
-            android:theme="@style/AppTheme.HeaderTextStyle"
+            android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".TrackInspector.HeaderData"
             android:theme="@style/AppTheme.HeaderTextStyle"
