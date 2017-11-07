@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.example.seniorproject.MainActivityLogin;
 import com.example.seniorproject.R;
+import com.example.seniorproject.TrackInspector.FormatReport;
 import com.example.seniorproject.TrackInspector.HeaderData;
 import com.example.seniorproject.TrackInspector.MenuTI;
 
@@ -26,6 +27,7 @@ public class MenuAdmin extends AppCompatActivity {
        manageaccounts = (Button) findViewById(R.id.ManageAccounts);
        modifymasterfiles= (Button) findViewById(R.id.ModifyMasterFiles);
        loguout = (Button) findViewById(R.id.logoutadmin);
+       FormatReport.usernameAccessingThis = "Admin";
        setButton();
     }
     private void setButton() {

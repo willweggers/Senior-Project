@@ -2,6 +2,8 @@ package com.example.seniorproject.TrackInspector;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,7 +33,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.seniorproject.AccountInfo;
+import com.example.seniorproject.Admin.MenuAdmin;
+import com.example.seniorproject.CreateDB;
 import com.example.seniorproject.DriveActivitys;
+import com.example.seniorproject.MainActivityLogin;
+import com.example.seniorproject.Manager.MenuManager;
+import com.example.seniorproject.Manager.MenuTIManager;
 import com.example.seniorproject.R;
 import com.example.seniorproject.TrackInspector.HeaderData;
 import com.example.seniorproject.TrackInspector.MapTI;
@@ -88,12 +96,19 @@ public class FormatReport extends DriveActivitys {
     private ConstraintLayout constraintLayout;
     public String documentTitle;
     private Handler handler = new Handler();
+    public static String usernameAccessingThis;
+    private SQLiteDatabase localDB;
+    private SQLiteDatabase readDB;
+
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inspection_report_format);
         constraintLayout = (ConstraintLayout)findViewById(R.id.CLInspectionReport);
+        localDB = new CreateDB(this).getWritableDatabase();
+        readDB = new CreateDB(this).getReadableDatabase();
         setData();
 
     }
@@ -120,8 +135,33 @@ public class FormatReport extends DriveActivitys {
     }
     private Runnable mLaunchTask = new Runnable() {
         public void run() {
-            Intent i = new Intent(FormatReport.this, MenuTI.class);
-            startActivity(i);
+            cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+            cursor.moveToFirst();
+            String accountType = null;
+            final String accountTypeFinal;
+            do {
+
+                if(cursor.getString(0).equals(usernameAccessingThis)){
+                    accountType = cursor.getString(1);
+
+                }
+            }while (cursor.moveToNext());
+            if(accountType.equals(AccountInfo.MANAGER_PREM)){
+                Intent i = new Intent(FormatReport.this, MenuManager.class);
+                startActivity(i);
+            }
+            else if(accountType.equals(AccountInfo.TI_PREM)) {
+                Intent i = new Intent(FormatReport.this, MenuTI.class);
+                startActivity(i);
+            }
+            else if(accountType.equals(AccountInfo.ADMIN_PREM)){
+                Intent i = new Intent(FormatReport.this, MenuAdmin.class);
+                startActivity(i);
+            }
+            else{
+                Intent i = new Intent(FormatReport.this, MainActivityLogin.class);
+                startActivity(i);
+            }
         }
     };
 

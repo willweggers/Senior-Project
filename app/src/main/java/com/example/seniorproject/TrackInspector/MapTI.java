@@ -87,6 +87,7 @@ public class MapTI extends MapActivitys {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                                generateReport();
+                                markers.clear();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

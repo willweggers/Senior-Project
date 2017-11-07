@@ -19,6 +19,7 @@ import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.CreateDB;
 import com.example.seniorproject.MainActivityLogin;
 import com.example.seniorproject.R;
+import com.example.seniorproject.TrackInspector.FormatReport;
 import com.example.seniorproject.TrackInspector.HeaderData;
 import com.example.seniorproject.TrackInspector.MenuTI;
 
@@ -47,7 +48,7 @@ public class MenuManager extends AppCompatActivity{
         viewTIInspections =  (Button) findViewById(R.id.viewInspectionmanager);
         editInspection = (Button) findViewById(R.id.editInspectionmanager);
         logout = (Button) findViewById(R.id.logoutmanager);
-
+        FormatReport.usernameAccessingThis = userNameManager;
         localDB = new CreateDB(this).getWritableDatabase();
         readDB = new CreateDB(this).getReadableDatabase();
         cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME + " WHERE username = ?", new String[]{userNameManager});

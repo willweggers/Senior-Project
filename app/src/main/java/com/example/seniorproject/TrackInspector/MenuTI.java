@@ -47,6 +47,7 @@ public class MenuTI extends AppCompatActivity{
         startInspection = (Button) findViewById(R.id.startInspection);
         viewInspection = (Button) findViewById(R.id.viewInspection);
         editInspection = (Button) findViewById(R.id.editInspection);
+        FormatReport.usernameAccessingThis = userNameTI;
         logout = (Button) findViewById(R.id.logoutti);
             cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME + " WHERE username = ?", new String[]{userNameTI});
             cursor.moveToFirst();
