@@ -83,7 +83,8 @@ public class MainActivityLogin extends AppCompatActivity {
 
     private void searchAccounts(){
         assignUNPass();
-
+        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+        cursor.moveToFirst();
 //        AccountInfo.showMessage(Integer.toString(cursor.getCount()),getApplicationContext());
         while (cursor.moveToNext()){
                if(userName.equals(cursor.getString(0))){
@@ -95,6 +96,7 @@ public class MainActivityLogin extends AppCompatActivity {
                                break;
                            }
                            else if(cursor.getString(1).equals(AccountInfo.MANAGER_PREM)){
+                               MenuManager.userNameManager = cursor.getString(0);
                                Intent intent = new Intent(MainActivityLogin.this,MenuManager.class);
                                startActivity(intent);
                                cursor.close();
@@ -102,6 +104,7 @@ public class MainActivityLogin extends AppCompatActivity {
                                break;
                            }
                            else if(cursor.getString(1).equals(AccountInfo.TI_PREM)){
+                               MenuTI.userNameTI = cursor.getString(0);
                                Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
                                startActivity(intent);
                                cursor.close();

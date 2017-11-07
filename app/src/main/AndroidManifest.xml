@@ -49,21 +49,22 @@
         <activity android:name=".TrackInspector.InspectionForm"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".TrackInspector.FormatReport"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
         <activity android:name=".Manager.MenuManager"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".Admin.MenuAdmin"
+        <activity android:name=".Manager.MenuTIManager"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Manager.ListTrackInspectors"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+
+        <activity android:name=".Admin.MenuManagerAdmin"
         android:theme="@style/AppTheme.NoActionBar"
         />
-        <activity android:name=".Admin.MenuTIAdmin"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".Admin.MenuManagerAdmin"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".TrackInspector.FormatReport"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
         <activity android:name=".Admin.ManageAccounts"
             android:theme="@style/AppTheme.NoActionBar"
             />
@@ -71,6 +72,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".Admin.AddAccount"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.MenuAdmin"
+        android:theme="@style/AppTheme.NoActionBar"
+        />
+        <activity android:name=".Admin.MenuTIAdmin"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <!-- api key -->

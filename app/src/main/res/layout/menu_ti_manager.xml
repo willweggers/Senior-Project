@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--using lineralayout with spaces so that it fits to whatever tablet size they are using-->
+<!--to adjust hieght adjust weightsum of linear layout along with weight of spaces and buttons-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="Track Inspector Menu"
+            android:id="@+id/managerTIID"
+            android:textSize="45sp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/backadminmenu5"
+            android:textSize="30sp"
+            android:text="Back to Manager Menu"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="2"/>
+
+    <Button
+        android:id="@+id/startInspectionmanager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_inspection"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="20sp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_weight="0.5"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="2"/>
+
+    <Button
+        android:id="@+id/viewInspectionmanager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/view_inspections"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="20sp"
+        android:layout_weight="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/startInspection" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="2"/>
+    <Button
+        android:id="@+id/editInspectionmanager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_inspection"
+        android:textSize="20sp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"/>
+
+</LinearLayout>

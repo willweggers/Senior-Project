@@ -116,7 +116,7 @@ public class InspectionForm extends AppCompatActivity {
         code_box = (EditText)findViewById(R.id.codeText);
         description_box = (EditText)findViewById(R.id.descriptionText);
         desctype_box= (EditText)findViewById(R.id.desctypeText);
-        quantity_box = (EditText)findViewById(R.id.quantityText);
+//        quantity_box = (EditText)findViewById(R.id.quantityText);
         priority_box = (EditText)findViewById(R.id.priorityText);
         unit_box = (EditText)findViewById(R.id.unit);
 //        imageView = (ImageView) findViewById(R.id.currdisplayimage);
@@ -203,7 +203,7 @@ public class InspectionForm extends AppCompatActivity {
                 trackDescriptions1.add(descriptionString);
                 desctypeString = desctype_box.getText().toString();
                 desctrypeArray.add(desctypeString);
-                quantityString = quantity_box.getText().toString();
+//                quantityString = quantity_box.getText().toString();
 
                 priorityString = priority_box.getText().toString();
                 trackPriority1.add(priorityString);

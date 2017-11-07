@@ -1,4 +1,4 @@
-package com.example.seniorproject.TrackInspector;
+package com.example.seniorproject.Manager;
 
 import android.Manifest;
 import android.content.ContentValues;
@@ -18,31 +18,35 @@ import android.widget.EditText;
 import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.CreateDB;
 import com.example.seniorproject.R;
-
+import com.example.seniorproject.TrackInspector.HeaderData;
+import com.example.seniorproject.TrackInspector.MenuTI;
 
 /**
- * Created by willw on 10/5/2017.
- * menu page for TI. just used to declare intents between this page and whatever page it is suppose to go to.
- * currently startinspection is going to trackinspector page which is just the old demo trackinspection page.
+ * Created by willw on 9/12/2017.
  */
 
-public class MenuTI extends AppCompatActivity{
+public class MenuManager extends AppCompatActivity{
     private Button startInspection;
-    private Button viewInspection;
+    private Button viewyourInspection;
+    private Button viewTIInspections;
     private Button editInspection;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
+    public static String userNameManager;
+    private Cursor cursor;
     private SQLiteDatabase localDB;
     private SQLiteDatabase readDB;
-    public static String userNameTI;
-    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_track_inspector);
+        startInspection = (Button) findViewById(R.id.startInspectionmanager);
+        viewyourInspection = (Button) findViewById(R.id.viewInspectionmanagermanager);
+        viewTIInspections =  (Button) findViewById(R.id.viewInspectionmanager);
+        editInspection = (Button) findViewById(R.id.editInspectionmanager);
         localDB = new CreateDB(this).getWritableDatabase();
         readDB = new CreateDB(this).getReadableDatabase();
-        cursor = readDB.rawQuery("SELECT " + CreateDB.TABLE_NAME + " FROM username WHERE username=?", new String[] {userNameTI});
+//        cursor = readDB.rawQuery(CreateDB.TABLE_NAME, "username=?", new String[]{userNameManager});;
         cursor.moveToFirst();
         if(cursor.getString(2).equals("")){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -57,17 +61,14 @@ public class MenuTI extends AppCompatActivity{
                     String newPass = input.getText().toString();
                     ContentValues values = new ContentValues();
                     values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(newPass));
-                    localDB.update(CreateDB.TABLE_NAME, values, "username=?",new String[]{userNameTI});
+                    localDB.update(CreateDB.TABLE_NAME, values, "username=?",new String[]{userNameManager});
 
                 }
             });
 
             builder.show();
         }
-        startInspection = (Button) findViewById(R.id.startInspection);
-        viewInspection = (Button) findViewById(R.id.viewInspection);
-        editInspection = (Button) findViewById(R.id.editInspection);
-        ActivityCompat.requestPermissions(MenuTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+        ActivityCompat.requestPermissions(MenuManager.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
         setTitle("Menu");
@@ -79,12 +80,20 @@ public class MenuTI extends AppCompatActivity{
         startInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuTI.this, HeaderData.class);
+                Intent intent = new Intent(MenuManager.this, HeaderData.class);
                 startActivity(intent);
             }
         });
 
-        viewInspection.setOnClickListener(new View.OnClickListener() {
+
+        viewTIInspections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuManager.this, ListTrackInspectors.class);
+                startActivity(intent);
+            }
+        });
+        viewyourInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
