@@ -15,6 +15,5 @@ public class ModiyMasterFiles extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modify_master_files);
-
     }
 }

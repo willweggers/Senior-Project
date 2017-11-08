@@ -222,8 +222,11 @@ public class FormatReport extends DriveActivitys {
         addArrayLists();
         int numOfTrackRows = trackIDs.size();
         int numOfSwitchRows = switchIDs.size();
-        TableLayout tracklayout = (TableLayout) findViewById(R.id.trackTable);
 
+        TableLayout tracklayout = (TableLayout) findViewById(R.id.trackTable);
+        if(numOfTrackRows == 0){
+            tracklayout.setVisibility(View.INVISIBLE);
+        }
         int numOfElementsPerRowTrack =trackArrayList.size();
         for(int i = 0; i < numOfTrackRows;i++){
             TableRow tableRow = new TableRow(this);
@@ -248,7 +251,9 @@ public class FormatReport extends DriveActivitys {
             tracklayout.addView(tableRow);
         }
         TableLayout switchlayout = (TableLayout) findViewById(R.id.switchTable);
-
+        if(numOfSwitchRows == 0){
+            switchlayout.setVisibility(View.INVISIBLE);
+        }
         int numOfElementsPerRowSwitch = switchArrayList.size();
         for(int i = 0; i < numOfSwitchRows;i++){
             TableRow tableRow = new TableRow(this);

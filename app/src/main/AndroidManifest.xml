@@ -28,7 +28,7 @@
 
         <!-- lists activitys the user will go through -->
         <!-- currently the menu for track inspector is starting acitvity, will be changed for demo or later -->
-        <activity android:name=".MainActivityLogin"
+        <activity android:name=".TrackInspector.MapTI"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -37,33 +37,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TrackInspector.MapTI"
+        <activity android:name=".MainActivityLogin"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".TrackInspector.MenuTI"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             />
         <activity android:name=".TrackInspector.HeaderData"
             android:theme="@style/AppTheme.HeaderTextStyle"
             />
         <activity android:name=".TrackInspector.InspectionForm"
             android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
             />
         <activity android:name=".TrackInspector.FormatReport"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         />
         <activity android:name=".Manager.MenuManager"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             />
         <activity android:name=".Manager.MenuTIManager"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             />
         <activity android:name=".Manager.ListTrackInspectors"
             android:theme="@style/AppTheme.NoActionBar"
             />
 
         <activity android:name=".Admin.MenuManagerAdmin"
-        android:theme="@style/AppTheme.NoActionBar"
+        android:theme="@style/AppTheme"
         />
         <activity android:name=".Admin.ManageAccounts"
             android:theme="@style/AppTheme.NoActionBar"
@@ -75,10 +76,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".Admin.MenuAdmin"
-        android:theme="@style/AppTheme.NoActionBar"
+        android:theme="@style/AppTheme"
         />
         <activity android:name=".Admin.MenuTIAdmin"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             />
         <!-- api key -->
         <meta-data

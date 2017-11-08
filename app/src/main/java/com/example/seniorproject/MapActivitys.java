@@ -125,8 +125,14 @@ public class MapActivitys extends FragmentActivity implements
        handler.postDelayed(mLaunchTask,1500);
         if(markers.size() !=0){
             for(int i = 0; i < markers.size();i++){
-                if(InspectionForm.desctypeString != null) {
-                    mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.desctrypeArray.get(i)));
+                if(InspectionForm.descriptionString != null) {
+                    if (InspectionForm.trackCheck.isChecked()) {
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.trackDescriptions1.get(i)));
+                    }
+                    else if(InspectionForm.switchCheck.isChecked()){
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.switchDescriptions1.get(i)));
+
+                    }
                 }
                 else{
                     mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));

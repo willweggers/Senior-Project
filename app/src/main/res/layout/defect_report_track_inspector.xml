@@ -1,481 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
-
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
+    android:weightSum="10">
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Inspection Number"
-        app:layout_constraintRight_toLeftOf="parent"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="0.05"
+        />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="City"
-        app:layout_constraintRight_toLeftOf="@+id/textView15"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView15"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="0dp"
+        android:text="@string/type_of_track"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:textSize="50sp"/>
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Contact"
-        app:layout_constraintRight_toLeftOf="@+id/textView18"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/textView19"
-        android:layout_marginTop="73dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="72dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textView18"
-        app:layout_constraintTop_toTopOf="@+id/locationText" />
+        android:layout_weight="0.05"
+        android:background="@color/black"/>
 
-    <EditText
-        android:id="@+id/contactText"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintRight_toLeftOf="@+id/textView18"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionText"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView18"
-        app:layout_constraintTop_toTopOf="@+id/descriptionText" />
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-    <EditText
-        android:id="@+id/phoneText"
-        android:layout_width="0dp"
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleY="2"
+            android:scaleX="2"
+            android:text="Track"
+            android:id="@+id/trackcheckbox"/>
+
+
+        <!--<Space-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1" />-->
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleY="2"
+            android:scaleX="2"
+            android:layout_weight="1"
+            android:text="Switch/Turnout"
+            android:id="@+id/switchcheckbox"/>
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="112dp"
-        android:layout_marginStart="112dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintRight_toLeftOf="@+id/laborText"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        android:layout_marginTop="63dp"
-        app:layout_constraintTop_toBottomOf="@+id/trackText"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="193dp"
+        android:layout_weight="0.05"
+        android:background="@color/black"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Add New Defect"
-        android:layout_marginEnd="109dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="47dp"
-        app:layout_constraintTop_toBottomOf="@+id/camerabtn" />
-
-    <EditText
-        android:id="@+id/trackText"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginEnd="3dp"
-        app:layout_constraintRight_toLeftOf="@+id/locationText"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/locationText"
-        tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView13" />
-
-    <EditText
-        android:id="@+id/laborText"
-        android:layout_width="61dp"
-        android:layout_height="44dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="67dp"
-        android:layout_marginEnd="67dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/button"
-        android:layout_marginTop="58dp"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/textView19" />
-
-    <EditText
-        android:id="@+id/locationText"
-        android:layout_width="99dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:weightSum="5">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:background="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text=""
+            android:textSize="40sp"
+            android:gravity="center"
+            android:id="@+id/trackswitchnumber"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:background="@color/black"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="4.35"
+            android:gravity="center"
+            android:text="@string/inspection_form"
+            android:textSize="50sp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:background="@color/black"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="101dp"
-        android:layout_marginEnd="101dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/laborText"
-        app:layout_constraintRight_toRightOf="@+id/camerabtn"
-        android:layout_marginTop="1dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintTop_toTopOf="@+id/categoryText"
-        app:layout_constraintLeft_toRightOf="@+id/textView9" />
-
-    <EditText
-        android:id="@+id/categoryText"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/textView16"
-        app:layout_constraintBaseline_toBaselineOf="@+id/laborText"
-        tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView21" />
-
-    <EditText
-        android:id="@+id/codeText"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@+id/categoryText"
-        tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/categoryText" />
-    <EditText
-        android:id="@+id/descriptionText"
-        android:layout_width="174dp"
-        android:layout_height="34dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="8dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/desctypeText"
-        android:layout_marginTop="55dp"
-        app:layout_constraintTop_toBottomOf="@+id/locationText"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="55dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <EditText
-        android:id="@+id/desctypeText"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="16dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/camerabtn"
-        android:layout_marginTop="80dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="82dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/phoneText" />
-
-    <!--<EditText-->
-        <!--android:id="@+id/quantityText"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--app:layout_constraintLeft_toRightOf="@+id/descriptionText"-->
-        <!--app:layout_constraintRight_toLeftOf="@+id/priorityText"-->
-        <!--tools:layout_editor_absoluteY="221dp"-->
-        <!--app:layout_constraintHorizontal_bias="0.444" />-->
-
-    <EditText
-        android:id="@+id/priorityText"
-        android:layout_width="0dp"
-        android:layout_height="37dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_marginStart="31dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView19"
-        android:layout_marginTop="35dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="34dp"
-        app:layout_constraintLeft_toLeftOf="@+id/laborText"
-        app:layout_constraintTop_toTopOf="@+id/textView18" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="0dp"
-        android:layout_height="27dp"
-        android:text="Track"
-        android:layout_marginStart="58dp"
-        android:layout_marginEnd="60dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/locationText"
-        app:layout_constraintRight_toRightOf="@+id/textView18"
-        android:layout_marginTop="17dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="14dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="64dp"
+        android:layout_weight="0.05"
+        android:background="@color/black"
+        />
+    <Space
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Location"
-        android:layout_marginStart="119dp"
-        android:layout_marginEnd="119dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView13"
-        app:layout_constraintRight_toRightOf="@+id/camerabtn"
-        android:layout_marginTop="16dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="11dp"
-        app:layout_constraintLeft_toLeftOf="@+id/textView18"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="44dp"
+        android:layout_weight="0.1" />
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Labor"
-        android:layout_marginStart="43dp"
-        android:layout_marginEnd="43dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView14"
-        app:layout_constraintRight_toRightOf="@+id/camerabtn"
-        android:layout_marginTop="3dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintTop_toTopOf="@+id/textView16"
-        app:layout_constraintLeft_toRightOf="@+id/descriptionText" />
+        android:layout_weight="7.8"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:weightSum="20">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="4.25"
+            android:layout_weight="2">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="Track/Turnout Number"
+            android:layout_weight="1.5"
+            android:backgroundTint="@color/black"
+            android:id="@+id/trackturnoutnumber"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:background="@color/black"/>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.9"
+            android:backgroundTint="@color/black"
+            android:hint="Enter Quantity Here."
+            android:id="@+id/quantityedit"/>
+            <!--<Space-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.4" />-->
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="66dp"
-        android:layout_height="23dp"
-        android:text="Category"
-        android:layout_marginEnd="92dp"
-        android:layout_marginStart="93dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/textView17"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="7dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/locationText" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Select one of the common defects(Other brings up a text box where you can make your own):"/>
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:text="Code"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/codeText"
-        app:layout_constraintRight_toRightOf="@+id/codeText"
-        android:layout_marginTop="14dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="17dp"
-        app:layout_constraintLeft_toLeftOf="@+id/codeText"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/listofcommondefects">
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="0dp"
-        android:layout_height="23dp"
-        android:text="Description of Problem"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="2dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/textView9"
-        app:layout_constraintRight_toRightOf="@+id/textView19"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/descriptionText"
-        app:layout_constraintTop_toTopOf="@+id/textView9" />
+        </Spinner>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Select a labor code below:"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:text="Description of Material"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="24dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="@+id/desctypeText"
-        app:layout_constraintRight_toRightOf="@+id/descriptionText"
-        android:layout_marginTop="48dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="54dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/descriptionText" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="Quantity"
-        android:layout_marginStart="16dp"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="111dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="61dp"
-        android:layout_height="26dp"
-        android:text="Priority"
-        android:layout_marginStart="104dp"
-        android:layout_marginEnd="104dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/priorityText"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@+id/categoryText"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintLeft_toRightOf="@+id/textView14" />
-
-    <TextView
-        android:id="@+id/itemTV"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:text="T01"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="23dp"
-        app:layout_constraintRight_toLeftOf="@+id/trackText"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/textView18"
-        android:layout_marginTop="29dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView14"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+                android:orientation="vertical"
+                android:weightSum="9">
 
 
-    <Button
-        android:id="@+id/camerabtn"
-        android:layout_width="131dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="21dp"
-        android:text="@string/take_pic_btn"
-        android:layout_alignParentStart="true"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="194dp"
-        app:layout_constraintTop_toBottomOf="@+id/categoryText"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="193dp"
-        app:layout_constraintLeft_toLeftOf="@+id/button" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/laborlist">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Units"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toRightOf="@+id/textView15"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintRight_toLeftOf="@+id/textView16"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.619" />
+        </Spinner>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Select a category below:"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
 
-    <EditText
-        android:id="@+id/unit"
-        android:layout_width="82dp"
-        android:layout_height="41dp"
-        android:ems="10"
-        android:inputType="textPersonName"
+            android:id="@+id/categorylist">
 
-        app:layout_constraintLeft_toRightOf="@+id/laborText"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="29dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintRight_toLeftOf="@+id/categoryText"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.521" />
+        </Spinner>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="Select code from category below:"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/codecategorylist">
+            </Spinner>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Select the priority of defect below:"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/prioritylist">
+        </Spinner>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Select the unit of defect below:"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/unitlist"/>
+                </LinearLayout>
+            <ImageView
+                android:id="@+id/clickheretotakepicofdefect"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
 
-    <!--<TextView-->
-        <!--android:id="@+id/textView4"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="Quantity"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/quantityText"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:layout_constraintVertical_bias="0.856"-->
-        <!--android:layout_marginLeft="296dp"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.0" />-->
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/clickheretotakepicofdefect"
+                android:layout_alignParentStart="true" />
+        </LinearLayout>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter Location here."
+            android:backgroundTint="@color/black"
+            android:id="@+id/locationedit"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <!--<ImageView-->
-    <!--android:id="@+id/currdisplayimage"-->
-    <!--android:layout_width="308dp"-->
-    <!--android:layout_height="156dp"-->
-    <!--app:srcCompat="@drawable/common_full_open_on_phone"-->
-    <!--android:layout_marginLeft="483dp"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintVertical_bias="0.319"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="0.217" />-->
-</android.support.constraint.ConstraintLayout>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter code description here."
+            android:backgroundTint="@color/black"
+            android:id="@+id/codedescnedit"/>
+        <!--<Space-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_weight="4"
+            >
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:textSize="30sp"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/adddefectsubmit"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
