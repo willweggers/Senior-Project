@@ -99,7 +99,7 @@ public class MapActivitys extends FragmentActivity implements
     public static Marker currLocMarker;
     public static double LATITUDE;
     public static double LONGITUDE;
-    public static double[] markerLatLong;
+    public static double[] markerLatLong = new double[1000];
     public static ArrayList<Marker> markers = new ArrayList<>();
     public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
     public static int numOfMarker = 0;

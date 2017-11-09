@@ -107,10 +107,12 @@ public class ListTrackInspectors extends AppCompatActivity {
 
             }
             final String lastTypeFinal = lastType;
+            final String lastUNType = lastUN;
             tableRow.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     if(lastTypeFinal.equals("Track Inspector")){
+                        userViewing = lastUNType;
                         MenuTIManager.currentUserName = userViewing;
                         Intent intent = new Intent(ListTrackInspectors.this, MenuTIManager.class);
                         if(userUsing.equals("Admin")) {

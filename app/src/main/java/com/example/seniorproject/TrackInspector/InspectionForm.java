@@ -114,11 +114,10 @@ public class InspectionForm extends AppCompatActivity {
     private Spinner priorityEdit;
     private Spinner unitEdit;
     private EditText locationEdit;
-    private EditText codeDescriptionEdit;
+//    private EditText codeDescriptionEdit;
     private Button sumbitDefectButton;
 
-    public int currentNumberOfTrack = 0;
-    public int currentNumberOfSwitches = 0;
+
 
     public static ArrayList<String> listCommonDefects = new ArrayList<>();
     public static ArrayList<String> listlaborcodes = new ArrayList<>();
@@ -139,7 +138,7 @@ public class InspectionForm extends AppCompatActivity {
         switchCheck = (CheckBox) findViewById(R.id.switchcheckbox);
         trackNumberEdit = (EditText) findViewById(R.id.trackturnoutnumber);
         quantityEdit = (EditText) findViewById(R.id.quantityedit);
-        codeDescriptionEdit = (EditText) findViewById(R.id.codedescnedit);
+//        codeDescriptionEdit = (EditText) findViewById(R.id.codedescnedit);
         //adding temp defects and other
         listCommonDefects.add("a defect");
         listCommonDefects.add("another defect");
@@ -216,7 +215,9 @@ public class InspectionForm extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     switchCheck.setChecked(false);
-                    switchTrackNumberTextField.setText("T0" + currentNumberOfTrack+1);
+                    int currentNumTracks = MapTI.currentNumberOfTrack+ 1;
+                    String theText = "T0".concat(Integer.toString(currentNumTracks));
+                    switchTrackNumberTextField.setText(theText);
                 }
             }
         });
@@ -225,7 +226,9 @@ public class InspectionForm extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     trackCheck.setChecked(false);
-                    switchTrackNumberTextField.setText("S0" + currentNumberOfSwitches+1);
+                    int currentNumSwitches = MapTI.currentNumberOfSwitches + 1;
+                    String theText = "S0".concat(Integer.toString(currentNumSwitches));
+                    switchTrackNumberTextField.setText(theText);
                 }
             }
         });
@@ -244,7 +247,9 @@ public class InspectionForm extends AppCompatActivity {
             {
                 setText();
                 if(trackCheck.isChecked()){
-                    trackIDs1.add("T0"+currentNumberOfTrack+1);
+                    int currentNumTracks = MapTI.currentNumberOfTrack+ 1;
+                    String theText = "T0".concat(Integer.toString(currentNumTracks));
+                    trackIDs1.add(theText);
                     trackNumber1.add(trackString);
                     trackLocations1.add(locString);
                     trackDescriptions1.add(descriptionString);
@@ -257,13 +262,15 @@ public class InspectionForm extends AppCompatActivity {
                     if(!MapTI.toggleMarkerOn){
                         MapTI.toggleMarkerOn = true;
                     }
-                    currentNumberOfTrack++;
-                   // emptyLists();
+                    MapTI.currentNumberOfTrack++;
+                    emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
                     startActivity(intent);
                 }
                 else if(switchCheck.isChecked()){
-                    switchIDs1.add("S0"+currentNumberOfSwitches+1);
+                    int currentNumSwitches = MapTI.currentNumberOfSwitches + 1;
+                    String theText = "S0".concat(Integer.toString(currentNumSwitches));
+                    switchIDs1.add(theText);
                     switchNumber1.add(trackString);
                     switchLocations1.add(locString);
                     switchDescriptions1.add(descriptionString);
@@ -272,12 +279,12 @@ public class InspectionForm extends AppCompatActivity {
                     switchPriority1.add(priorityString);
                     setEditTextsToNull();
 
-                    currentNumberOfSwitches++;
+                    MapTI.currentNumberOfSwitches++;
                     MapActivitys.numOfMarker++;
                     if(!MapTI.toggleMarkerOn){
                         MapTI.toggleMarkerOn = true;
                     }
-                    //emptyLists();
+                    emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
                     startActivity(intent);
                 }
@@ -311,16 +318,27 @@ public class InspectionForm extends AppCompatActivity {
         listthatcategoryscodes.clear();
     }
     private void setText(){
+
         trackString= trackNumberEdit.getText().toString();
         quantityString= quantityEdit.getText().toString();
-        if(!defectDescriptionEdit.getSelectedItem().toString().equals("Other")) {
-            descriptionString = defectDescriptionEdit.getSelectedItem().toString();
+        try {
+            if (!defectDescriptionEdit.getSelectedItem().toString().equals("Other")) {
+                descriptionString = defectDescriptionEdit.getSelectedItem().toString();
+            }
+            laborString = laborEdit.getSelectedItem().toString();
+            categoryString = catergoryEdit.getSelectedItem().toString();
+            codeString = codeEdit.getSelectedItem().toString();
+            priorityString = priorityEdit.getSelectedItem().toString();
+            unitString=unitEdit.getSelectedItem().toString();
+        }catch (NullPointerException e){
+            descriptionString = "No description of defect entered.";
+            laborString = "No labor code of defect entered.";
+                    categoryString= "No category of defect entered.";
+            codeString = "No code from category of defect entered.";
+            priorityString= "No priority of defect entered.";
+            unitString = " No unit of defect entered.";
         }
-        laborString= laborEdit.getSelectedItem().toString();
-        categoryString= catergoryEdit.getSelectedItem().toString();
-        codeString=codeEdit.getSelectedItem().toString();
-        priorityString=priorityEdit.getSelectedItem().toString();
-        unitString=unitEdit.getSelectedItem().toString();
+
         locString= locationEdit.getText().toString();
     }
     private void setEditTextsToNull(){

@@ -51,7 +51,7 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".TrackInspector.FormatReport"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/AppTheme.NoActionBar"
         />
         <activity android:name=".Manager.MenuManager"
             android:theme="@style/AppTheme"

@@ -1,36 +1,17 @@
 package com.example.seniorproject.TrackInspector;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.BundleCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.Space;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,43 +23,32 @@ import com.example.seniorproject.CreateDB;
 import com.example.seniorproject.DriveActivitys;
 import com.example.seniorproject.MainActivityLogin;
 import com.example.seniorproject.Manager.MenuManager;
-import com.example.seniorproject.Manager.MenuTIManager;
 import com.example.seniorproject.R;
-import com.example.seniorproject.TrackInspector.HeaderData;
-import com.example.seniorproject.TrackInspector.MapTI;
-import com.example.seniorproject.TrackInspector.MenuTI;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.itextpdf.text.pdf.parser.Line;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.logging.LogRecord;
 
 /**
- * Created by willw on 10/11/2017.
- * Formats viewable report at end of inspection. if id for either switch or track is entered all other columns currently have to be entered
- * or it will give nullpointer error.
+ * Created by willw on 11/9/2017.
  */
 
-public class FormatReport extends DriveActivitys {
+public class FormatPropsal extends DriveActivitys {
     public String theCompanyName;
     public  String theStreetAddress;
     public  String theCityStateZip;
 
-    public  ArrayList<String> trackIDs= new ArrayList<>();
+    public ArrayList<String> trackIDs= new ArrayList<>();
     public  ArrayList<String> trackNumber= new ArrayList<>();
     public  ArrayList<String> trackLocations= new ArrayList<>();
     public  ArrayList<String> trackDescriptions= new ArrayList<>();
@@ -105,14 +75,12 @@ public class FormatReport extends DriveActivitys {
 
     private Cursor cursor;
     private LinearLayout constraintLayout;
-    private Button sendToDrive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.inspection_report_format);
+        setContentView(R.layout.inspection_proposal_format);
         constraintLayout = (LinearLayout) findViewById(R.id.CLInspectionReport);
-        sendToDrive = (Button) findViewById(R.id.sendToDriveReport);
         localDB = new CreateDB(this).getWritableDatabase();
         readDB = new CreateDB(this).getReadableDatabase();
         setData();
@@ -129,13 +97,11 @@ public class FormatReport extends DriveActivitys {
         catch (NullPointerException e){
             documentTitle = thecurrdate.concat(" -  Track inspectorid not found.");
         }
-        sendToDrive.setOnClickListener(new View.OnClickListener() {
+        constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendToDrive.setVisibility(View.INVISIBLE);
                 Drive.DriveApi.newDriveContents(getGoogleApi())
-                .setResultCallback(driveContentsCallback);
-                emptyStuff();
+                        .setResultCallback(driveContentsCallback);
                 //adding delay
                 handler.postDelayed(mLaunchTask,1500);
             }
@@ -154,22 +120,20 @@ public class FormatReport extends DriveActivitys {
 
                 }
             }while (cursor.moveToNext());
-            try {
-                if (accountType.equals(AccountInfo.MANAGER_PREM)) {
-                    Intent i = new Intent(FormatReport.this, MenuManager.class);
-                    startActivity(i);
-                } else if (accountType.equals(AccountInfo.TI_PREM)) {
-                    Intent i = new Intent(FormatReport.this, MenuTI.class);
-                    startActivity(i);
-                } else if (accountType.equals(AccountInfo.ADMIN_PREM)) {
-                    Intent i = new Intent(FormatReport.this, MenuAdmin.class);
-                    startActivity(i);
-                } else {
-                    Intent i = new Intent(FormatReport.this, MainActivityLogin.class);
-                    startActivity(i);
-                }
-            }catch (NullPointerException e){
-                Intent i = new Intent(FormatReport.this, MainActivityLogin.class);
+            if(accountType.equals(AccountInfo.MANAGER_PREM)){
+                Intent i = new Intent(FormatPropsal.this, MenuManager.class);
+                startActivity(i);
+            }
+            else if(accountType.equals(AccountInfo.TI_PREM)) {
+                Intent i = new Intent(FormatPropsal.this, MenuTI.class);
+                startActivity(i);
+            }
+            else if(accountType.equals(AccountInfo.ADMIN_PREM)){
+                Intent i = new Intent(FormatPropsal.this, MenuAdmin.class);
+                startActivity(i);
+            }
+            else{
+                Intent i = new Intent(FormatPropsal.this, MainActivityLogin.class);
                 startActivity(i);
             }
         }
@@ -195,12 +159,12 @@ public class FormatReport extends DriveActivitys {
     private void setHeaderData(){
 
 
-            try {
-                theCompanyName = "Track Inspection for ".concat(HeaderData.thecompanyname);
-            }
-            catch (NullPointerException e){
-                theCompanyName = "Track Inspection for company name not entered.";
-            }
+        try {
+            theCompanyName = "Track Inspection for ".concat(HeaderData.thecompanyname);
+        }
+        catch (NullPointerException e){
+            theCompanyName = "Track Inspection for company name not entered.";
+        }
 
 
         theStreetAddress = HeaderData.theaddress;
@@ -423,24 +387,6 @@ public class FormatReport extends DriveActivitys {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
-    }
-    private void emptyStuff(){
-        trackArrayList.clear();
-                trackIDs.clear();
-                trackNumber.clear();
-                trackLocations.clear();
-                trackDescriptions.clear();
-                trackUnits.clear();
-                trackQuantitys.clear();
-                trackPriority.clear();
-        switchArrayList.clear();
-                switchIDs.clear();
-                switchNumber.clear();
-                switchLocations.clear();
-                switchDescriptions.clear();
-                switchUnits.clear();
-                switchQuantitys.clear();
-                switchPriority.clear();
     }
 
 

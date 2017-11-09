@@ -51,7 +51,8 @@ public class MapTI extends MapActivitys {
     private ToggleButton toggleMarkerPlacement;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static boolean toggleMarkerOn = true;
-    public static int score = 0;
+    public static int currentNumberOfTrack = 0;
+    public static int currentNumberOfSwitches = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +149,7 @@ public class MapTI extends MapActivitys {
                     thread.start();
 
 //
-                    score++;
+
                 }
                 else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(MapTI.this);
