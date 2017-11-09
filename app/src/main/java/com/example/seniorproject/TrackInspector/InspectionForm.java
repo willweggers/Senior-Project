@@ -75,6 +75,7 @@ public class InspectionForm extends AppCompatActivity {
     String myPicPath;
     //    private ImageView imageView;
     Bitmap mImageBitmap;
+
     public static ArrayList<String> trackIDs1= new ArrayList<>();
     public static ArrayList<String> trackNumber1= new ArrayList<>();
     public static ArrayList<String> trackLocations1= new ArrayList<>();

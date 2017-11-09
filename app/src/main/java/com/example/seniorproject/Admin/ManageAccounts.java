@@ -29,10 +29,9 @@ import com.example.seniorproject.TrackInspector.MenuTI;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by willw on 11/4/2017.
  */
-
 public class ManageAccounts extends AppCompatActivity {
     private Button addAccounts;
     private Button backmenu;
