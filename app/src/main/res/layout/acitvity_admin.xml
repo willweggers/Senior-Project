@@ -6,7 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="9.5">
+    android:weightSum="9.5"
+    android:paddingRight="100dp"
+    android:paddingLeft="100dp">
     <Space
         android:layout_width="match_parent"
         android:layout_height="1dp"

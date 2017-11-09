@@ -6,11 +6,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="9.5">
+    android:weightSum="9.5"
+    android:paddingLeft="100dp"
+    android:paddingRight="100dp">
     <Space
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="1"/>
+        android:layout_weight="2"/>
 
     <Button
         android:id="@+id/startInspection"
@@ -27,22 +29,7 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="2"/>
-
-    <Button
-        android:id="@+id/viewInspection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/view_inspections"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="20sp"
-        android:layout_weight="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/startInspection" />
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="2"/>
+        android:layout_weight="1"/>
     <Button
         android:id="@+id/editInspection"
         android:layout_width="match_parent"
@@ -53,10 +40,26 @@
         android:layout_marginStart="16dp"
         android:layout_weight="0.5"
         app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/viewInspection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/view_inspections"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="20sp"
+        android:layout_weight="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/startInspection" />
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"/>
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/logoutti"

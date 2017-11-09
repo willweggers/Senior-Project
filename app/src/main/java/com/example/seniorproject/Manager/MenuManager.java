@@ -31,7 +31,7 @@ public class MenuManager extends AppCompatActivity{
     private Button startInspection;
     private Button viewyourInspection;
     private Button viewTIInspections;
-    private Button editInspection;
+    private Button resumeInspection;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static String userNameManager;
     private Cursor cursor;
@@ -46,7 +46,7 @@ public class MenuManager extends AppCompatActivity{
         startInspection = (Button) findViewById(R.id.startInspectionmanager);
         viewyourInspection = (Button) findViewById(R.id.viewInspectionmanagermanager);
         viewTIInspections =  (Button) findViewById(R.id.viewInspectionmanager);
-        editInspection = (Button) findViewById(R.id.editInspectionmanager);
+        resumeInspection = (Button) findViewById(R.id.resumeInspectionmanager);
         logout = (Button) findViewById(R.id.logoutmanager);
         FormatReport.usernameAccessingThis = userNameManager;
         localDB = new CreateDB(this).getWritableDatabase();
@@ -77,6 +77,7 @@ public class MenuManager extends AppCompatActivity{
         ActivityCompat.requestPermissions(MenuManager.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
+        setTitle(userNameManager + " Manager Menu");
     }
 
     private void setButtons(){
@@ -105,7 +106,7 @@ public class MenuManager extends AppCompatActivity{
             }
         });
 
-        editInspection.setOnClickListener(new View.OnClickListener() {
+        resumeInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

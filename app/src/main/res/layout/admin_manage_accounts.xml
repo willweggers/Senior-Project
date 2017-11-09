@@ -55,8 +55,8 @@
             android:layout_weight="0.1"
             android:background="@color/black"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:text="Name"
             android:layout_gravity="center"
             android:textStyle="bold"
@@ -72,8 +72,8 @@
             android:layout_weight="0.1"
             android:background="@color/black"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:text="Type"
             android:paddingLeft="10dp"
             android:id="@+id/managetype"
@@ -88,7 +88,7 @@
             android:layout_weight="0.1"
             android:background="@color/black"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Features"
             android:paddingLeft="10dp"
@@ -115,7 +115,8 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/accounttable">
+            android:id="@+id/accounttable"
+            >
 
         </TableLayout>
     </ScrollView>

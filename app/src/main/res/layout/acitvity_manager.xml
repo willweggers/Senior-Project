@@ -8,7 +8,9 @@
         android:layout_height="1127dp"
         android:weightSum="9.5"
         tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        tools:layout_editor_absoluteX="8dp"
+    android:paddingLeft="100dp"
+    android:paddingRight="100dp">
         <Space
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -43,31 +45,31 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
-        <Button
-            android:id="@+id/viewInspectionmanagermanager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Your Inspections"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textSize="20sp"
-            android:layout_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@+id/startInspection" />
+            android:layout_weight="1"/>    <Button
+    android:id="@+id/resumeInspectionmanager"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Resume Existing Inspections"
+    android:textSize="20sp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_weight="0.5"
+    app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="1"/>
-        <Button
-            android:id="@+id/editInspectionmanager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit Your Inspections"
-            android:textSize="20sp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
+    <Button
+        android:id="@+id/viewInspectionmanagermanager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Your Old Inspections"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="20sp"
+        android:layout_weight="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/startInspection" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -89,12 +90,12 @@ public class ListTrackInspectors extends AppCompatActivity {
 
                 TextView textView = new TextView(this);
                 if (j == 0) {
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 10.0f));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 10.0f));
                 }
 //                    AccountInfo.showMessage(cursor.getString(j),getApplicationContext());
                 textView.setText(cursor.getString(j));
 
-
+                textView.setTypeface(null, Typeface.ITALIC);
                 textView.setTextSize(25f);
                 textView.setPadding(10,0,0,0);
 
@@ -110,6 +111,7 @@ public class ListTrackInspectors extends AppCompatActivity {
                 @Override
                 public void onClick(View v){
                     if(lastTypeFinal.equals("Track Inspector")){
+                        MenuTIManager.currentUserName = userViewing;
                         Intent intent = new Intent(ListTrackInspectors.this, MenuTIManager.class);
                         if(userUsing.equals("Admin")) {
                             intent = new Intent(ListTrackInspectors.this, MenuTIAdmin.class);

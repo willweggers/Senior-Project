@@ -19,9 +19,7 @@ import com.example.seniorproject.TrackInspector.HeaderData;
 
 public class MenuManagerAdmin extends AppCompatActivity {
     private Button startInspection;
-    private Button viewyourInspection;
     private Button viewTIInspections;
-    private Button editInspection;
     private Button backadminmenu;
 
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
@@ -31,14 +29,13 @@ public class MenuManagerAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_manager_admin);
         startInspection = (Button) findViewById(R.id.startInspectionmanager);
-        viewyourInspection = (Button) findViewById(R.id.viewInspectionmanagermanager);
         viewTIInspections =  (Button) findViewById(R.id.viewInspectionmanager);
-        editInspection = (Button) findViewById(R.id.editInspectionmanager);
-        backadminmenu = (Button) findViewById(R.id.backadminmenu2) ;
+        backadminmenu = (Button) findViewById(R.id.backadminmanager) ;
 
         ActivityCompat.requestPermissions(MenuManagerAdmin.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
+        setTitle(ManageAccounts.userCurrentlyViewing + " Managers Menu");
 
     }
 
@@ -62,24 +59,10 @@ public class MenuManagerAdmin extends AppCompatActivity {
         viewTIInspections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListTrackInspectors.userUsing = "Admin";
-                Intent intent = new Intent(MenuManagerAdmin.this, ListTrackInspectors.class);
-                startActivity(intent);
-            }
-        });
-        viewyourInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
             }
         });
 
-        editInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
 }
