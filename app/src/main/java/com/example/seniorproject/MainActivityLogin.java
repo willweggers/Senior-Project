@@ -86,12 +86,13 @@ public class MainActivityLogin extends AppCompatActivity {
     private void searchAccounts(){
         assignUNPass();
         cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-
+        int amount = 0;
         cursor.moveToFirst();
 //        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
 //        cursor.moveToFirst();
 //        AccountInfo.showMessage(Integer.toString(cursor.getCount()),getApplicationContext());
         do{
+            amount++;
                if(userName.equals(cursor.getString(0))){
                    if(AccountInfo.md5(passWord).equals(cursor.getString(2))){
                            if(cursor.getString(1).equals(AccountInfo.ADMIN_PREM)){
@@ -131,10 +132,14 @@ public class MainActivityLogin extends AppCompatActivity {
                        AccountInfo.showMessage("Password is invalid.",getApplicationContext());
                    }
                }
-//               else{
+               else if(amount == cursor.getCount()){
+                   AccountInfo.showMessage("Username or Password is invalid.", getApplicationContext());
+               }
+                   //               else{
 //                  // cursor.moveToNext();
 //                   continue;
 //               }
+
 
            }while (cursor.moveToNext());
 //           cursor.close();
@@ -177,8 +182,8 @@ public class MainActivityLogin extends AppCompatActivity {
 //        binding.recycleView.setAdapter(new SampleRecyclerViewCursorAdapter(this, cursor));
     }
     private void assignUNPass(){
-        passWord = enterPass.getText().toString();
-        userName = enterUserName.getText().toString();
+        passWord = enterPass.getText().toString().trim();
+        userName = enterUserName.getText().toString().trim();
     }
 
 }

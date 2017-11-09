@@ -116,7 +116,7 @@ public class InspectionForm extends AppCompatActivity {
     private EditText locationEdit;
 //    private EditText codeDescriptionEdit;
     private Button sumbitDefectButton;
-
+    public static ArrayList<String> allDefectsDescriptions = new ArrayList<>();
 
 
     public static ArrayList<String> listCommonDefects = new ArrayList<>();
@@ -253,6 +253,7 @@ public class InspectionForm extends AppCompatActivity {
                     trackNumber1.add(trackString);
                     trackLocations1.add(locString);
                     trackDescriptions1.add(descriptionString);
+                    allDefectsDescriptions.add(descriptionString);
                     trackUnits1.add(unitString);
                     trackQuantitys1.add(quantityString);
                     trackPriority1.add(priorityString);
@@ -274,6 +275,7 @@ public class InspectionForm extends AppCompatActivity {
                     switchNumber1.add(trackString);
                     switchLocations1.add(locString);
                     switchDescriptions1.add(descriptionString);
+                    allDefectsDescriptions.add(descriptionString);
                     switchUnits1.add(unitString);
                     switchQuantitys1.add(quantityString);
                     switchPriority1.add(priorityString);
