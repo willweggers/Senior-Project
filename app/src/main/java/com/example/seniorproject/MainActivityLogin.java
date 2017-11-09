@@ -43,8 +43,10 @@ public class MainActivityLogin extends AppCompatActivity {
         enterUserName = (EditText) findViewById(R.id.userName);
         enterPass = (EditText) findViewById(R.id.passWord);
         localDB = new CreateDB(this).getWritableDatabase();
+        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
+        cursor.moveToFirst();
         readDB = new CreateDB(this).getReadableDatabase();
-        if(CreateDB.isDBEmpty(localDB)) {
+        if(cursor.getCount() <=0) {
 //            AccountInfo.showMessage("empty database",getApplicationContext());
             ContentValues values = new ContentValues();
             values.put(CreateDB.COLUMN_NAME, AccountInfo.adminUN);
@@ -55,8 +57,7 @@ public class MainActivityLogin extends AppCompatActivity {
         else{
 //            AccountInfo.showMessage("not empty database",getApplicationContext());
         }
-        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        cursor.moveToFirst();
+
 //        cursor.moveToFirst();
 //        while (cursor.moveToNext()){
 //            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
