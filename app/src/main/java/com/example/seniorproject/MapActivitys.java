@@ -99,6 +99,7 @@ public class MapActivitys extends FragmentActivity implements
     public static Marker currLocMarker;
     public static double LATITUDE;
     public static double LONGITUDE;
+    public static double[] markerLatLong;
     public static ArrayList<Marker> markers = new ArrayList<>();
     public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
     public static int numOfMarker = 0;
@@ -111,6 +112,8 @@ public class MapActivitys extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         checkGPSOn();
         mMap = googleMap;
+        markerLatLong[0] = LATITUDE;
+        markerLatLong[1] = LONGITUDE;
         if(LATITUDE != 0.0 && LONGITUDE != 0.0){
             curLoc = new LatLng(LATITUDE, LONGITUDE);
         }
@@ -152,6 +155,8 @@ public class MapActivitys extends FragmentActivity implements
                                     .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
                     markers.add(numOfMarker, currMarker);
+                    markerLatLong[0] = currMarker.getPosition().latitude;
+                    markerLatLong[1] = currMarker.getPosition().longitude;
 
                 }
                 else if(!MapTI.toggleMarkerOn){
@@ -180,6 +185,24 @@ public class MapActivitys extends FragmentActivity implements
         } else {
 //            showMessage("GPS enabled");
         }
+    }
+
+    public double[] getMarkerLoc()
+    {
+        return markerLatLong;
+    }
+
+    public void setMarkerLoc(double[] pos)
+    {
+        LatLng sentLoc;
+        sentLoc = new LatLng(pos[0], pos[1]);
+        currMarker = mMap.addMarker(new MarkerOptions()
+                .position(sentLoc)
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        markers.add(numOfMarker, currMarker);
+        markerLatLong[0] = currMarker.getPosition().latitude;
+        markerLatLong[1] = currMarker.getPosition().longitude;
     }
 
     public void enableGPS() {
