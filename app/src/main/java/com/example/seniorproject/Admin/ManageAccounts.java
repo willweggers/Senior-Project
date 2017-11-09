@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -44,6 +47,8 @@ public class ManageAccounts extends AppCompatActivity {
     private ArrayList<TableRow> tableRows = new ArrayList<>();
     private ArrayList<String> username = new ArrayList<>();
     private ArrayList<String> types = new ArrayList<>();
+
+    public static String userCurrentlyViewing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,22 +93,27 @@ public class ManageAccounts extends AppCompatActivity {
         cursor.moveToFirst();
         accountTable = (TableLayout) findViewById(R.id.accounttable);
         accountTable.removeAllViews();
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.border, null);
             do {
                 TableRow tableRow = new TableRow(this);
+
                 tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
                 tableRow.setPadding(0, 20, 0, 20);
                 tableRow.setWeightSum(10);
 
                 for (int j = 0; j < 2; j++) {
                     TextView textView = new TextView(this);
+
+                   // textView.setBackground(drawable);
                     if (j == 0) {
-                        textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT, 3.9f));
+                        textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 3.9f));
                     } else if (j == 1) {
-                        textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT, 2.9f));
+                        textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2.9f));
 
                     }
 //                    AccountInfo.showMessage(cursor.getString(j),getApplicationContext());
                     textView.setText(cursor.getString(j));
+                    textView.setTypeface(null, Typeface.ITALIC);
 
 
                     textView.setTextSize(25f);
@@ -121,6 +131,7 @@ public class ManageAccounts extends AppCompatActivity {
                 upgradAcc.setText("Change Type");
                 upgradAcc.setTextSize(25f);
                 upgradAcc.setPadding(0, 0, 20, 0);
+               // upgradAcc.setBackground(drawable);
                 if(!cursor.getString(1).equals("Administrator")) {
                     upgradbuttons.add(upgradAcc);
                 }
@@ -129,11 +140,12 @@ public class ManageAccounts extends AppCompatActivity {
                 removeacc.setText("Delete");
                 removeacc.setTextSize(25f);
                 removeacc.setPadding(0, 0, 20, 0);
+               // removeacc.setBackground(drawable);
                 if(!lastType.equals(AccountInfo.ADMIN_PREM)) {
                     removeButtons.add(removeacc);
                 }
-                upgradAcc.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
-                removeacc.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
+                upgradAcc.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
+                removeacc.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
                 tableRow.addView(upgradAcc);
                 tableRow.addView(removeacc);
                 if(!lastType.equals(AccountInfo.ADMIN_PREM)) {
@@ -231,12 +243,14 @@ public class ManageAccounts extends AppCompatActivity {
                             upgradbuttons.clear();
                             removeButtons.clear();
                             tableRows.clear();
+                            userCurrentlyViewing = username.get(currentI);
                             Intent intent = new Intent(ManageAccounts.this, MenuManagerAdmin.class);
                             startActivity(intent);
                         } else if (types.get(currentI).equals("Track Inspector")) {
                             upgradbuttons.clear();
                             removeButtons.clear();
                             tableRows.clear();
+                            userCurrentlyViewing = username.get(currentI);
                             Intent intent = new Intent(ManageAccounts.this, MenuTIAdmin.class);
                             startActivity(intent);
                         }

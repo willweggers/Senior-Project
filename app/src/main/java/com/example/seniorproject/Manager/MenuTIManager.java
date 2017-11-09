@@ -32,11 +32,11 @@ public class MenuTIManager extends AppCompatActivity {
         setContentView(R.layout.menu_ti_manager);
         startInspection = (Button) findViewById(R.id.startInspectionmanager);
         viewInspection = (Button) findViewById(R.id.viewInspectionmanager);
-        editInspection = (Button) findViewById(R.id.editInspectionmanager);
-        back = (Button) findViewById(R.id.backadminmenu5) ;
+        back = (Button) findViewById(R.id.backmanager) ;
         ActivityCompat.requestPermissions(MenuTIManager.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
+        setTitle(ListTrackInspectors.userViewing + " Track Inspector Menu");
 
     }
 
@@ -63,12 +63,6 @@ public class MenuTIManager extends AppCompatActivity {
             }
         });
 
-        editInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
 }

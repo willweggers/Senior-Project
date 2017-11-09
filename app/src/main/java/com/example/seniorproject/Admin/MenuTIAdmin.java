@@ -19,7 +19,6 @@ import com.example.seniorproject.TrackInspector.MenuTI;
 public class MenuTIAdmin extends AppCompatActivity {
     private Button startInspection;
     private Button viewInspection;
-    private Button editInspection;
     private Button back;
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
 
@@ -27,13 +26,13 @@ public class MenuTIAdmin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_ti_admin);
-        startInspection = (Button) findViewById(R.id.startInspectionadmin);
-        viewInspection = (Button) findViewById(R.id.viewInspectionadmin);
-        editInspection = (Button) findViewById(R.id.editInspectionadmin);
-        back = (Button) findViewById(R.id.backadminmenu4) ;
+        startInspection = (Button) findViewById(R.id.startInspectionmanager);
+        viewInspection = (Button) findViewById(R.id.viewInspectionmanager);
+        back = (Button) findViewById(R.id.backadminti) ;
         ActivityCompat.requestPermissions(MenuTIAdmin.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         setButtons();
+        setTitle(ManageAccounts.userCurrentlyViewing + " Track Inspector Menu");
 
     }
 
@@ -60,12 +59,7 @@ public class MenuTIAdmin extends AppCompatActivity {
             }
         });
 
-        editInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 
 }

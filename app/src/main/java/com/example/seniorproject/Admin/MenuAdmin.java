@@ -29,6 +29,7 @@ public class MenuAdmin extends AppCompatActivity {
        loguout = (Button) findViewById(R.id.logoutadmin);
        FormatReport.usernameAccessingThis = "Admin";
        setButton();
+       setTitle("Admin Menu");
     }
     private void setButton() {
         manageaccounts.setOnClickListener(new View.OnClickListener(){

@@ -137,7 +137,7 @@ public class FormatReport extends DriveActivitys {
         public void run() {
             cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
             cursor.moveToFirst();
-            String accountType = null;
+            String accountType=null;
             final String accountTypeFinal;
             do {
 

@@ -82,7 +82,7 @@ public class InspectionForm extends AppCompatActivity {
     public static ArrayList<String> trackUnits1= new ArrayList<>();
     public static ArrayList<String> trackQuantitys1= new ArrayList<>();
     public static ArrayList<String> trackPriority1= new ArrayList<>();
-
+    public static ArrayList<Bitmap> imageBitmaps = new ArrayList<>();
 
 
     public static ArrayList<String> switchIDs1= new ArrayList<>();

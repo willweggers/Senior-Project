@@ -6,31 +6,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="4">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:text="Track Inspector Menu"
-            android:textSize="50sp"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/backadminmenu4"
-            android:textSize="30sp"
-            android:text="Back to Admin Menu"/>
-    </LinearLayout>
+    android:weightSum="9.5"
+    android:paddingLeft="100dp"
+    android:paddingRight="100dp">
     <Space
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_weight="2"/>
 
     <Button
-        android:id="@+id/startInspectionadmin"
+        android:id="@+id/startInspectionmanager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/start_inspection"
@@ -44,10 +29,10 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="2"/>
+        android:layout_weight="1"/>
 
     <Button
-        android:id="@+id/viewInspectionadmin"
+        android:id="@+id/viewInspectionmanager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/view_inspections"
@@ -56,23 +41,21 @@
         android:textSize="20sp"
         android:layout_weight="0.5"
         app:layout_constraintTop_toBottomOf="@+id/startInspection" />
+
     <Space
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="2"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
     <Button
-        android:id="@+id/editInspectionadmin"
+        android:id="@+id/backadminti"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/edit_inspection"
+        android:text="Back To Admin Menu"
         android:textSize="20sp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_weight="0.5"
         app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"/>
 
 </LinearLayout>
