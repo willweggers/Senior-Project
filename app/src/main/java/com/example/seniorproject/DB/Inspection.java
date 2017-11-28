@@ -1,12 +1,13 @@
 package com.example.seniorproject.DB;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /*
  * Created by Chris Hamlet on 11/4/2017.
  */
-public class Inspection {
+public class Inspection implements Serializable {
     // string constants for XML tags
     public static final String masterTag = "inspection";
     public static final String inspectorIDTag = "user_id";
@@ -32,7 +33,7 @@ public class Inspection {
     // actual Ispection header properties
     // identifying info
     public String inspectionNum;
-    public long inspectorID;
+    public String inspectorID;
     public Date inspectionDate;
     public String customer;
 
@@ -59,8 +60,11 @@ public class Inspection {
     public double latitude; // calculated field - average of corresponding field in defect list
     public double longitude; // calculated field - average of corresponding field in defect list
 
+
     // array list of defects associated with inspection
     // all defect properties (and XML tags) go in Defect.java
-    public ArrayList<Defect> defectList;
+    public ArrayList<Defect> defectList = new ArrayList<>();
+
+
 
 }

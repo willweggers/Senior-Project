@@ -55,5 +55,14 @@
         android:textOff="Marker Placement is Disabled"
         android:textOn="Marker Placement is Enabled" />
 
+    <Button
+        android:id="@+id/saveinspection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/endInspection"
+        android:layout_below="@+id/endInspection"
+        android:layout_marginTop="42dp"
+        android:text="Save Inspection" />
+
 
 </RelativeLayout>

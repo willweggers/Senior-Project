@@ -1,29 +1,29 @@
 package com.example.seniorproject.Manager;
 
-import android.content.ContentValues;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.Space;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.seniorproject.AccountInfo;
-import com.example.seniorproject.Admin.AddAccount;
-import com.example.seniorproject.Admin.ManageAccounts;
-import com.example.seniorproject.Admin.MenuAdmin;
-import com.example.seniorproject.Admin.MenuManagerAdmin;
-import com.example.seniorproject.Admin.MenuTIAdmin;
-import com.example.seniorproject.CreateDB;
+import com.example.seniorproject.DB.AccountFields;
+import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.ListOfInspections;
+import com.example.seniorproject.ListOfInspectionsOther;
 import com.example.seniorproject.R;
+import com.example.seniorproject.ViewInspection;
 
 import java.util.ArrayList;
 
@@ -31,102 +31,154 @@ import java.util.ArrayList;
  * Created by willw on 11/6/2017.
  */
 
-public class ListTrackInspectors extends AppCompatActivity {
-    private Button backmenu;
-    private TableLayout accountTable;
-    private SQLiteDatabase writeDB;
-    private SQLiteDatabase readDB;
-    private Cursor cursor;
-    private String lastUN;
-    private String lastType;
-    private ArrayList<String> types = new ArrayList<>();
-    public static String userUsing;
-    public static String userViewing;
+public class ListTrackInspectors extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+
+
+    private OnFragmentInteractionListener mListener;
+
+    public ListTrackInspectors() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Tab1.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ListTrackInspectors newInstance(String param1, String param2) {
+        ListTrackInspectors fragment = new ListTrackInspectors();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_track_inspectors);
-        backmenu = (Button) findViewById(R.id.adminbackmenu);
-        accountTable = (TableLayout) findViewById(R.id.trackinspectortable);
-        writeDB = new CreateDB(this).getWritableDatabase();
-        readDB = new CreateDB(this).getReadableDatabase();
-
-//        String adminusername = cursor.getString(0);
-
-
-//                while (cursor.moveToNext()){
-//            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
-//
-//        }
-        setAddAccounts();
-
-        addRows();
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
-    private void setAddAccounts(){
 
-        backmenu.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(ListTrackInspectors.this, MenuManager.class);
-                startActivity(intent);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.list_track_inspectors, container, false);
+        TableLayout tableLayout = (TableLayout) view.findViewById(R.id.listoftrackinspec);
+        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getActivity());
+        ArrayList<String> allTrackInspecUserName = new ArrayList<>();
+        ArrayList<String> allTrackInspecName = new ArrayList<>();
+        ArrayList<AccountFields> allTrackInspecAcc = localDBHelper.getAllAccountByType(AccountInfo.TI_PREM);
+        for (int i = 0; i < allTrackInspecAcc.size(); i++){
+            allTrackInspecUserName.add(allTrackInspecAcc.get(i).userName);
+            allTrackInspecName.add(allTrackInspecAcc.get(i).firstName.concat(" ").concat(allTrackInspecAcc.get(i).lastName));
+        }
+        int numRows = allTrackInspecAcc.size()*2;
+        setTableRows(tableLayout, numRows, allTrackInspecUserName, allTrackInspecName);
+
+        return view;
+    }
+    private void setTableRows(TableLayout tableLayout,  int numRows, ArrayList<String> alltrackinspecids, ArrayList<String> alltrackinspecNames){
+        tableLayout.removeAllViews();
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
+        final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
+        for(int i = 0; i< numRows;i++){
+            //if even add space
+            if(i==0 || i%2 == 0){
+                Space space = new Space(getContext());
+                space.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 30));
+                tableLayout.addView(space);
+                continue;
             }
-        });
-    }
-    private void addRows(){
-        cursor = writeDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        cursor.moveToFirst();
-        accountTable = (TableLayout) findViewById(R.id.trackinspectortable);
-        accountTable.removeAllViews();
-        do {
-
-            TableRow tableRow = new TableRow(this);
+            TableRow tableRow = new TableRow(getContext());
             tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-            tableRow.setPadding(0, 20, 0, 20);
-            tableRow.setWeightSum(10);
+            tableRow.setWeightSum(3);
+            tableRow.setBackground(drawable);
 
-            for (int j = 0; j < 1; j++) {
-
-                TextView textView = new TextView(this);
+            for (int j = 0; j < 2; j++) {
+                TextView textView = new TextView(getContext());
                 if (j == 0) {
-                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 10.0f));
+                    textView.setText(alltrackinspecNames.get(i-1));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
+
+                } else if (j == 1) {
+                    textView.setText(alltrackinspecids.get(i-1));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
                 }
-//                    AccountInfo.showMessage(cursor.getString(j),getApplicationContext());
-                textView.setText(cursor.getString(j));
-
-                textView.setTypeface(null, Typeface.ITALIC);
-                textView.setTextSize(25f);
+                textView.setTextSize(20f);
+                textView.setGravity(Gravity.CENTER_VERTICAL);
                 textView.setPadding(10,0,0,0);
-
-                    lastUN = cursor.getString(0);
-                    lastType = cursor.getString(1);
-
-
-                    tableRow.addView(textView);
-
+                tableRow.addView(textView);
             }
-            final String lastTypeFinal = lastType;
-            final String lastUNType = lastUN;
-            tableRow.setOnClickListener(new View.OnClickListener(){
+            final String currUsername = alltrackinspecids.get(i-1);
+            final TableRow currTableRow = tableRow;
+            tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(lastTypeFinal.equals("Track Inspector")){
-                        userViewing = lastUNType;
-                        MenuTIManager.currentUserName = userViewing;
-                        Intent intent = new Intent(ListTrackInspectors.this, MenuTIManager.class);
-                        if(userUsing.equals("Admin")) {
-                            intent = new Intent(ListTrackInspectors.this, MenuTIAdmin.class);
-                        }
-                        startActivity(intent);
-                    }
+                public void onClick(View v) {
+                    currTableRow.setBackground(clickDrawable);
+                    LocalDBHelper tempDB = LocalDBHelper.getInstance(getContext());
+                    Intent intent = new Intent(getActivity(), ListOfInspectionsOther.class);
+                    LocalDBHelper.storeDataInSharedPreference(getContext(),"userviewing",currUsername);
+                    startActivity(intent);
                 }
             });
-            if(!lastTypeFinal.equals(AccountInfo.ADMIN_PREM) && (!lastTypeFinal.equals(AccountInfo.MANAGER_PREM))) {
-                accountTable.addView(tableRow);
-            }
-        } while (cursor.moveToNext());
-        cursor.close();
+            tableLayout.addView(tableRow);
+        }
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 
 }

@@ -1,108 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="12"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
     >
+    <EditText
+        android:id="@+id/inspectionidnum"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:hint="Enter Inspection ID Number Here."
+        android:backgroundTint="@color/black"
+        />
 
     <EditText
         android:id="@+id/companynamee"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="30dp"
-        android:textSize="30sp"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:hint="Enter Customer Name Here."
         android:backgroundTint="@color/black"
-        android:hint="Enter Company Name Here."
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp" />
-
+        />
     <EditText
-        android:id="@+id/location"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="60dp"
-        android:textSize="30sp"
+        android:id="@+id/locationstate"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Locations State Here."
         android:backgroundTint="@color/black"
-        android:hint="Enter City, State and Zip Code Here."
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companynamee"
-        app:layout_constraintHorizontal_bias="1.0"
-        android:layout_marginStart="16dp" />
+        />
 
 
     <EditText
-        android:id="@+id/trackinspectorid"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="60dp"
-        android:hint="Enter Track Inspection ID Number Here."
-        android:textSize="30sp"
+        android:id="@+id/locationaddress"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Location Address Here."
         android:backgroundTint="@color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location"
-        android:layout_marginStart="8dp" />
-
+ />
     <EditText
-        android:id="@+id/address"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="60dp"
-        android:hint="Enter Customers Address Here."
-        android:textSize="30sp"
+        android:id="@+id/locationcity"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Location City Here."
         android:backgroundTint="@color/black"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackinspectorid"
-        android:layout_marginStart="8dp" />
-
+        />
     <EditText
-        android:id="@+id/cusomtercontact"
-        android:layout_width="884dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="60dp"
-        android:hint="Enter Customer Contact Information Here."
-        android:textSize="30sp"
+        android:id="@+id/locationcounty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Location County Here."
         android:backgroundTint="@color/black"
+        />
+    <EditText
+        android:id="@+id/locationzip"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Location Zip Code Here."
+        android:backgroundTint="@color/black"
+        />
+    <EditText
+        android:id="@+id/contactname"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Contact Name Here."
+        android:backgroundTint="@color/black"
+        />
+    <EditText
+        android:id="@+id/contacttele"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Contacts Telephone Number Here."
+        android:backgroundTint="@color/black"
+        />
+    <EditText
+        android:id="@+id/contacttelefax"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Contacts Telefax Number Here."
+        android:backgroundTint="@color/black"
+        />
+    <EditText
+        android:id="@+id/contactemail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Enter Contacts Email Here."
+        android:backgroundTint="@color/black"
+        />
 
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address"
-        android:layout_marginStart="16dp" />
+
+
+
+
+
+
+
 
     <Button
         android:id="@+id/gotomap"
-        android:layout_width="884dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/go_to_map"
-        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Save information and start inspection."
+ />
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

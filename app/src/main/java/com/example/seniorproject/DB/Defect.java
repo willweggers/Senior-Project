@@ -2,10 +2,12 @@ package com.example.seniorproject.DB;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /*
  * Created by Chris Hamlet on 11/4/2017.
  */
-public class Defect
+public class Defect implements Serializable
 {
     // XML tags for defects
     public static final String masterTag = "defect";
@@ -30,7 +32,7 @@ public class Defect
     public String trackNumber;
     public String location;
     public String description;
-    public Bitmap picture;
+    public byte[] picture;
     public int labor;
     public int category;
     public int code;

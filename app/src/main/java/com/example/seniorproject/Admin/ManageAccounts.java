@@ -1,19 +1,21 @@
 package com.example.seniorproject.Admin;
 
-import android.app.ActionBar;
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.Space;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -21,204 +23,173 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.seniorproject.AccountInfo;
-import com.example.seniorproject.CreateDB;
-import com.example.seniorproject.Manager.MenuManager;
+import com.example.seniorproject.DB.AccountFields;
+import com.example.seniorproject.DB.Inspection;
+import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.ListOfInspectionsOther;
+import com.example.seniorproject.Manager.ListTrackInspectors;
 import com.example.seniorproject.R;
-import com.example.seniorproject.TrackInspector.MapTI;
-import com.example.seniorproject.TrackInspector.MenuTI;
 
 import java.util.ArrayList;
 
 /*
  * Created by willw on 11/4/2017.
  */
-public class ManageAccounts extends AppCompatActivity {
-    private Button addAccounts;
-    private Button backmenu;
-    private TableLayout accountTable;
-    private SQLiteDatabase writeDB;
-    private SQLiteDatabase readDB;
-    private Cursor cursor;
-    private String lastUN;
-    private String lastType;
-    private ArrayList<Button> upgradbuttons = new ArrayList<>();
-    private ArrayList<Button> removeButtons = new ArrayList<>();
-    private ArrayList<TableRow> tableRows = new ArrayList<>();
-    private ArrayList<String> username = new ArrayList<>();
-    private ArrayList<String> types = new ArrayList<>();
+public class ManageAccounts extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    public static String userCurrentlyViewing;
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+
+
+    private OnFragmentInteractionListener mListener;
+
+    public ManageAccounts() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Tab1.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ManageAccounts newInstance(String param1, String param2) {
+        ManageAccounts fragment = new ManageAccounts();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_manage_accounts);
-        addAccounts = (Button) findViewById(R.id.addaccount);
-        backmenu = (Button) findViewById(R.id.adminbackmenu);
-        accountTable = (TableLayout) findViewById(R.id.accounttable);
-        writeDB = new CreateDB(this).getWritableDatabase();
-        readDB = new CreateDB(this).getReadableDatabase();
-
-//        String adminusername = cursor.getString(0);
-
-
-//                while (cursor.moveToNext()){
-//            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
-//
-//        }
-        setAddAccounts();
-
-      addRows();
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
-    private void setAddAccounts(){
 
-            addAccounts.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    Intent intent = new Intent(ManageAccounts.this, AddAccount.class);
-                    startActivity(intent);
-                }
-            });
-        backmenu.setOnClickListener(new View.OnClickListener(){
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.admin_manage_accounts, container, false);
+        Button addAccount = (Button) view.findViewById(R.id.addaccounta);
+        addAccount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                Intent intent = new Intent(ManageAccounts.this, MenuAdmin.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddAccount.class);
                 startActivity(intent);
             }
         });
+        TableLayout tableLayout = (TableLayout) view.findViewById(R.id.listofaccounts);
+        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getContext());
+        ArrayList<String> allAccountUserNames = new ArrayList<>();
+        ArrayList<String> allAccountName = new ArrayList<>();
+        ArrayList<String> allAccountTypes = new ArrayList<>();
+        ArrayList<AccountFields> allAcc = localDBHelper.getAllAccounts();
+        for (int i = 0; i < allAcc.size(); i++){
+            allAccountUserNames.add(allAcc.get(i).userName);
+            allAccountName.add(allAcc.get(i).firstName.concat(" ").concat(allAcc.get(i).lastName));
+            allAccountTypes.add(allAcc.get(i).accountType);
+        }
+        int numRows = allAcc.size()*2;
+        setTableRows(tableLayout, numRows, allAccountUserNames, allAccountName, allAccountTypes);
+
+        return view;
     }
-    private void addRows(){
-        cursor = writeDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        cursor.moveToFirst();
-        accountTable = (TableLayout) findViewById(R.id.accounttable);
-        accountTable.removeAllViews();
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.border, null);
-            do {
-                TableRow tableRow = new TableRow(this);
+    private void setTableRows(final TableLayout tableLayout, int numRowsReal, final ArrayList<String> allids, final  ArrayList<String> allNames, final ArrayList<String> alltypes) {
+        final String[] accountTypes = new String[]{AccountInfo.TI_PREM, AccountInfo.MANAGER_PREM, AccountInfo.ADMIN_PREM};
+        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getActivity());
+        ArrayList<String> allAccountUserNames = new ArrayList<>();
+        ArrayList<String> allAccountName = new ArrayList<>();
+        ArrayList<String> allAccountTypes = new ArrayList<>();
+        ArrayList<AccountFields> allAcc = localDBHelper.getAllAccounts();
+        for (int i = 0; i < allAcc.size(); i++){
+            allAccountUserNames.add(allAcc.get(i).userName);
+            allAccountName.add(allAcc.get(i).firstName.concat(" ").concat(allAcc.get(i).lastName));
+            allAccountTypes.add(allAcc.get(i).accountType);
+        }
+        allids.clear();
+        allNames.clear();
+        alltypes.clear();
+        for(int i = 0; i < allAcc.size();i++){
+            allids.add(allAccountUserNames.get(i));
+            allNames.add(allAccountName.get(i));
+            alltypes.add(allAccountTypes.get(i));
+        }
 
-                tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-                tableRow.setPadding(0, 20, 0, 20);
-                tableRow.setWeightSum(10);
-
-                for (int j = 0; j < 2; j++) {
-                    TextView textView = new TextView(this);
-
-                   // textView.setBackground(drawable);
-                    if (j == 0) {
-                        textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 3.9f));
-                    } else if (j == 1) {
-                        textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2.9f));
-
-                    }
-//                    AccountInfo.showMessage(cursor.getString(j),getApplicationContext());
-                    textView.setText(cursor.getString(j));
-                    textView.setTypeface(null, Typeface.ITALIC);
-
-
-                    textView.setTextSize(25f);
-                    textView.setPadding(10,0,0,0);
-                    if (j == 0) {
-                        lastUN = cursor.getString(j);
-                    }
-                    else if(j == 1){
-                        lastType = cursor.getString(j);
-                    }
-                    tableRow.addView(textView);
-                }
-
-                Button upgradAcc = new Button(this);
-                upgradAcc.setText("Change Type");
-                upgradAcc.setTextSize(25f);
-                upgradAcc.setPadding(0, 0, 20, 0);
-               // upgradAcc.setBackground(drawable);
-                if(!cursor.getString(1).equals("Administrator")) {
-                    upgradbuttons.add(upgradAcc);
-                }
-
-                Button removeacc = new Button(this);
-                removeacc.setText("Delete");
-                removeacc.setTextSize(25f);
-                removeacc.setPadding(0, 0, 20, 0);
-               // removeacc.setBackground(drawable);
-                if(!lastType.equals(AccountInfo.ADMIN_PREM)) {
-                    removeButtons.add(removeacc);
-                }
-                upgradAcc.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
-                removeacc.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1.4f));
-                tableRow.addView(upgradAcc);
-                tableRow.addView(removeacc);
-                if(!lastType.equals(AccountInfo.ADMIN_PREM)) {
-                    tableRows.add(tableRow);
-                }
-
-                if(!lastType.equals(AccountInfo.ADMIN_PREM)) {
-                    accountTable.addView(tableRow);
-                }
-            } while (cursor.moveToNext());
-            cursor.close();
-        setButtons();
-
-    }
-    private void setButtons(){
-        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        cursor.moveToFirst();
-        final String[] accountType = {"Track Inspector", "Manager"};
-        int i = 0;
-        username.clear();
-        types.clear();
-        do{
-            if(cursor.getString(1).equals(AccountInfo.ADMIN_PREM)){
-               // cursor.moveToNext();
+        numRowsReal = allAcc.size()*2;
+        tableLayout.removeAllViews();
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
+        final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
+        int count = 0;
+        for (int i = 0; i < numRowsReal; i++) {
+            //if even add space
+            if (i == 0 || i % 2 == 0) {
+                Space space = new Space(getContext());
+                space.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 30));
+                tableLayout.addView(space);
+                count++;
+                continue;
             }
-            else {
-                final int currentI = i;
-                username.add(cursor.getString(0));
-                types.add(cursor.getString(1));
-                removeButtons.get(i).setOnClickListener(new View.OnClickListener() {
+            TableRow tableRow = new TableRow(getContext());
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+            tableRow.setWeightSum(3);
+            tableRow.setBackground(drawable);
+
+            for (int j = 0; j < 3; j++) {
+                TextView textView = new TextView(getContext());
+                if (j == 0) {
+                    textView.setText(allNames.get(i - count));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
+
+                } else if (j == 1) {
+                    textView.setText(allids.get(i - count));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.5f));
+                } else if (j == 2) {
+                    textView.setText(alltypes.get(i - count));
+                    textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.5f));
+
+
+
+                } textView.setTextSize(20f);
+                textView.setGravity(Gravity.CENTER_VERTICAL);
+                textView.setPadding(10, 0, 0, 0);
+                tableRow.addView(textView);
+            }
+                final String currUsername = allids.get(i - count);
+                final int numRows = numRowsReal;
+                Button setPrem = new Button(getContext());
+                setPrem.setText("Set Type");
+                setPrem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(ManageAccounts.this);
-                        builder.setMessage("Would you like to delete this account?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                                        writeDB.delete(CreateDB.TABLE_NAME, "username=?", new String[]{username.get(currentI)});
-                                        upgradbuttons.clear();
-                                        removeButtons.clear();
-                                        tableRows.clear();
-                                        addRows();
-                                        dialog.cancel();
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        final AlertDialog alert = builder.create();
-                        alert.show();
-                    }
-                });
-                upgradbuttons.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(ManageAccounts.this);
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setMessage("Would you like to change the premissions of this account?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-//                                    // Account picker
-                                        final AlertDialog builder1 = new AlertDialog.Builder(ManageAccounts.this).setTitle("Pick new account type").setAdapter(new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, accountType), new DialogInterface.OnClickListener() {
+                                        // Account picker
+                                        final AlertDialog builder1 = new AlertDialog.Builder(getContext()).setTitle("Pick new account type").setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, accountTypes), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                String typeSelected = accountType[which];
-                                                ContentValues values = new ContentValues();
-                                                values.put(CreateDB.COLUMN_TYPE, typeSelected);
-                                                writeDB.update(CreateDB.TABLE_NAME, values, "username=?", new String[]{username.get(currentI)});
-                                                upgradbuttons.clear();
-                                                removeButtons.clear();
-                                                tableRows.clear();
-                                                addRows();
+                                                LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getContext());
+                                                String typeSelected = accountTypes[which];
+                                                AccountFields accountFields = localDBHelper.getAccountByUser(currUsername);
+                                                accountFields.accountType = typeSelected;
+                                                localDBHelper.updateAccountLine(accountFields);
+                                                setTableRows(tableLayout, numRows, allids,allNames, alltypes);
                                                 dialog.cancel();
 
                                             }
@@ -235,28 +206,127 @@ public class ManageAccounts extends AppCompatActivity {
                         alert.show();
                     }
                 });
-                tableRows.get(i).setOnClickListener(new View.OnClickListener() {
+
+                setPrem.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
+                tableRow.addView(setPrem);
+                Space space = new Space(getContext());
+                space.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.05f));
+                tableRow.addView(space);
+
+                Button resetPass = new Button(getContext());
+                resetPass.setText("Reset Pass");
+                resetPass.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (types.get(currentI).equals("Manager")) {
-                            upgradbuttons.clear();
-                            removeButtons.clear();
-                            tableRows.clear();
-                            userCurrentlyViewing = username.get(currentI);
-                            Intent intent = new Intent(ManageAccounts.this, MenuManagerAdmin.class);
-                            startActivity(intent);
-                        } else if (types.get(currentI).equals("Track Inspector")) {
-                            upgradbuttons.clear();
-                            removeButtons.clear();
-                            tableRows.clear();
-                            userCurrentlyViewing = username.get(currentI);
-                            Intent intent = new Intent(ManageAccounts.this, MenuTIAdmin.class);
-                            startActivity(intent);
-                        }
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Would you like to reset the password to nothing for this account?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getContext());
+                                        AccountFields accountFields = localDBHelper.getAccountByUser(currUsername);
+                                        accountFields.passWord = AccountInfo.md5("");
+                                        localDBHelper.updateAccountLine(accountFields);
+                                        setTableRows(tableLayout, numRows, allids,allNames, alltypes);
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
                     }
                 });
-               i++;
-            }
-        }while(cursor.moveToNext() && cursor !=null);
+                resetPass.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
+                tableRow.addView(resetPass);
+                Space space1 = new Space(getContext());
+                space1.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.05f));
+                tableRow.addView(space1);
+                Button delete = new Button(getContext());
+                delete.setText("Delete");
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Would you like to remove this account?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getContext());
+                                        localDBHelper.deleteAccount(currUsername);
+                                        setTableRows(tableLayout, numRows, allids,allNames, alltypes);
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                });
+                delete.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
+                tableRow.addView(delete);
+                final TableRow currTableRow = tableRow;
+                tableRow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        currTableRow.setBackground(clickDrawable);
+                        Intent intent = new Intent(getActivity(), ListOfInspectionsOther.class);
+                        LocalDBHelper.storeDataInSharedPreference(getContext(), "userviewing", currUsername);
+                        startActivity(intent);
+                    }
+                });
+
+
+            tableLayout.addView(tableRow);
+        }
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }
+

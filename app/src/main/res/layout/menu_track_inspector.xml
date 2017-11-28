@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--using lineralayout with spaces so that it fits to whatever tablet size they are using-->
 <!--to adjust hieght adjust weightsum of linear layout along with weight of spaces and buttons-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -6,70 +7,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="9.5"
-    android:paddingLeft="100dp"
-    android:paddingRight="100dp">
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="2"/>
+    android:weightSum="22"
 
-    <Button
-        android:id="@+id/startInspection"
+    >
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/start_inspection"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="20sp"
+        android:layout_height="0dp"
+        android:id="@+id/wholemenutipager"
+        android:layout_weight="20.5">
 
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_weight="0.5"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"/>
-    <Button
-        android:id="@+id/editInspection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_inspection"
-        android:textSize="20sp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_weight="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
+    </android.support.v4.view.ViewPager>
+    <android.support.design.widget.TabLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1.5"
+    android:background="@color/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:tabMaxWidth="0dp"
+        app:tabIndicatorHeight="0dp"
+    app:tabBackground="@drawable/tab_color_on_selected"
+        app:tabTextAppearance="@style/MineCustomTabText"
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"/>
-    <Button
-        android:id="@+id/viewInspection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/view_inspections"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="20sp"
-        android:layout_weight="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/startInspection" />
+        android:id="@+id/titabmenu">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+</android.support.design.widget.TabLayout>
 
-    <Button
-        android:id="@+id/logoutti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textSize="20sp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_weight="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/viewInspection" />
 
 </LinearLayout>

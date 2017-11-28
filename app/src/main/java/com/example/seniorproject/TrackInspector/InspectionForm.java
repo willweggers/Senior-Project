@@ -1,19 +1,16 @@
 package com.example.seniorproject.TrackInspector;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,39 +22,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-import org.xmlpull.v1.XmlSerializer;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
-import com.example.seniorproject.AccountInfo;
-import com.example.seniorproject.CreateDB;
+import com.example.seniorproject.DB.Defect;
+import com.example.seniorproject.DB.Inspection;
+import com.example.seniorproject.DB.LocalDBHelper;
 import com.example.seniorproject.MapActivitys;
 import com.example.seniorproject.NothingSelectedSpinnerAdapter;
 import com.example.seniorproject.R;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by willw on 10/6/2017.
@@ -258,6 +235,29 @@ public class InspectionForm extends AppCompatActivity {
                     trackUnits1.add(unitString);
                     trackQuantitys1.add(quantityString);
                     trackPriority1.add(priorityString);
+                    Defect defect = new Defect();
+                    defect.trackNumber = trackString;
+                    defect.lineItem = theText;
+                    defect.location = locString;
+                    defect.description = descriptionString;
+                    defect.unit = unitString;
+                    try {
+                        defect.quantity = Integer.parseInt(quantityString);
+                        defect.priority = Integer.parseInt(priorityString);
+                    }
+                    catch (NumberFormatException e){
+                        defect.quantity = 1;
+                        defect.priority = 2;
+                        Log.e("NOTNUMQ", e.getMessage());
+                    }
+                    defect.latitude =  getIntent().getDoubleExtra("lat", 0);
+                    defect.longitude = getIntent().getDoubleExtra("long", 0);
+                    defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                    defect.codeDescription = "code descp";
+                    Inspection currInspection = (Inspection)getIntent().getSerializableExtra("inspection");
+                    currInspection.defectList.add(defect);
+
+
                     setEditTextsToNull();
 
                     MapActivitys.numOfMarker++;
@@ -267,6 +267,7 @@ public class InspectionForm extends AppCompatActivity {
                     MapTI.currentNumberOfTrack++;
                     emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
+                    intent.putExtra("inspection", currInspection);
                     startActivity(intent);
                 }
                 else if(switchCheck.isChecked()){
@@ -280,6 +281,28 @@ public class InspectionForm extends AppCompatActivity {
                     switchUnits1.add(unitString);
                     switchQuantitys1.add(quantityString);
                     switchPriority1.add(priorityString);
+                    Defect defect = new Defect();
+                    defect.trackNumber = trackString;
+                    defect.lineItem = theText;
+                    defect.location = locString;
+                    defect.description = descriptionString;
+                    defect.unit = unitString;
+                    try {
+                        defect.quantity = Integer.parseInt(quantityString);
+                        defect.priority = Integer.parseInt(priorityString);
+                    }
+                    catch (NumberFormatException e){
+                        defect.quantity = 1;
+                        defect.priority = 2;
+                        Log.e("NOTNUMQ", e.getMessage());
+                    }
+
+
+                    defect.latitude =  getIntent().getDoubleExtra("lat", 0);
+                    defect.longitude = getIntent().getDoubleExtra("long", 0);
+                    defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                    Inspection currInspection = (Inspection)getIntent().getSerializableExtra("inspection");
+                    currInspection.defectList.add(defect);
                     setEditTextsToNull();
 
                     MapTI.currentNumberOfSwitches++;
@@ -289,6 +312,7 @@ public class InspectionForm extends AppCompatActivity {
                     }
                     emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
+                    intent.putExtra("inspection", currInspection);
                     startActivity(intent);
                 }
                 else{
@@ -322,8 +346,8 @@ public class InspectionForm extends AppCompatActivity {
     }
     private void setText(){
 
-        trackString= trackNumberEdit.getText().toString();
-        quantityString= quantityEdit.getText().toString();
+        trackString= trackNumberEdit.getText().toString().trim();
+        quantityString= quantityEdit.getText().toString().trim();
         try {
             if (!defectDescriptionEdit.getSelectedItem().toString().equals("Other")) {
                 descriptionString = defectDescriptionEdit.getSelectedItem().toString();
@@ -334,15 +358,15 @@ public class InspectionForm extends AppCompatActivity {
             priorityString = priorityEdit.getSelectedItem().toString();
             unitString=unitEdit.getSelectedItem().toString();
         }catch (NullPointerException e){
-            descriptionString = "No description of defect entered.";
-            laborString = "No labor code of defect entered.";
-                    categoryString= "No category of defect entered.";
-            codeString = "No code from category of defect entered.";
-            priorityString= "No priority of defect entered.";
-            unitString = " No unit of defect entered.";
+            descriptionString = null;
+            laborString = null;
+            categoryString= null;
+            codeString = null;
+            priorityString= null;
+            unitString = null;
         }
 
-        locString= locationEdit.getText().toString();
+        locString= locationEdit.getText().toString().trim();
     }
     private void setEditTextsToNull(){
         trackNumberEdit.setText(null);

@@ -23,8 +23,11 @@ public class AccountInfo{
     public static final String MANAGER_PREM = "Manager";
     public static final String TI_PREM = "Track Inspector";
     //Admin info
-    public static final String adminUN = "Admin";
-    public static final String adminPass = "adminpass";
+    public static final String adminUN = "admin";
+    public static final String adminPass = "pass";
+    //adding this here for now can change if want to
+    public static String currentUserLoggedIntoAs;
+    public static String currentUserViewing;
     //hashing string function
     //https://stackoverflow.com/questions/3934331/how-to-hash-a-string-in-android
     public static String md5(String s)

@@ -13,23 +13,34 @@ public class InspectionContract {
     public static final class User implements BaseColumns {
 
         // table schema
-        public static final String TABLE_NAME = "userTable";
-        public static final String COL_USER = "user";
-        public static final String COL_PASS = "pass";
-        public static final String COL_PERMISSION = "permission"; // inspector, manager, admin
+        public static final String TABLE_NAME = "user_info";
+        public static final String COLUMN_NAME = "username";
+        public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_PASS = "password";
+        public static final String COLUMN_FIRST = "firstname";
+        public static final String COLUMN_LAST = "lastname";// inspector, manager, admin
         public static final String COL_INITIALS = "initials"; // 2 letter initials
 
         // helper constants for SQL commands
         public static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY, "
-                + COL_USER + " TEXT UNIQUE NOT NULL, "
-                + COL_PASS + " TEXT NOT NULL, "
-                + COL_INITIALS + " TEXT UNIQUE NOT NULL, "
-                + COL_PERMISSION + " INTEGER NOT NULL);";
+                + COLUMN_NAME + " TEXT UNIQUE NOT NULL, "
+                + COLUMN_TYPE + " TEXT NOT NULL, "
+                + COLUMN_PASS + " TEXT NOT NULL, "
+                + COLUMN_FIRST + " TEXT NOT NULL, "
+                + COLUMN_LAST + " TEXT NOT NULL, "
+                + COL_INITIALS + " INTEGER NOT NULL);";
+        public static final String[] PROJECTION = {_ID,COLUMN_NAME,
+                COLUMN_TYPE,
+                COLUMN_PASS,
+                COLUMN_FIRST,
+                COLUMN_LAST,
+                COL_INITIALS
+               };
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-        public static final String DEFAULT_SORT_ORDER = COL_USER + " ASC";
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME + " ASC";
     }
 
     public static final class Inspection implements BaseColumns {
@@ -60,21 +71,21 @@ public class InspectionContract {
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY, "
                 + COL_INSPECTOR_FK + " INTEGER REFERENCES " + User.TABLE_NAME + ", "
-                + COL_INSP_NUM + " TEXT UNIQUE NOT NULL, "
-                + COL_INSP_DATE + " INTEGER NOT NULL, "
+                + COL_INSP_NUM + " TEXT, "
+                + COL_INSP_DATE + " INTEGER, "
                 + COL_CUSTOMER + " TEXT, "
                 + COL_ADDRESS + " TEXT, "
-                + COL_CITY + " TEXT NOT NULL, "
-                + COL_STATE + " TEXT NOT NULL, "
+                + COL_CITY + " TEXT, "
+                + COL_STATE + " TEXT, "
                 + COL_ZIP + " TEXT, "
-                + COL_COUNTY + " TEXT NOT NULL, "
+                + COL_COUNTY + " TEXT, "
                 + COL_CONTACT + " TEXT, "
                 + COL_PHONE + " TEXT, "
                 + COL_FAX + " TEXT, "
                 + COL_EMAIL + " TEXT, "
-                + COL_DISTANCE + " INTEGER NOT NULL, "
-                + COL_TRIPS + " INTEGER NOT NULL, "
-                + COL_SURFACING_TRIPS + " INTEGER NOT NULL, "
+                + COL_DISTANCE + " INTEGER, "
+                + COL_TRIPS + " INTEGER, "
+                + COL_SURFACING_TRIPS + " INTEGER, "
                 + COL_MOBILIZATION + " REAL, "
                 + COL_LATITUDE + " REAL, "
                 + COL_LONGITUDE + " REAL"
@@ -131,18 +142,18 @@ public class InspectionContract {
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY, "
                 + COL_INSPECTION_FK + " INTEGER NOT NULL REFERENCES " + Inspection.TABLE_NAME + " ON DELETE CASCADE, "
-                + COL_LINE_ITEM + " TEXT NOT NULL, "
-                + COL_TRACK + " TEXT NOT NULL, "
+                + COL_LINE_ITEM + " TEXT, "
+                + COL_TRACK + " TEXT, "
                 + COL_LOCATION + " TEXT, "
                 + COL_DESCRIPTION + " TEXT, "
                 + COL_PICTURE + " BLOB, "
-                + COL_LABOR + " INTEGER NOT NULL, "
-                + COL_CATEGORY + " INTEGER NOT NULL, "
-                + COL_CODE + " INTEGER NOT NULL, "
+                + COL_LABOR + " INTEGER, "
+                + COL_CATEGORY + " INTEGER, "
+                + COL_CODE + " INTEGER, "
                 + COL_CODE_DESC + " TEXT, "
-                + COL_QUANTITY + " INTEGER NOT NULL, "
+                + COL_QUANTITY + " INTEGER, "
                 + COL_UNIT + " TEXT, "
-                + COL_PRIORITY + " INTEGER NOT NULL, "
+                + COL_PRIORITY + " INTEGER, "
                 + COL_PRICE + " REAL, "
                 + COL_LATITUDE + " REAL, "
                 + COL_LONGITUDE + " REAL"
@@ -151,7 +162,7 @@ public class InspectionContract {
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         public static final String[] PROJECTION = {_ID,
-                                                    COL_INSPECTION_FK,
+//                                                    COL_INSPECTION_FK,
                                                     COL_LINE_ITEM,
                                                     COL_TRACK,
                                                     COL_LOCATION,

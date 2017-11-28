@@ -1,23 +1,25 @@
 package com.example.seniorproject.TrackInspector;
 
 import android.Manifest;
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.view.View;
+import android.view.Menu;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.seniorproject.AccountInfo;
-import com.example.seniorproject.CreateDB;
-import com.example.seniorproject.MainActivityLogin;
+import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.FindLocalDBInfo;
+import com.example.seniorproject.ListInspectionsCurrent;
+
+import com.example.seniorproject.ListOfInspections;
+import com.example.seniorproject.NullPassDialog;
 import com.example.seniorproject.R;
 
 
@@ -27,89 +29,72 @@ import com.example.seniorproject.R;
  * currently startinspection is going to trackinspector page which is just the old demo trackinspection page.
  */
 
-public class MenuTI extends AppCompatActivity{
-    private Button startInspection;
-    private Button viewInspection;
-    private Button editInspection;
+public class MenuTI extends AppCompatActivity implements MenuTrackInspectorFrag.OnFragmentInteractionListener,
+        SettingsTIFrag.OnFragmentInteractionListener,
+        ListInspectionsCurrent.OnFragmentInteractionListener,
+        ListOfInspections.OnFragmentInteractionListener{
+
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
-    private SQLiteDatabase localDB;
-    private SQLiteDatabase readDB;
-    public static String userNameTI;
-    private Cursor cursor;
-    private Button logout;
+    private LocalDBHelper localDB;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_track_inspector);
-        localDB = new CreateDB(this).getWritableDatabase();
-        readDB = new CreateDB(this).getReadableDatabase();
-        startInspection = (Button) findViewById(R.id.startInspection);
-        viewInspection = (Button) findViewById(R.id.viewInspection);
-        editInspection = (Button) findViewById(R.id.editInspection);
-        FormatReport.usernameAccessingThis = userNameTI;
-        logout = (Button) findViewById(R.id.logoutti);
-            cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME + " WHERE username = ?", new String[]{userNameTI});
-            cursor.moveToFirst();
-            if (cursor.getString(2).equals(AccountInfo.md5(""))) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("New Account set your password below: ");
+        TabLayout bottomLayout = (TabLayout) findViewById(R.id.titabmenu);
+        bottomLayout.addTab(bottomLayout.newTab().setText("Inspections"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Settings"));
+        bottomLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        bottomLayout.setTabMode(TabLayout.MODE_FIXED);
 
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(input);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String newPass = input.getText().toString();
-                        ContentValues values = new ContentValues();
-                        values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(newPass));
-                        localDB.update(CreateDB.TABLE_NAME, values, "username=?", new String[]{userNameTI});
+        final ViewPager wholeViewPager = (ViewPager) findViewById(R.id.wholemenutipager);
+        final PageAdapter pageAdapter = new PageAdapter(getSupportFragmentManager(), bottomLayout.getTabCount());
+        wholeViewPager.setAdapter(pageAdapter);
+        wholeViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(bottomLayout));
 
-                    }
-                });
-
-                builder.show();
+        bottomLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                wholeViewPager.setCurrentItem(tab.getPosition());
             }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        localDB = LocalDBHelper.getInstance(this);
 
 
         ActivityCompat.requestPermissions(MenuTI.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-        setButtons();
-        setTitle(userNameTI + " Track Inspector Menu");
+        checkIfPassISDefault();
+
+
 
     }
 
-    private void setButtons(){
-
-        startInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuTI.this, HeaderData.class);
-                startActivity(intent);
-            }
-        });
-
-        viewInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        editInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        logout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(MenuTI.this, MainActivityLogin.class);
-                startActivity(intent);
-            }
-        });
+    private void checkIfPassISDefault() {
+        final String theUsername = LocalDBHelper.getDataInSharedPreference(this, "username");
+        if (localDB.getAccountByUser(theUsername).passWord.equals(AccountInfo.md5(""))) {
+            NullPassDialog nullPassDialog = new NullPassDialog();
+            nullPassDialog.createDiaglogBox(this, theUsername, localDB);
+        }
     }
+
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
 
 }

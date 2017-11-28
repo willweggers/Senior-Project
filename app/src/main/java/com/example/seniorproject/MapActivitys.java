@@ -99,7 +99,7 @@ public class MapActivitys extends FragmentActivity implements
     public static Marker currLocMarker;
     public static double LATITUDE;
     public static double LONGITUDE;
-    public static double[] markerLatLong = new double[1000];
+//    public static double[] markerLatLong = new double[1000];
     public static ArrayList<Marker> markers = new ArrayList<>();
     public static ArrayList<LatLng> latlngMarkers = new ArrayList<>();
     public static int numOfMarker = 0;
@@ -112,8 +112,8 @@ public class MapActivitys extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         checkGPSOn();
         mMap = googleMap;
-        markerLatLong[0] = LATITUDE;
-        markerLatLong[1] = LONGITUDE;
+//        markerLatLong[0] = LATITUDE;
+//        markerLatLong[1] = LONGITUDE;
         if(LATITUDE != 0.0 && LONGITUDE != 0.0){
             curLoc = new LatLng(LATITUDE, LONGITUDE);
         }
@@ -125,7 +125,7 @@ public class MapActivitys extends FragmentActivity implements
             currLocMarker.remove();
         }
         currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
-       handler.postDelayed(mLaunchTask,1500);
+        moveCamera();
         if(markers.size() !=0){
             for(int i = 0; i < markers.size();i++){
                 if(InspectionForm.descriptionString != null) {
@@ -161,8 +161,8 @@ public class MapActivitys extends FragmentActivity implements
                                     .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
                     markers.add(numOfMarker, currMarker);
-                    markerLatLong[0] = currMarker.getPosition().latitude;
-                    markerLatLong[1] = currMarker.getPosition().longitude;
+//                    markerLatLong[0] = currMarker.getPosition().latitude;
+//                    markerLatLong[1] = currMarker.getPosition().longitude;
 
                 }
                 else if(!MapTI.toggleMarkerOn){
@@ -172,12 +172,11 @@ public class MapActivitys extends FragmentActivity implements
             }
         });
     }
-    private Runnable mLaunchTask = new Runnable() {
-        public void run() {
-             mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-        }
-    };
+    private void moveCamera(){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLoc,15));
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f), 2000, null);
+    }
 
 
     //method to show user what is happening on screen
@@ -193,10 +192,10 @@ public class MapActivitys extends FragmentActivity implements
         }
     }
 
-    public double[] getMarkerLoc()
-    {
-        return markerLatLong;
-    }
+//    public double[] getMarkerLoc()
+//    {
+//        return markerLatLong;
+//    }
 
     public void setMarkerLoc(double[] pos)
     {
@@ -207,8 +206,8 @@ public class MapActivitys extends FragmentActivity implements
                 .icon(BitmapDescriptorFactory
                         .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         markers.add(numOfMarker, currMarker);
-        markerLatLong[0] = currMarker.getPosition().latitude;
-        markerLatLong[1] = currMarker.getPosition().longitude;
+//        markerLatLong[0] = currMarker.getPosition().latitude;
+//        markerLatLong[1] = currMarker.getPosition().longitude;
     }
 
     public void enableGPS() {
@@ -235,20 +234,20 @@ public class MapActivitys extends FragmentActivity implements
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
     @Override
     public void onProviderEnabled(String provider) {
         // TODO Auto-generated method stub

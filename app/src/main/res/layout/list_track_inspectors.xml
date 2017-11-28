@@ -1,84 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        />
+    android:weightSum="22"
+    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
         android:orientation="horizontal"
-        android:weightSum="10">
-        <Button
+        android:weightSum="4"
+        android:background="@color/colorPrimaryDark">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Menu"
+            android:text="List of track inspectors:"
+            android:id="@+id/tititleusername"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_weight="1.5"
+            android:textColor="@color/white"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:background="@color/gray">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/adminbackmenu"
-            android:textSize="30sp" />
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="   Track Inspector Name"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Track Inspectors"
-            android:layout_gravity="center"
-            android:paddingLeft="150dp"
-            android:textSize="50sp"
-            android:layout_weight="8"
-            />
-
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:background="@color/black"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10">
-        <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:background="@color/black"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:paddingLeft="10dp"
-            android:id="@+id/manageusername"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:text="   Track Inspector ID"/>
 
-            android:textSize="30sp"
-            android:layout_weight="9.8"
-            />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:background="@color/black"/>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:background="@color/black"/>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="19">
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/trackinspectortable">
+            android:id="@+id/listoftrackinspec">
 
         </TableLayout>
+
     </ScrollView>
+
 </LinearLayout>

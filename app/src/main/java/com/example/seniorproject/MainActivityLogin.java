@@ -19,22 +19,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.seniorproject.Admin.MenuAdmin;
+import com.example.seniorproject.DB.AccountFields;
+import com.example.seniorproject.DB.InspectionContract;
+import com.example.seniorproject.DB.LocalDBHelper;
 import com.example.seniorproject.Manager.MenuManager;
+import com.example.seniorproject.TempDB.TempDB;
 import com.example.seniorproject.TrackInspector.MenuTI;
+
+import java.util.ArrayList;
 
 
 public class MainActivityLogin extends AppCompatActivity {
     private Button submitButton;
     private EditText enterUserName;
     private EditText enterPass;
-
     private String userName;
     private String passWord;
-    private SQLiteDatabase localDB;
-    private SQLiteDatabase readDB;
-
-    private Cursor cursor;
-
+    private LocalDBHelper localDB;
+    private ArrayList<AccountFields> allAccounts = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,37 +44,23 @@ public class MainActivityLogin extends AppCompatActivity {
         submitButton = (Button) findViewById(R.id.submit);
         enterUserName = (EditText) findViewById(R.id.userName);
         enterPass = (EditText) findViewById(R.id.passWord);
-        localDB = new CreateDB(this).getWritableDatabase();
-        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        cursor.moveToFirst();
-        readDB = new CreateDB(this).getReadableDatabase();
-        if(cursor.getCount() <=0) {
-//            AccountInfo.showMessage("empty database",getApplicationContext());
-            ContentValues values = new ContentValues();
-            values.put(CreateDB.COLUMN_NAME, AccountInfo.adminUN);
-            values.put(CreateDB.COLUMN_TYPE, AccountInfo.ADMIN_PREM);
-            values.put(CreateDB.COLUMN_PASS, AccountInfo.md5(AccountInfo.adminPass));
-            long newRowId = localDB.insert(CreateDB.TABLE_NAME, null, values);
-        }
-        else{
-//            AccountInfo.showMessage("not empty database",getApplicationContext());
-        }
-
-//        cursor.moveToFirst();
-//        while (cursor.moveToNext()){
-//            AccountInfo.showMessage(cursor.getString(0) + " " + cursor.getString(1) + " " + cursor.getString(2),getApplicationContext());
-//
-//        }
-//        if(CreateDB.isDBEmpty(readDB)){
-//                        AccountInfo.showMessage("empty database",getApplicationContext());
-//
-//        }
-//        else{
-//                        AccountInfo.showMessage("not empty database",getApplicationContext());
-//
-//        }
-
+        localDB = LocalDBHelper.getInstance(this);
+//        Log.e("SOMETHING", Integer.toString(localDB.getAllAccounts().size()));
+        createAdminAccountIfEmpty();
         setSubmitButton();
+    }
+    private void createAdminAccountIfEmpty(){
+//
+      if(localDB.getAllAccounts().size() == 0){
+            AccountFields adminAccount = new AccountFields();
+            adminAccount.accountType = AccountInfo.ADMIN_PREM;
+            adminAccount.firstName = "default";
+            adminAccount.lastName = "admin";
+            adminAccount.initials = "da";
+            adminAccount.userName = AccountInfo.adminUN;
+            adminAccount.passWord = AccountInfo.md5(AccountInfo.adminPass);
+            localDB.addAccount(adminAccount);
+        }
     }
 
     private void setSubmitButton() {
@@ -86,102 +74,61 @@ public class MainActivityLogin extends AppCompatActivity {
 
     private void searchAccounts(){
         assignUNPass();
-        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-        int amount = 0;
-        cursor.moveToFirst();
-//        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-//        cursor.moveToFirst();
-//        AccountInfo.showMessage(Integer.toString(cursor.getCount()),getApplicationContext());
-        do{
-            amount++;
-               if(userName.equals(cursor.getString(0))){
-                   if(AccountInfo.md5(passWord).equals(cursor.getString(2))){
-                           if(cursor.getString(1).equals(AccountInfo.ADMIN_PREM)){
-                               Intent intent = new Intent(MainActivityLogin.this,MenuAdmin.class);
-                               startActivity(intent);
-                               enterUserName.setText(null);
-                               enterPass.setText(null);
-                               cursor.close();
-                               break;
-                           }
-                           else if(cursor.getString(1).equals(AccountInfo.MANAGER_PREM)){
-                               MenuManager.userNameManager = cursor.getString(0);
-                               Intent intent = new Intent(MainActivityLogin.this,MenuManager.class);
-                               startActivity(intent);
-                               enterUserName.setText(null);
-                               enterPass.setText(null);
-                               cursor.close();
+        allAccounts.clear();
+        allAccounts = localDB.getAllAccounts();
+        for(int i = 0; i < allAccounts.size();i++) {
+            String currentUsername = allAccounts.get(i).userName;
+            String currentPassword = allAccounts.get(i).passWord;
+            String currentPremissions = allAccounts.get(i).accountType;
+            if (userName.equals(currentUsername)) {
+                if (AccountInfo.md5(passWord).equals(currentPassword)) {
+                    if (currentPremissions.equals(AccountInfo.ADMIN_PREM)) {
+                        Intent intent = new Intent(MainActivityLogin.this, MenuAdmin.class);
+                        LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"username", currentUsername);
+                        startActivity(intent);
+                        enterUserName.setText(null);
+                        enterPass.setText(null);
+                        break;
+                    } else if (currentPremissions.equals(AccountInfo.MANAGER_PREM)) {
+                        Intent intent = new Intent(MainActivityLogin.this, MenuManager.class);
+                        LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"username", currentUsername);
 
-                               break;
-                           }
-                           else if(cursor.getString(1).equals(AccountInfo.TI_PREM)){
-                               MenuTI.userNameTI = cursor.getString(0);
-                               Intent intent = new Intent(MainActivityLogin.this,MenuTI.class);
-                               startActivity(intent);
-                               enterUserName.setText(null);
-                               enterPass.setText(null);
-                               cursor.close();
+                        startActivity(intent);
+                        enterUserName.setText(null);
+                        enterPass.setText(null);
+                        break;
+                    } else if (currentPremissions.equals(AccountInfo.TI_PREM)) {
+                        Intent intent = new Intent(MainActivityLogin.this, MenuTI.class);
+                        LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"username", currentUsername);
 
-                               break;
-                           }
-                           else{
-                               AccountInfo.showMessage("Error account doesnt have premission set.",getApplicationContext());
-                           }
+                        startActivity(intent);
+                        AccountFields accountFields= localDB.getAccountByUser(currentUsername);
+                        TempDB tempDB = TempDB.getInstance(this);
+                        if(tempDB.isUserTableEmpty()){
+                            tempDB.addAccount(accountFields);
+                        }
+                        else{
+                            tempDB.deleteAllEntriesInAccountTable();
+                            tempDB.addAccount(accountFields);
+                        }
+                        enterUserName.setText(null);
+                        enterPass.setText(null);
+                        break;
+                    } else {
+                        AccountInfo.showMessage("Error account doesnt have premission set.", getApplicationContext());
+                    }
 
-                   }
-                   else{
-                       AccountInfo.showMessage("Password is invalid.",getApplicationContext());
-                   }
-               }
-               else if(amount == cursor.getCount()){
-                   AccountInfo.showMessage("Username or Password is invalid.", getApplicationContext());
-               }
-                   //               else{
-//                  // cursor.moveToNext();
-//                   continue;
-//               }
+                } else {
+                    AccountInfo.showMessage("Password is invalid.", getApplicationContext());
+                }
+            } else if (i == allAccounts.size()-1) {
+                AccountInfo.showMessage("Username or Password is invalid.", getApplicationContext());
+            }
 
 
-           }while (cursor.moveToNext());
-//           cursor.close();
+            }
         }
-//        else {
-//            AccountInfo.showMessage("empty database",getApplicationContext());
-//        }
 
-
-
-    //}
-    private void readDB(){
-//        cursor = readDB.rawQuery("SELECT * FROM " + CreateDB.TABLE_NAME, null);
-//
-//        String[] projection = {
-//                CreateDB.COLUMN_NAME,
-//                CreateDB.COLUMN_TYPE,
-//                CreateDB.COLUMN_PASS
-//        };
-//
-//        String selection =
-//                CreateDB.COLUMN_NAME + " like ? and " +
-//                        CreateDB.COLUMN_TYPE + " like ? and " +
-//                        CreateDB.COLUMN_PASS + " like ?";
-//        String[] selectionArgs = { "My Title" };
-//
-//
-//
-//        cursor = readDB.query(
-//                CreateDB.TABLE_NAME,     // The table to query
-//                projection,                               // The columns to return
-//                selection,                               // The columns for the WHERE clause
-//                selectionArgs,                            // The values for the WHERE clause
-//                null,                                     // don't group the rows
-//                null,                                     // don't filter by row groups
-////                null                                      // don't sort
-//        );
-//
-//        Log.d(TAG, "The total cursor count is " + cursor.getCount());
-//        binding.recycleView.setAdapter(new SampleRecyclerViewCursorAdapter(this, cursor));
-    }
     private void assignUNPass(){
         passWord = enterPass.getText().toString().trim();
         userName = enterUserName.getText().toString().trim();

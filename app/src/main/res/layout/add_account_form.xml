@@ -7,33 +7,28 @@
         android:layout_width="match_parent"
         android:layout_height="100dp" />
     <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addfirstname"
+        android:hint="First Name"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addlastname"
+        android:hint="Last Name"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/addusername"
     android:hint="Username"
     />
-    <!--<Space-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp" />-->
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/addpass"-->
-        <!--android:inputType="textPassword"-->
 
-        <!--android:hint="La"-->
-        <!--/>-->
-    <!--<Space-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp" />-->
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/addverifypass"-->
-        <!--android:inputType="textPassword"-->
-
-        <!--android:hint="Username(auto generated)"-->
-        <!--/>-->
     <Space
         android:layout_width="match_parent"
         android:layout_height="100dp" />
@@ -46,6 +41,7 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="100dp" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
