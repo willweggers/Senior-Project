@@ -4,6 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.seniorproject.MasterFiles.CatFile;
+import com.example.seniorproject.MasterFiles.LaborMaster;
+import com.example.seniorproject.MasterFiles.MobilizationMaster;
+import com.example.seniorproject.MasterFiles.PriorityMaster;
+import com.example.seniorproject.MasterFiles.StateMasterFile;
+
 /**
  * Created by willw on 11/28/2017.
  */
@@ -22,11 +28,15 @@ public class PagerAdapterAMaster extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ManageAccounts();
+                return new StateMasterFile();
             case 1:
-                return new ModiyMasterFiles();
+                return new CatFile();
             case 2:
-                return new SettingsAdmin();
+                return new PriorityMaster();
+            case 3:
+                return new LaborMaster();
+            case 4:
+                return new MobilizationMaster();
             default:
                 return null;
         }

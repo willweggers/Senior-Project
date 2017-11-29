@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.Space;
@@ -31,6 +32,7 @@ import com.example.seniorproject.Manager.ListTrackInspectors;
 import com.example.seniorproject.R;
 
 import java.util.ArrayList;
+import java.util.logging.LogRecord;
 
 /*
  * Created by willw on 11/4/2017.
@@ -108,6 +110,7 @@ public class ManageAccounts extends Fragment {
 
         return view;
     }
+
     private void setTableRows(final TableLayout tableLayout, int numRowsReal, final ArrayList<String> allids, final  ArrayList<String> allNames, final ArrayList<String> alltypes) {
         final String[] accountTypes = new String[]{AccountInfo.TI_PREM, AccountInfo.MANAGER_PREM, AccountInfo.ADMIN_PREM};
         LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getActivity());
@@ -131,7 +134,7 @@ public class ManageAccounts extends Fragment {
 
         numRowsReal = allAcc.size()*2;
         tableLayout.removeAllViews();
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
+        final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
         int count = 0;
         for (int i = 0; i < numRowsReal; i++) {
@@ -275,13 +278,27 @@ public class ManageAccounts extends Fragment {
                 delete.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
                 tableRow.addView(delete);
                 final TableRow currTableRow = tableRow;
+            final String currType = alltypes.get(i-count);
                 tableRow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        currTableRow.setBackground(clickDrawable);
-                        Intent intent = new Intent(getActivity(), ListOfInspectionsOther.class);
-                        LocalDBHelper.storeDataInSharedPreference(getContext(), "userviewing", currUsername);
-                        startActivity(intent);
+                        if(currType.equals(AccountInfo.ADMIN_PREM)){
+
+                        }
+                        else {
+                            currTableRow.setBackground(clickDrawable);
+                           Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    currTableRow.setBackground(drawable);
+                                }
+                            }, 1000);
+
+                            Intent intent = new Intent(getActivity(), ListOfInspectionsOther.class);
+                            LocalDBHelper.storeDataInSharedPreference(getContext(), "userviewing", currUsername);
+                            startActivity(intent);
+                        }
                     }
                 });
 

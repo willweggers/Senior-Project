@@ -4,6 +4,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.seniorproject.MasterFiles.CategoryMFs.CrossingCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.CrosstiesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.IssuesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.OtherCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.OtherTrackCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.RaileMasterFile;
+import com.example.seniorproject.MasterFiles.CategoryMFs.SwitchesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.TurnoutCat;
+
 /**
  * Created by willw on 11/28/2017.
  */
@@ -24,11 +33,21 @@ public class PagerAdapterAMasterCat extends FragmentStatePagerAdapter {
         switch(position)
         {
             case 0:
-                return new ManageAccounts();
+                return new RaileMasterFile();
             case 1:
-                return new ModiyMasterFiles();
+                return new CrosstiesCat();
             case 2:
-                return new SettingsAdmin();
+                return new SwitchesCat();
+            case 3:
+                return new OtherTrackCat();
+            case 4:
+                return new TurnoutCat();
+            case 5:
+                return new CrossingCat();
+            case 6:
+                return new OtherCat();
+            case 7:
+                return new IssuesCat();
             default:
                 return null;
         }

@@ -130,9 +130,9 @@ public class AddAccount extends AppCompatActivity {
     }
 
     private void setText(){
-        userName = enterUserName.getText().toString();
-        firstName = enterFirstName.getText().toString();
-        lastName = enterLastName.getText().toString();
+        userName = enterUserName.getText().toString().trim();
+        firstName = enterFirstName.getText().toString().trim();
+        lastName = enterLastName.getText().toString().trim();
 
         type = dropdown.getSelectedItem().toString();
         if(type.equals("Administrator")){

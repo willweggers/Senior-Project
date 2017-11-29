@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.Space;
@@ -98,12 +99,14 @@ public class ListTrackInspectors extends Fragment {
         tableLayout.removeAllViews();
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
+        int count = 0;
         for(int i = 0; i< numRows;i++){
             //if even add space
             if(i==0 || i%2 == 0){
                 Space space = new Space(getContext());
                 space.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 30));
                 tableLayout.addView(space);
+                count++;
                 continue;
             }
             TableRow tableRow = new TableRow(getContext());
@@ -114,11 +117,11 @@ public class ListTrackInspectors extends Fragment {
             for (int j = 0; j < 2; j++) {
                 TextView textView = new TextView(getContext());
                 if (j == 0) {
-                    textView.setText(alltrackinspecNames.get(i-1));
+                    textView.setText(alltrackinspecNames.get(i-count));
                     textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
 
                 } else if (j == 1) {
-                    textView.setText(alltrackinspecids.get(i-1));
+                    textView.setText(alltrackinspecids.get(i-count));
                     textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
                 }
                 textView.setTextSize(20f);
@@ -126,12 +129,20 @@ public class ListTrackInspectors extends Fragment {
                 textView.setPadding(10,0,0,0);
                 tableRow.addView(textView);
             }
-            final String currUsername = alltrackinspecids.get(i-1);
+            final String currUsername = alltrackinspecids.get(i-count);
             final TableRow currTableRow = tableRow;
+            final Drawable drawable1 = drawable;
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currTableRow.setBackground(clickDrawable);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            currTableRow.setBackground(drawable1);
+                        }
+                    }, 1000);
                     LocalDBHelper tempDB = LocalDBHelper.getInstance(getContext());
                     Intent intent = new Intent(getActivity(), ListOfInspectionsOther.class);
                     LocalDBHelper.storeDataInSharedPreference(getContext(),"userviewing",currUsername);

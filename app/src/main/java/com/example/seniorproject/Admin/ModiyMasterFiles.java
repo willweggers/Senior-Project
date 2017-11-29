@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +32,7 @@ public class ModiyMasterFiles extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Button ChangeGoogleAccount;
-    private Button SyncData;
-    private Button ResetPassword;
-    private Button Logout;
+
 
 
     private OnFragmentInteractionListener mListener;
@@ -74,7 +73,35 @@ public class ModiyMasterFiles extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.modify_master_files, container, false);
+        final ViewPager mViewPager = (ViewPager) view.findViewById(R.id.wholemenumasterpager);
+        TabLayout bottomLayout = (TabLayout) view.findViewById(R.id.mastertabmenu);
+        bottomLayout.addTab(bottomLayout.newTab().setText("State"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Category"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Priority"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Labor"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Mobilization"));
+        bottomLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        bottomLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        final PagerAdapterAMaster pageAdapter = new PagerAdapterAMaster(getChildFragmentManager(), bottomLayout.getTabCount());
+        mViewPager.setAdapter(pageAdapter);
+        mViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(bottomLayout));
 
+        bottomLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         return view;
     }
 

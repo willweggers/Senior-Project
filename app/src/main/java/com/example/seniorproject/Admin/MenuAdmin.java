@@ -18,6 +18,19 @@ import com.example.seniorproject.DB.LocalDBHelper;
 import com.example.seniorproject.ListInspectionsCurrent;
 
 import com.example.seniorproject.ListOfInspections;
+import com.example.seniorproject.MasterFiles.CatFile;
+import com.example.seniorproject.MasterFiles.CategoryMFs.CrossingCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.CrosstiesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.IssuesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.OtherCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.OtherTrackCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.RaileMasterFile;
+import com.example.seniorproject.MasterFiles.CategoryMFs.SwitchesCat;
+import com.example.seniorproject.MasterFiles.CategoryMFs.TurnoutCat;
+import com.example.seniorproject.MasterFiles.LaborMaster;
+import com.example.seniorproject.MasterFiles.MobilizationMaster;
+import com.example.seniorproject.MasterFiles.PriorityMaster;
+import com.example.seniorproject.MasterFiles.StateMasterFile;
 import com.example.seniorproject.NullPassDialog;
 import com.example.seniorproject.R;
 import com.example.seniorproject.TrackInspector.MenuTrackInspectorFrag;
@@ -33,7 +46,20 @@ import com.example.seniorproject.TrackInspector.MenuTI;
 
 public class MenuAdmin extends AppCompatActivity implements SettingsAdmin.OnFragmentInteractionListener,
         ManageAccounts.OnFragmentInteractionListener,
-        ModiyMasterFiles.OnFragmentInteractionListener{
+        ModiyMasterFiles.OnFragmentInteractionListener,
+        StateMasterFile.OnFragmentInteractionListener,
+        CatFile.OnFragmentInteractionListener,
+        LaborMaster.OnFragmentInteractionListener,
+        MobilizationMaster.OnFragmentInteractionListener,
+        PriorityMaster.OnFragmentInteractionListener,
+        CrossingCat.OnFragmentInteractionListener,
+        CrosstiesCat.OnFragmentInteractionListener,
+        IssuesCat.OnFragmentInteractionListener,
+        OtherCat.OnFragmentInteractionListener,
+        OtherTrackCat.OnFragmentInteractionListener,
+        RaileMasterFile.OnFragmentInteractionListener,
+        SwitchesCat.OnFragmentInteractionListener,
+        TurnoutCat.OnFragmentInteractionListener{
 
 private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
 private LocalDBHelper localDB;
