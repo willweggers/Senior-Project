@@ -22,6 +22,19 @@ import com.example.seniorproject.Admin.MenuAdmin;
 import com.example.seniorproject.DB.AccountFields;
 import com.example.seniorproject.DB.InspectionContract;
 import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.DB.MasterFileObjects.CrossingsFile;
+import com.example.seniorproject.DB.MasterFileObjects.CrosstiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.IssueFile;
+import com.example.seniorproject.DB.MasterFileObjects.LaborInstallFile;
+import com.example.seniorproject.DB.MasterFileObjects.MobilizationFile;
+import com.example.seniorproject.DB.MasterFileObjects.OTMFile;
+import com.example.seniorproject.DB.MasterFileObjects.OtherFile;
+import com.example.seniorproject.DB.MasterFileObjects.PriorityFile;
+import com.example.seniorproject.DB.MasterFileObjects.RailFile;
+import com.example.seniorproject.DB.MasterFileObjects.StateFile;
+import com.example.seniorproject.DB.MasterFileObjects.SwitchTiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.TurnoutsFile;
+import com.example.seniorproject.DB.MasterFileTable;
 import com.example.seniorproject.Manager.MenuManager;
 import com.example.seniorproject.TempDB.TempDB;
 import com.example.seniorproject.TrackInspector.MenuTI;
@@ -47,6 +60,7 @@ public class MainActivityLogin extends AppCompatActivity {
         localDB = LocalDBHelper.getInstance(this);
 //        Log.e("SOMETHING", Integer.toString(localDB.getAllAccounts().size()));
         createAdminAccountIfEmpty();
+        tempAddRowsMasterFiles();
         setSubmitButton();
     }
     private void createAdminAccountIfEmpty(){
@@ -100,17 +114,16 @@ public class MainActivityLogin extends AppCompatActivity {
                     } else if (currentPremissions.equals(AccountInfo.TI_PREM)) {
                         Intent intent = new Intent(MainActivityLogin.this, MenuTI.class);
                         LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"username", currentUsername);
-
                         startActivity(intent);
                         AccountFields accountFields= localDB.getAccountByUser(currentUsername);
                         TempDB tempDB = TempDB.getInstance(this);
-                        if(tempDB.isUserTableEmpty()){
-                            tempDB.addAccount(accountFields);
-                        }
-                        else{
-                            tempDB.deleteAllEntriesInAccountTable();
-                            tempDB.addAccount(accountFields);
-                        }
+//                        if(tempDB.isUserTableEmpty()){
+//                            tempDB.addAccount(accountFields);
+//                        }
+//                        else{
+//                            tempDB.deleteAllEntriesInAccountTable();
+//                            tempDB.addAccount(accountFields);
+//                        }
                         enterUserName.setText(null);
                         enterPass.setText(null);
                         break;
@@ -132,6 +145,132 @@ public class MainActivityLogin extends AppCompatActivity {
     private void assignUNPass(){
         passWord = enterPass.getText().toString().trim();
         userName = enterUserName.getText().toString().trim();
+    }
+    private void tempAddRowsMasterFiles(){
+        if(localDB.getAllStateFiles().size() == 0){
+            StateFile stateFile = new StateFile();
+            stateFile.theID = "id1";
+            stateFile.thedescription = "descp";
+            stateFile.theOtherTaxPerc = 1;
+            stateFile.theOtherTaxOn = "okokok";
+            stateFile.theLaborTax = "each";
+            localDB.addStateFiles(stateFile);
+
+        }
+        if(localDB.getAllPriorityFiles().size() == 0){
+            PriorityFile stateFile = new PriorityFile();
+            stateFile.theID = 1;
+            stateFile.thedescription = "high";
+            localDB.addPriorityFiles(stateFile);
+
+        }
+        if(localDB.getAllMobilizationFiles().size() == 0){
+            MobilizationFile stateFile = new MobilizationFile();
+            stateFile.theID = "id1";
+            stateFile.thedescription = "descp";
+            stateFile.thetravel = 1;
+            stateFile.theMinimum = 2;
+            localDB.addMobilizationFiles(stateFile);
+
+        }
+        if(localDB.getAllLaborFiles().size() == 0){
+            LaborInstallFile stateFile = new LaborInstallFile();
+            stateFile.theID = "id1";
+            stateFile.thedescription = "descp";
+            stateFile.theCrewRate = 1;
+            stateFile.thePerDiem = 11;
+            localDB.addLaborFiles(stateFile);
+
+        }
+        if(localDB.getAllCrossingsFiles().size()==0){
+            CrossingsFile crossingsFile = new CrossingsFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12121;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addCrossingFiles(crossingsFile);
+        }
+        if(localDB.getAllCrosstiesFiles().size()==0){
+            CrosstiesFile crossingsFile = new CrosstiesFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12100021;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addCrosstiesFiles(crossingsFile);
+        } if(localDB.getAllIssuesFiles().size()==0){
+            IssueFile crossingsFile = new IssueFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12111121;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addIssueFiles(crossingsFile);
+        } if(localDB.getAllOTMFiles().size()==0){
+            OTMFile crossingsFile = new OTMFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12222121;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addOTMFiles(crossingsFile);
+
+        } if(localDB.getAllOtherFiles().size()==0){
+            OtherFile crossingsFile = new OtherFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12333121;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addOtherFiles(crossingsFile);
+
+        } if(localDB.getAllRailFiles().size()==0){
+            RailFile crossingsFile = new RailFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12144421;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addRailFiles(crossingsFile);
+
+        } if(localDB.getAllSwitchTiesFiles().size()==0){
+            SwitchTiesFile crossingsFile = new SwitchTiesFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12155521;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addSwitchFtiles(crossingsFile);
+
+        } if(localDB.getAllTurnoutFiles().size()==0){
+            TurnoutsFile crossingsFile = new TurnoutsFile();
+            crossingsFile.theID = "id";
+            crossingsFile.thedescription = "askdjhadsh";
+            crossingsFile.theBillingRate = 12166621;
+            crossingsFile.theMarkup = 1298;
+            crossingsFile.theProduction = 12;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 1292198;
+            localDB.addTuroutFiles(crossingsFile);
+
+        }
+
+
     }
 
 }

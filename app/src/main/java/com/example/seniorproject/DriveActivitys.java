@@ -85,7 +85,7 @@ public class DriveActivitys extends AppCompatActivity implements
     //tag used for log errors
     private String TAG = "Google Drive Activity";
     //apicliend for drive
-    private GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
 
     public static final int REQUEST_CODE_RESOLUTION = 3;
     public DriveFile file;
@@ -155,7 +155,7 @@ public class DriveActivitys extends AppCompatActivity implements
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
     //clears default gmail used and prompts user to select either same one or another
-    public void changeDriveAccount(){
+    public static void changeDriveAccount(){
         mGoogleApiClient.clearDefaultAccountAndReconnect();
     }
 

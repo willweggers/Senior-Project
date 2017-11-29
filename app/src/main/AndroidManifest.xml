@@ -54,6 +54,21 @@
         <activity android:name=".TrackInspector.FormatReport"
         android:theme="@style/AppTheme.NoActionBar"
         />
+        <activity android:name=".Admin.EditStateRow"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.EditLabor"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.EditMobilization"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.EditPriority"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".Admin.EditCat"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".Manager.MenuManager"
             android:theme="@style/AppTheme.NoActionBar"
             />

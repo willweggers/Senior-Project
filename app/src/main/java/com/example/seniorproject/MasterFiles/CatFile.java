@@ -1,33 +1,25 @@
-package com.example.seniorproject.Admin;
+package com.example.seniorproject.MasterFiles;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 
-import com.example.seniorproject.DB.LocalDBHelper;
-import com.example.seniorproject.MainActivityLogin;
-import com.example.seniorproject.Manager.SettingsManager;
-import com.example.seniorproject.NullPassDialog;
+import com.example.seniorproject.Admin.PagerAdapterAMasterCat;
 import com.example.seniorproject.R;
 
 /**
- * Created by willw on 11/4/2017.
+ * Created by willw on 11/28/2017.
  */
 
-public class ModiyMasterFiles extends Fragment {
+public class CatFile extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,12 +28,15 @@ public class ModiyMasterFiles extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private Button ChangeGoogleAccount;
+    private Button SyncData;
+    private Button ResetPassword;
+    private Button Logout;
 
 
     private OnFragmentInteractionListener mListener;
 
-    public ModiyMasterFiles() {
+    public CatFile() {
         // Required empty public constructor
     }
 
@@ -54,8 +49,8 @@ public class ModiyMasterFiles extends Fragment {
      * @return A new instance of fragment Tab1.
      */
     // TODO: Rename and change types and number of parameters
-    public static ModiyMasterFiles newInstance(String param1, String param2) {
-        ModiyMasterFiles fragment = new ModiyMasterFiles();
+    public static CatFile newInstance(String param1, String param2) {
+        CatFile fragment = new CatFile();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,17 +71,20 @@ public class ModiyMasterFiles extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.modify_master_files, container, false);
-        final ViewPager mViewPager = (ViewPager) view.findViewById(R.id.wholemenumasterpager);
-        TabLayout bottomLayout = (TabLayout) view.findViewById(R.id.mastertabmenu);
-        bottomLayout.addTab(bottomLayout.newTab().setText("State"));
-        bottomLayout.addTab(bottomLayout.newTab().setText("Category"));
-        bottomLayout.addTab(bottomLayout.newTab().setText("Priority"));
-        bottomLayout.addTab(bottomLayout.newTab().setText("Labor"));
-        bottomLayout.addTab(bottomLayout.newTab().setText("Mobilization"));
+        View view = inflater.inflate(R.layout.category_file, container, false);
+        final ViewPager mViewPager = (ViewPager) view.findViewById(R.id.catpager);
+        TabLayout bottomLayout = (TabLayout) view.findViewById(R.id.cattab);
+        bottomLayout.addTab(bottomLayout.newTab().setText("Rail"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Crossties"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Switch Ties"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Other Track"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Turnout"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Crossing"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Other"));
+        bottomLayout.addTab(bottomLayout.newTab().setText("Track Issues"));
         bottomLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         bottomLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        final PagerAdapterAMaster pageAdapter = new PagerAdapterAMaster(getChildFragmentManager(), bottomLayout.getTabCount());
+        final PagerAdapterAMasterCat pageAdapter = new PagerAdapterAMasterCat(getChildFragmentManager(), bottomLayout.getTabCount());
         mViewPager.setAdapter(pageAdapter);
         mViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(bottomLayout));
 
@@ -147,5 +145,4 @@ public class ModiyMasterFiles extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

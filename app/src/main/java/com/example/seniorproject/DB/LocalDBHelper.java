@@ -10,6 +10,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Switch;
+
+import com.example.seniorproject.DB.MasterFileObjects.CrossingsFile;
+import com.example.seniorproject.DB.MasterFileObjects.CrosstiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.IssueFile;
+import com.example.seniorproject.DB.MasterFileObjects.LaborInstallFile;
+import com.example.seniorproject.DB.MasterFileObjects.MobilizationFile;
+import com.example.seniorproject.DB.MasterFileObjects.OTMFile;
+import com.example.seniorproject.DB.MasterFileObjects.OtherFile;
+import com.example.seniorproject.DB.MasterFileObjects.PriorityFile;
+import com.example.seniorproject.DB.MasterFileObjects.RailFile;
+import com.example.seniorproject.DB.MasterFileObjects.StateFile;
+import com.example.seniorproject.DB.MasterFileObjects.SwitchTiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.TurnoutsFile;
+import com.example.seniorproject.MasterFiles.StateMasterFile;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -61,6 +76,259 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     public static Bitmap getImage(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
+    public static StateFile cursorToState(Cursor cr) {
+        StateFile stateMasterFile = new StateFile();
+        stateMasterFile.theID = cr.getString(cr.getColumnIndex(MasterFileTable.State.COLUMN_ID));
+        stateMasterFile.thedescription = cr.getString(cr.getColumnIndex(MasterFileTable.State.COLUMN_DESC));
+        stateMasterFile.theLaborTax = cr.getString(cr.getColumnIndex(MasterFileTable.State.COLUMN_LABORTAX));
+        stateMasterFile.theOtherTaxOn = cr.getString(cr.getColumnIndex(MasterFileTable.State.COLUMN_OTHETAXON));
+        stateMasterFile.theOtherTaxPerc = cr.getInt(cr.getColumnIndex(MasterFileTable.State.COLUMN_OTHERTAX));
+        return stateMasterFile;
+    }
+
+    public static ContentValues stateFileToCV (StateFile stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.State.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.State.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.State.COLUMN_LABORTAX, stateMasterFile.theLaborTax );
+        cv.put(MasterFileTable.State.COLUMN_OTHETAXON, stateMasterFile.theOtherTaxOn  );
+        cv.put(MasterFileTable.State.COLUMN_OTHERTAX,stateMasterFile.theOtherTaxPerc   );
+
+
+        return cv;
+    }
+    public static LaborInstallFile cursorToLabor(Cursor cr) {
+        LaborInstallFile stateMasterFile = new LaborInstallFile();
+        stateMasterFile.theID = cr.getString(cr.getColumnIndex(MasterFileTable.Labor.COLUMN_ID));
+        stateMasterFile.thedescription = cr.getString(cr.getColumnIndex(MasterFileTable.Labor.COLUMN_DESC));
+        stateMasterFile.theCrewRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Labor.COLUMN_CREWRATE));
+        stateMasterFile.thePerDiem = cr.getInt(cr.getColumnIndex(MasterFileTable.Labor.COLUMN_PERDIEM));
+        return stateMasterFile;
+    }
+
+    public static ContentValues laborToCV (LaborInstallFile stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Labor.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Labor.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Labor.COLUMN_CREWRATE, stateMasterFile.theCrewRate );
+        cv.put(MasterFileTable.Labor.COLUMN_PERDIEM, stateMasterFile.thePerDiem );
+        return cv;
+    }
+    public static PriorityFile cursorToPriority(Cursor cr) {
+        PriorityFile stateMasterFile = new PriorityFile();
+        stateMasterFile.theID = cr.getInt(cr.getColumnIndex(MasterFileTable.Priority.COLUMN_ID));
+        stateMasterFile.thedescription = cr.getString(cr.getColumnIndex(MasterFileTable.Priority.COLUMN_DESC));
+        return stateMasterFile;
+    }
+
+    public static ContentValues priorityToCV (PriorityFile stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Priority.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Priority.COLUMN_DESC,    stateMasterFile.thedescription    );
+        return cv;
+    }
+    public static MobilizationFile cursorToMobilization(Cursor cr) {
+        MobilizationFile  stateMasterFile = new MobilizationFile ();
+        stateMasterFile.theID = cr.getString(cr.getColumnIndex(MasterFileTable.Mobilization.COLUMN_ID));
+        stateMasterFile.thedescription = cr.getString(cr.getColumnIndex(MasterFileTable.Mobilization.COLUMN_DESC));
+        stateMasterFile.theMinimum = cr.getInt(cr.getColumnIndex(MasterFileTable.Mobilization.COLUMN_MIN));
+        stateMasterFile.thetravel= cr.getInt(cr.getColumnIndex(MasterFileTable.Mobilization.COLUMN_TRAVEL));
+        return stateMasterFile;
+    }
+
+    public static ContentValues mobilizationToCV (MobilizationFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Mobilization.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Mobilization.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Mobilization.COLUMN_MIN,   stateMasterFile.theMinimum    );
+        cv.put(MasterFileTable.Mobilization.COLUMN_TRAVEL,    stateMasterFile.thetravel    );
+        return cv;
+    }
+    public static RailFile cursorToCatRail(Cursor cr) {
+        RailFile   stateMasterFile = new RailFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.CatRail.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catRailToCV (RailFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.CatRail.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.CatRail.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.CatRail.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.CatRail.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.CatRail.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.CatRail.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.CatRail.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static SwitchTiesFile cursorToCatSwitch(Cursor cr) {
+        SwitchTiesFile stateMasterFile = new SwitchTiesFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catswitch.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catSwitchToCV (SwitchTiesFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catswitch.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catswitch.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catswitch.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catswitch.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catswitch.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catswitch.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catswitch.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static TurnoutsFile cursorToCatTurnout(Cursor cr) {
+        TurnoutsFile stateMasterFile = new TurnoutsFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catturnout.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catTurnoutToCV (TurnoutsFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catturnout.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catturnout.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catturnout.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catturnout.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catturnout.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catturnout.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catturnout.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static OTMFile cursorToCatOtherTrack(Cursor cr) {
+        OTMFile stateMasterFile = new OTMFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catothertrack.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catOtherTrackToCV (OTMFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catothertrack.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catothertrack.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static OtherFile cursorToCatOther(Cursor cr) {
+        OtherFile stateMasterFile = new OtherFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catother.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catOtherToCV (OtherFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catother.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catother.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catother.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catother.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catother.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catother.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catother.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static IssueFile cursorToCatIssues(Cursor cr) {
+        IssueFile stateMasterFile = new IssueFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catissues.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catIssuesToCV (IssueFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catissues.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catissues.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catissues.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catissues.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catissues.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catissues.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catissues.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static CrosstiesFile cursorToCatCrossties(Cursor cr) {
+        CrosstiesFile stateMasterFile = new CrosstiesFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossties.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catCrosstiesToCV (CrosstiesFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catcrossties.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catcrossties.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+    public static CrossingsFile cursorToCatCrossings(Cursor cr) {
+        CrossingsFile stateMasterFile = new CrossingsFile  ();
+        stateMasterFile.theID =         cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_ID));
+        stateMasterFile.thedescription =cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_DESC));
+        stateMasterFile.theUnit=        cr.getString(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_UNIT));
+        stateMasterFile.theUnitCost=    cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_UNITCOST));
+        stateMasterFile.theMarkup=      cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_MARKUP));
+        stateMasterFile.theBillingRate= cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_BILLINGRATE));
+        stateMasterFile.theProduction=  cr.getInt(cr.getColumnIndex(MasterFileTable.Catcrossings.COLUMN_PRODUCTION));
+        return stateMasterFile;
+    }
+
+    public static ContentValues catCrossingsToCV (CrossingsFile  stateMasterFile) {
+        ContentValues cv = new ContentValues();
+        cv.put(MasterFileTable.Catcrossings.COLUMN_ID,   stateMasterFile.theID     );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_DESC,    stateMasterFile.thedescription    );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_UNIT,   stateMasterFile.theUnit    );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_UNITCOST,    stateMasterFile.theUnitCost    );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_MARKUP,   stateMasterFile.theMarkup     );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_BILLINGRATE,    stateMasterFile.theBillingRate    );
+        cv.put(MasterFileTable.Catcrossings.COLUMN_PRODUCTION,   stateMasterFile.theProduction    );
+        return cv;
+    }
+
 
     public static AccountFields cursorToAccount(Cursor cr) {
         AccountFields accountFields = new AccountFields();
@@ -192,6 +460,735 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     }
 
     // add CRUD methods here
+    public void addStateFiles(StateFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = stateFileToCV(stateFile);
+            localDB.insert(MasterFileTable.State.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addLaborFiles(LaborInstallFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = laborToCV(stateFile);
+            localDB.insert(MasterFileTable.Labor.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addPriorityFiles(PriorityFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = priorityToCV(stateFile);
+            localDB.insert(MasterFileTable.Priority.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addRailFiles(RailFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catRailToCV(stateFile);
+            localDB.insert(MasterFileTable.CatRail.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addMobilizationFiles(MobilizationFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = mobilizationToCV(stateFile);
+            localDB.insert(MasterFileTable.Mobilization.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addTuroutFiles(TurnoutsFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catTurnoutToCV(stateFile);
+            localDB.insert(MasterFileTable.Catturnout.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }
+    public void addSwitchFtiles(SwitchTiesFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catSwitchToCV(stateFile);
+            localDB.insert(MasterFileTable.Catswitch.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    } public void addOTMFiles(OTMFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catOtherTrackToCV(stateFile);
+            localDB.insert(MasterFileTable.Catothertrack.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    } public void addOtherFiles(OtherFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catOtherToCV(stateFile);
+            localDB.insert(MasterFileTable.Catother.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    } public void addIssueFiles(IssueFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catIssuesToCV(stateFile);
+            localDB.insert(MasterFileTable.Catissues.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    } public void addCrosstiesFiles(CrosstiesFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catCrosstiesToCV(stateFile);
+            localDB.insert(MasterFileTable.Catcrossties.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    } public void addCrossingFiles(CrossingsFile stateFile){
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            ContentValues accountCV = catCrossingsToCV(stateFile);
+            localDB.insert(MasterFileTable.Catcrossings.TABLE_NAME, null,accountCV);
+            localDB.setTransactionSuccessful();
+        }finally {
+            localDB.endTransaction();
+        }
+    }public ArrayList<StateFile> getAllStateFiles(){
+        ArrayList<StateFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.State.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToState(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }
+    public ArrayList<TurnoutsFile> getAllTurnoutFiles(){
+        ArrayList<TurnoutsFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catturnout.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatTurnout(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<SwitchTiesFile> getAllSwitchTiesFiles(){
+        ArrayList<SwitchTiesFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catswitch.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatSwitch(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<RailFile> getAllRailFiles(){
+        ArrayList<RailFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.CatRail.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatRail(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<PriorityFile> getAllPriorityFiles(){
+        ArrayList<PriorityFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Priority.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToPriority(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<OTMFile> getAllOTMFiles(){
+        ArrayList<OTMFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catothertrack.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatOtherTrack(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<OtherFile> getAllOtherFiles(){
+        ArrayList<OtherFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catother.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatOther(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<MobilizationFile> getAllMobilizationFiles(){
+        ArrayList<MobilizationFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Mobilization.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToMobilization(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<LaborInstallFile> getAllLaborFiles(){
+        ArrayList<LaborInstallFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Labor.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToLabor(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<IssueFile> getAllIssuesFiles(){
+        ArrayList<IssueFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catissues.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatIssues(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<CrosstiesFile> getAllCrosstiesFiles(){
+        ArrayList<CrosstiesFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catcrossties.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatCrossties(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }public ArrayList<CrossingsFile> getAllCrossingsFiles(){
+        ArrayList<CrossingsFile> stateFiles = new ArrayList<>();
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        Cursor cr;
+        try {
+            cr = localDB.rawQuery("SELECT * FROM " + MasterFileTable.Catcrossings.TABLE_NAME, null);
+
+            if (cr.moveToFirst()) {
+                do{
+                    stateFiles.add(cursorToCatCrossings(cr));
+                }while(cr.moveToNext());
+
+                cr.close();
+
+            }
+
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return stateFiles;
+    }
+    public int updateStateLine(StateFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.State.TABLE_NAME,
+                    stateFileToCV(stateFile),
+                    MasterFileTable.State.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.State.TABLE_NAME,
+                        new String[]{MasterFileTable.State._ID},
+                        MasterFileTable.State.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateTurnoutLine(TurnoutsFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catturnout.TABLE_NAME,
+                    catTurnoutToCV(stateFile),
+                    MasterFileTable.Catturnout.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catturnout.TABLE_NAME,
+                        new String[]{MasterFileTable.Catturnout._ID},
+                        MasterFileTable.Catturnout.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateSwitchLine(SwitchTiesFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catswitch.TABLE_NAME,
+                    catSwitchToCV(stateFile),
+                    MasterFileTable.Catswitch.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catswitch.TABLE_NAME,
+                        new String[]{MasterFileTable.Catswitch._ID},
+                        MasterFileTable.Catswitch.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateRailLine(RailFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.CatRail.TABLE_NAME,
+                    catRailToCV(stateFile),
+                    MasterFileTable.CatRail.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.CatRail.TABLE_NAME,
+                        new String[]{MasterFileTable.CatRail._ID},
+                        MasterFileTable.CatRail.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updatePrioriyLine(PriorityFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Priority.TABLE_NAME,
+                    priorityToCV(stateFile),
+                    MasterFileTable.Priority.COLUMN_ID + " = ?",
+                    new String[]{Integer.toString(stateFile.theID)});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Priority.TABLE_NAME,
+                        new String[]{MasterFileTable.Priority._ID},
+                        MasterFileTable.Priority.COLUMN_ID + " = ?",
+                        new String[]{Integer.toString(stateFile.theID)},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateOTMLine(OTMFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catothertrack.TABLE_NAME,
+                    catOtherTrackToCV(stateFile),
+                    MasterFileTable.Catothertrack.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catothertrack.TABLE_NAME,
+                        new String[]{MasterFileTable.Catothertrack._ID},
+                        MasterFileTable.Catothertrack.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateOtherLine(OtherFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catother.TABLE_NAME,
+                    catOtherToCV(stateFile),
+                    MasterFileTable.Catother.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catother.TABLE_NAME,
+                        new String[]{MasterFileTable.Catother._ID},
+                        MasterFileTable.Catother.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateMobilizationLine(MobilizationFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Mobilization.TABLE_NAME,
+                    mobilizationToCV(stateFile),
+                    MasterFileTable.Mobilization.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Mobilization.TABLE_NAME,
+                        new String[]{MasterFileTable.Mobilization._ID},
+                        MasterFileTable.Mobilization.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateLaborLine(LaborInstallFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Labor.TABLE_NAME,
+                    laborToCV(stateFile),
+                    MasterFileTable.Labor.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Labor.TABLE_NAME,
+                        new String[]{MasterFileTable.Labor._ID},
+                        MasterFileTable.Labor.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateIssueLine(IssueFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catissues.TABLE_NAME,
+                    catIssuesToCV(stateFile),
+                    MasterFileTable.Catissues.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catissues.TABLE_NAME,
+                        new String[]{MasterFileTable.Catissues._ID},
+                        MasterFileTable.Catissues.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateCrossTiesLine(CrosstiesFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catcrossties.TABLE_NAME,
+                    catCrosstiesToCV(stateFile),
+                    MasterFileTable.State.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catcrossties.TABLE_NAME,
+                        new String[]{MasterFileTable.Catcrossties._ID},
+                        MasterFileTable.Catcrossties.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    } public int updateCrossingsLine(CrossingsFile stateFile) {
+        int rows;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            rows = localDB.update(MasterFileTable.Catcrossings.TABLE_NAME,
+                    catCrossingsToCV(stateFile),
+                    MasterFileTable.Catcrossings.COLUMN_ID + " = ?",
+                    new String[]{stateFile.theID});
+            if (rows == 1) {
+                // get the table id for the updated inspection
+                Cursor cr = localDB.query(MasterFileTable.Catcrossings.TABLE_NAME,
+                        new String[]{MasterFileTable.Catcrossings._ID},
+                        MasterFileTable.Catcrossings.COLUMN_ID + " = ?",
+                        new String[]{stateFile.theID},
+                        null,
+                        null,
+                        null);
+
+
+                localDB.setTransactionSuccessful();
+            }
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return rows;
+    }
     public long addAccount(AccountFields accountFields){
         long id;
         SQLiteDatabase localDB = getWritableDatabase();
@@ -638,6 +1635,20 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(InspectionContract.User.CREATE_TABLE);
         sqLiteDatabase.execSQL(InspectionContract.Inspection.CREATE_TABLE);
         sqLiteDatabase.execSQL(InspectionContract.Defect.CREATE_TABLE);
+        //masterdata tables
+        sqLiteDatabase.execSQL(MasterFileTable.State.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Labor.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Mobilization.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Priority.CREATE_TABLE);
+        //cat tables
+        sqLiteDatabase.execSQL(MasterFileTable.Catcrossings.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catcrossties.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catissues.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catother.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catothertrack.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.CatRail.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catswitch.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MasterFileTable.Catturnout.CREATE_TABLE);
     }
 
     @Override
@@ -646,6 +1657,20 @@ public class LocalDBHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL(InspectionContract.User.DELETE_TABLE);
             sqLiteDatabase.execSQL(InspectionContract.Inspection.DELETE_TABLE);
             sqLiteDatabase.execSQL(InspectionContract.Defect.DELETE_TABLE);
+            //masterdata tables
+            sqLiteDatabase.execSQL(MasterFileTable.State.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Labor.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Mobilization.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Priority.DELETE_TABLE);
+            //cat tables
+            sqLiteDatabase.execSQL(MasterFileTable.Catcrossings.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catcrossties.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catissues.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catother.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catothertrack.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.CatRail.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catswitch.DELETE_TABLE);
+            sqLiteDatabase.execSQL(MasterFileTable.Catturnout.DELETE_TABLE);
             onCreate(sqLiteDatabase);
         }
     }

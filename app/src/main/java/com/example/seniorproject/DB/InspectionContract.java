@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
  */
 public class InspectionContract {
     public static final String DB_NAME = "railserve.db";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     // one class for each table in the database
     public static final class User implements BaseColumns {
