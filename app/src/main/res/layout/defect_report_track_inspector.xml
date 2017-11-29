@@ -136,6 +136,7 @@
             android:layout_height="match_parent"
             android:hint="Track/Turnout Number"
             android:layout_weight="1.5"
+            android:inputType="number"
             android:backgroundTint="@color/black"
             android:id="@+id/trackturnoutnumber"/>
             <Space
@@ -157,6 +158,7 @@
             android:layout_weight="1.9"
             android:backgroundTint="@color/black"
             android:hint="Enter Quantity Here."
+            android:inputType="number"
             android:id="@+id/quantityedit"/>
             <!--<Space-->
                 <!--android:layout_width="0dp"-->
@@ -174,6 +176,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/gray"
+            android:textColor="@color/black"
+            android:popupBackground="@color/gray"
+
+
             android:id="@+id/listofcommondefects">
 
         </Spinner>
@@ -181,6 +188,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:textColor="@color/black"
+
             android:text="Select a labor code below:"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,13 +203,17 @@
                 android:layout_weight="1"
 
                 android:orientation="vertical"
-                android:weightSum="9">
+                android:weightSum="7">
 
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/black"
+            android:popupBackground="@color/gray"
+
+            android:background="@color/gray"
             android:id="@+id/laborlist">
 
         </Spinner>
@@ -213,6 +226,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/gray"
+            android:textColor="@color/black"
+            android:popupBackground="@color/gray"
+
 
             android:id="@+id/categorylist">
 
@@ -226,6 +243,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/gray"
+            android:textColor="@color/black"
+            android:popupBackground="@color/gray"
+
+
             android:id="@+id/codecategorylist">
             </Spinner>
                 <TextView
@@ -237,18 +259,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@color/gray"
+                    android:textColor="@color/black"
+
+                    android:popupBackground="@color/gray"
+
                     android:id="@+id/prioritylist">
         </Spinner>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="Select the unit of defect below:"/>
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/unitlist"/>
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="Select the unit of defect below:"/>-->
+                <!--&lt;!&ndash;<Spinner&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/unitlist"/>&ndash;&gt;-->
                 </LinearLayout>
             <ImageView
                 android:id="@+id/clickheretotakepicofdefect"

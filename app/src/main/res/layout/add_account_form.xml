@@ -2,49 +2,96 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="60dp">
-    <!--<Space-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100dp" />-->
-    <EditText
+    android:weightSum="20">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addfirstname"
-        android:hint="First Name"/>
-    <Space
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="  First Name: "
+            android:gravity="center_vertical"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/addfirstname"
+            android:layout_weight="2.5"
+            />
+        </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addlastname"
-        android:hint="Last Name"/>
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-    <EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/addusername"
-    android:hint="Username"
-    />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="  Last Name: "
+            android:gravity="center_vertical"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/addlastname"
+            android:layout_weight="2.5"
+            />
+        </LinearLayout>
 
-    <Space
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
-    <Spinner
-        android:id="@+id/addtype"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="  Username: "
+            android:gravity="center_vertical"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/addusername"
+            android:layout_weight="2.5"
+            />
+        </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown" />
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="  Type: "
+            android:gravity="center_vertical"/>
+        <Spinner
+            android:id="@+id/addtype"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:layout_weight="2.5"
+
+            android:popupBackground="@color/gray"/>
+        </LinearLayout>
+
+
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/addsubmit"
         android:text="Submit"/>
 </LinearLayout>

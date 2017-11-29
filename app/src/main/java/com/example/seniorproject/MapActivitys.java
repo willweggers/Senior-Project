@@ -37,6 +37,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.seniorproject.DB.Inspection;
 import com.example.seniorproject.TrackInspector.FormatReport;
 import com.example.seniorproject.TrackInspector.InspectionForm;
 import com.example.seniorproject.TrackInspector.MapTI;
@@ -130,17 +131,23 @@ public class MapActivitys extends FragmentActivity implements
             for(int i = 0; i < markers.size();i++){
                 if(InspectionForm.descriptionString != null) {
                     if (InspectionForm.trackCheck.isChecked()) {
-                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.allDefectsDescriptions.get(i)));
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " "
+                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " "
+                                + "Priority: " + InspectionForm.allpriorities.get(i))).showInfoWindow();
                     }
                     else if(InspectionForm.switchCheck.isChecked()){
-                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title(InspectionForm.allDefectsDescriptions.get(i)));
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " "
+                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " "
+                                + "Priority: " + InspectionForm.allpriorities.get(i))).showInfoWindow();
+
 
                     }
                 }
                 else{
-                    mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("extra marker"));
 
                 }
+
             }
         }
 

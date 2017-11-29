@@ -28,6 +28,16 @@ import java.io.IOException;
 import com.example.seniorproject.DB.Defect;
 import com.example.seniorproject.DB.Inspection;
 import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.DB.MasterFileObjects.CrossingsFile;
+import com.example.seniorproject.DB.MasterFileObjects.CrosstiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.IssueFile;
+import com.example.seniorproject.DB.MasterFileObjects.LaborInstallFile;
+import com.example.seniorproject.DB.MasterFileObjects.OTMFile;
+import com.example.seniorproject.DB.MasterFileObjects.OtherFile;
+import com.example.seniorproject.DB.MasterFileObjects.PriorityFile;
+import com.example.seniorproject.DB.MasterFileObjects.RailFile;
+import com.example.seniorproject.DB.MasterFileObjects.SwitchTiesFile;
+import com.example.seniorproject.DB.MasterFileObjects.TurnoutsFile;
 import com.example.seniorproject.MapActivitys;
 import com.example.seniorproject.NothingSelectedSpinnerAdapter;
 import com.example.seniorproject.R;
@@ -95,6 +105,8 @@ public class InspectionForm extends AppCompatActivity {
 //    private EditText codeDescriptionEdit;
     private Button sumbitDefectButton;
     public static ArrayList<String> allDefectsDescriptions = new ArrayList<>();
+    public static ArrayList<String> alllinenumbers = new ArrayList<>();
+    public static ArrayList<String> allpriorities = new ArrayList<>();
 
 
     public static ArrayList<String> listCommonDefects = new ArrayList<>();
@@ -103,6 +115,8 @@ public class InspectionForm extends AppCompatActivity {
     public static ArrayList<String> listthatcategoryscodes = new ArrayList<>();
     public static ArrayList<String> listprioritys = new ArrayList<>();
     public static ArrayList<String> listunits = new ArrayList<>();
+    public LocalDBHelper localDBHelper;
+    public String[] categories;
 
 
 
@@ -116,18 +130,35 @@ public class InspectionForm extends AppCompatActivity {
         switchCheck = (CheckBox) findViewById(R.id.switchcheckbox);
         trackNumberEdit = (EditText) findViewById(R.id.trackturnoutnumber);
         quantityEdit = (EditText) findViewById(R.id.quantityedit);
+        localDBHelper = LocalDBHelper.getInstance(this);
 //        codeDescriptionEdit = (EditText) findViewById(R.id.codedescnedit);
         //adding temp defects and other
-        listCommonDefects.add("a defect");
-        listCommonDefects.add("another defect");
-        listCommonDefects.add("another one");
+        listCommonDefects.add("Broken Base");
+        listCommonDefects.add("Broken Rail Joint Area");
+        listCommonDefects.add("Broken Rail");
+        listCommonDefects.add("Engine Burn Fracture");
+        listCommonDefects.add("Compound Fissure");
+        listCommonDefects.add("Detail Fracture");
+        listCommonDefects.add("Thermite Weld Boutet(Wide Gap");
+        listCommonDefects.add("Vertical Split Head Joint Area(Outside Joint Area");
         listCommonDefects.add("Other");
 
         //temp adding arraylist for other spinners for testing remove when master data files are a thing
-        listlaborcodes.add("labor code");
-        listcategorys.add("a category");
-        listprioritys.add("High");
+        ArrayList<LaborInstallFile> laborInstallFiles = localDBHelper.getAllLaborFiles();
+        for(int i = 0; i < laborInstallFiles.size();i++) {
+            listlaborcodes.add(laborInstallFiles.get(i).theID);
+        }
+       categories = new String[]{"RAIL","CROSSTIES","CROSSINGS","SWITCHTIE","OTM","TURNOUT","OTHER","ISSUES"};
+        for(int i = 0; i < categories.length;i++) {
+            listcategorys.add(categories[i]);
+        }
+        //temp
         listthatcategoryscodes.add("category code");
+        ArrayList<PriorityFile> priorityFiles = localDBHelper.getAllPriorityFiles();
+        for(int i= 0; i < priorityFiles.size();i++){
+            listprioritys.add(Integer.toString(priorityFiles.get(i).theID));
+        }
+
         listunits.add("units");
         //listcommondefects
         defectDescriptionEdit = (Spinner) findViewById(R.id.listofcommondefects);
@@ -170,14 +201,7 @@ public class InspectionForm extends AppCompatActivity {
                         priorityAdaptar,
                         R.layout.contact_spinner_row_nothing_selected_priority,
                         this));
-        unitEdit = (Spinner) findViewById(R.id.unitlist);
-        ArrayAdapter<String> unitAdaptar = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, listunits);
-        unitEdit.setPrompt("[Select the unit of defect...]");
-        unitEdit.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        unitAdaptar,
-                        R.layout.contact_spinner_row_nothing_selected_units,
-                        this));
+
         locationEdit = (EditText) findViewById(R.id.locationedit);
         sumbitDefectButton = (Button) findViewById(R.id.adddefectsubmit);
         cameraButton = (ImageView) findViewById(R.id.clickheretotakepicofdefect) ;
@@ -235,6 +259,8 @@ public class InspectionForm extends AppCompatActivity {
                     trackUnits1.add(unitString);
                     trackQuantitys1.add(quantityString);
                     trackPriority1.add(priorityString);
+                    alllinenumbers.add(theText);
+                    allpriorities.add(priorityString);
                     Defect defect = new Defect();
                     defect.trackNumber = trackString;
                     defect.lineItem = theText;
@@ -281,6 +307,8 @@ public class InspectionForm extends AppCompatActivity {
                     switchUnits1.add(unitString);
                     switchQuantitys1.add(quantityString);
                     switchPriority1.add(priorityString);
+                    alllinenumbers.add(theText);
+                    allpriorities.add(priorityString);
                     Defect defect = new Defect();
                     defect.trackNumber = trackString;
                     defect.lineItem = theText;
@@ -356,14 +384,12 @@ public class InspectionForm extends AppCompatActivity {
             categoryString = catergoryEdit.getSelectedItem().toString();
             codeString = codeEdit.getSelectedItem().toString();
             priorityString = priorityEdit.getSelectedItem().toString();
-            unitString=unitEdit.getSelectedItem().toString();
         }catch (NullPointerException e){
             descriptionString = null;
             laborString = null;
             categoryString= null;
             codeString = null;
             priorityString= null;
-            unitString = null;
         }
 
         locString= locationEdit.getText().toString().trim();
@@ -374,7 +400,81 @@ public class InspectionForm extends AppCompatActivity {
         locationEdit.setText(null);
     }
     private void onItemSelectedDefect() {
+        catergoryEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem;
+                if(position == 0){
+                    selectedItem = parent.getItemAtPosition(position + 1).toString();
+                }
+                else {
+                    selectedItem = parent.getItemAtPosition(position).toString();
+                }
+                if(selectedItem.equals("RAIL")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<RailFile> railFiles = localDBHelper.getAllRailFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("CROSSTIES")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<CrosstiesFile> railFiles = localDBHelper.getAllCrosstiesFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("CROSSINGS")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<CrossingsFile> railFiles = localDBHelper.getAllCrossingsFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("OTM")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<OTMFile> railFiles = localDBHelper.getAllOTMFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("OTHER")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<OtherFile> railFiles = localDBHelper.getAllOtherFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("SWITCHETIE")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<SwitchTiesFile> railFiles = localDBHelper.getAllSwitchTiesFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("ISSUES")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<IssueFile> railFiles = localDBHelper.getAllIssuesFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }else if(selectedItem.equals("TURNOUT")){
+                    listthatcategoryscodes.clear();
+                    ArrayList<TurnoutsFile> railFiles = localDBHelper.getAllTurnoutFiles();
+                    for(int i = 0; i < railFiles.size();i++){
+                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    }
+                }
+                codeEdit = (Spinner) findViewById(R.id.codecategorylist);
 
+                ArrayAdapter<String> codeAdaptar = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, listthatcategoryscodes);
+                codeEdit.setPrompt("[Select the code from the category below...]");
+                codeEdit.setAdapter(
+                        new NothingSelectedSpinnerAdapter(
+                                codeAdaptar,
+                                R.layout.contact_spinner_row_nothing_selected_category_code,
+                                getBaseContext()));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         defectDescriptionEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
