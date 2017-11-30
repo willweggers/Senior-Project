@@ -45,17 +45,18 @@ public class ListOfInspectionsOther extends AppCompatActivity {
         ArrayList<Inspection> allInspections = localDBHelper.getAllInspections();
         ArrayList<String> allInspectionIDNum = new ArrayList<>();
         ArrayList<String> allInspectionIDDate = new ArrayList<>();
-
+        int inspections = 0;
         for(int i = 0; i < allInspections.size();i++){
             if(allInspections.get(i).inspectorID.equals(userViewing)) {
                 allInspectionIDNum.add(allInspections.get(i).inspectionNum);
+                inspections++;
                 allInspectionIDDate.add(AccountInfo.convertDate(allInspections.get(i).inspectionDate));
             }
 
         }
         final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
-        int numRows = allInspections.size()*2;
+        int numRows = inspections*2;
         int count = 0;
         for(int i = 0; i< numRows;i++){
             //if even add space

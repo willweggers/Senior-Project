@@ -77,7 +77,7 @@ public class HeaderData extends AppCompatActivity {
         }catch (IllegalArgumentException e){
             accountFields.initials = "ERR";
         }
-        String inspectionNumber = accountFields.initials.concat(getDate()).concat("-").concat(Integer.toString(j));
+        String inspectionNumber = accountFields.initials.concat(getDate()).concat(" - ").concat(Integer.toString(j));
         inspectionNumber = checkInspectionNumUnique(inspectionNumber);
         inspection.inspectionNum = inspectionNumber;
         LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"inspectionID", inspectionNumber);
@@ -151,16 +151,16 @@ public class HeaderData extends AppCompatActivity {
             allids.add(arrayList.get(i).inspectionNum);
         }
         for (int i = 0; i< allids.size();i++){
-            if(allids.get(i).equals(inspectionID)){
+            if(allids.get(i).equals(newinspectionID)){
                 j++;
-                newinspectionID =  removeAfterDashChar(inspectionID).concat(" - ").concat(Integer.toString(j));
+                newinspectionID =  removeAfterDashChar(newinspectionID).concat(" - ").concat(Integer.toString(j));
                 checkInspectionNumUnique(newinspectionID);
             }
         }
         return newinspectionID;
     }
     private String removeAfterDashChar(String str) {
-        return str.split("-")[0];
+        return str.split(" - ")[0];
     }
     public static String getDate(){
         DateFormat df = new SimpleDateFormat("MMdyy");

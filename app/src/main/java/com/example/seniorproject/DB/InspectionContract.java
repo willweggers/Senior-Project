@@ -146,7 +146,7 @@ public class InspectionContract {
                 + COL_TRACK + " TEXT, "
                 + COL_LOCATION + " TEXT, "
                 + COL_DESCRIPTION + " TEXT, "
-                + COL_PICTURE + " BLOB, "
+                + COL_PICTURE + " TEXT, "
                 + COL_LABOR + " TEXT, "
                 + COL_CATEGORY + " TEXT, "
                 + COL_CODE + " TEXT, "

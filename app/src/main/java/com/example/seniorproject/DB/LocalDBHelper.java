@@ -444,7 +444,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         defect.trackNumber = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_TRACK));
         defect.location = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LOCATION));
         defect.description = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_DESCRIPTION));
-        defect.picture = cr.getBlob(cr.getColumnIndex(InspectionContract.Defect.COL_PICTURE));
+        defect.picture = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_PICTURE));
         defect.labor = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LABOR));
         defect.category = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_CATEGORY));
         defect.code = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_CODE));

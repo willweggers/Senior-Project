@@ -33,7 +33,7 @@ public class Defect implements Serializable
     public String trackNumber;
     public String location;
     public String description;
-    public byte[] picture;
+    public String picture;
     public String labor;
     public String category;
     public String code;

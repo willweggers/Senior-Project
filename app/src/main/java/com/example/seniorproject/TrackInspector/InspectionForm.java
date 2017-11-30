@@ -62,6 +62,7 @@ public class InspectionForm extends AppCompatActivity {
     Uri imageFileUri;
     // absolute path for camera images
     String myPicPath;
+    String anotherPicPath;
     //    private ImageView imageView;
     Bitmap mImageBitmap;
 
@@ -391,7 +392,7 @@ public class InspectionForm extends AppCompatActivity {
                         }
                         defect.latitude = getIntent().getDoubleExtra("lat", 0);
                         defect.longitude = getIntent().getDoubleExtra("long", 0);
-                        defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                        defect.picture = myPicPath;
                         defect.codeDescription = codeDescriptionString;
                         HeaderData.inspection.defectList.add(defect);
 
@@ -448,7 +449,7 @@ public class InspectionForm extends AppCompatActivity {
 
                         defect.latitude = getIntent().getDoubleExtra("lat", 0);
                         defect.longitude = getIntent().getDoubleExtra("long", 0);
-                        defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                        defect.picture = myPicPath;
                         defect.codeDescription = codeDescriptionString;
                         HeaderData.inspection.defectList.add(defect);
                         setEditTextsToNull();
@@ -670,6 +671,7 @@ public class InspectionForm extends AppCompatActivity {
         // create filename for the full-size picture
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "CameraTest_IMG_" + timeStamp + ".jpg";
+        anotherPicPath = "/Internal storage/Pictures/CameraTest/".concat(fileName);
         // return the full file reference including directory
         File image = new File(mediaStorageDir.getPath() + File.separator + fileName);
         myPicPath = "file:" + image.getAbsolutePath();
