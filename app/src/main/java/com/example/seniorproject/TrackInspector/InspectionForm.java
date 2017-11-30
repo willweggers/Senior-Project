@@ -616,7 +616,8 @@ public class InspectionForm extends AppCompatActivity {
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                descriptionString = input.getText().toString();
+                                descriptionString = input.getText().toString().trim();
+                                dialog.dismiss();
 
                             }
                         });
@@ -635,6 +636,12 @@ public class InspectionForm extends AppCompatActivity {
             }
         });
 
+
+
+    }
+    @Override
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
 
 
     }
