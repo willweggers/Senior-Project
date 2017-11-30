@@ -413,10 +413,10 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     }
 
     // convert defect data structure to CV for database insertion
-    public static ContentValues defectToCV (Defect defect, long inspID) {
+    public static ContentValues defectToCV (Defect defect) {
         ContentValues cv = new ContentValues();
 
-        cv.put(InspectionContract.Defect.COL_INSPECTION_FK, inspID);
+        cv.put(InspectionContract.Defect.COL_INSPECTION_FK,defect.inspection_id_num);
         cv.put(InspectionContract.Defect.COL_LINE_ITEM, defect.lineItem);
         cv.put(InspectionContract.Defect.COL_TRACK, defect.trackNumber);
         cv.put(InspectionContract.Defect.COL_LOCATION, defect.location);
@@ -439,7 +439,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     // convert cursor reference to Defect data structure for database retrieval
     public static Defect cursorToDefect (Cursor cr) {
         Defect defect = new Defect();
-
+        defect.inspection_id_num = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_INSPECTION_FK));
         defect.lineItem = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LINE_ITEM));
         defect.trackNumber = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_TRACK));
         defect.location = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LOCATION));
@@ -1374,7 +1374,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
 
             // loop over defect list for inspection, add to defect table
             for (Defect defect: newInsp.defectList)
-                addDefect(defect, id);
+                addDefect(defect);
 
             localDB.setTransactionSuccessful();
         }
@@ -1448,7 +1448,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
 
                     // loop through the inspection's defects and update them as well
                     for (Defect defect: insp.defectList)
-                        updateDefect(defect, id);
+                        updateDefect(defect);
                 }
 
                 localDB.setTransactionSuccessful();
@@ -1468,7 +1468,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         localDB.beginTransaction();
         try {
             // get inspection from inspection table with matching inspection number
-            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_NUM + "=?", null);
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_NUM + " = ? ", null);
 
             // convert the row pointed to by Cursor to Inspection data structure
             if (cr.moveToFirst()) {
@@ -1487,6 +1487,41 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         }
         return arrayList;
     }
+    public ArrayList<Inspection> getAllInspections(){
+        Cursor cr;
+        int numInspections=0;
+        SQLiteDatabase localDB = getWritableDatabase();
+        ArrayList<Inspection> arrayList = new ArrayList<>();
+        localDB.beginTransaction();
+        try {
+            // get inspection from inspection table with matching inspection number
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME,null);
+            numInspections= cr.getCount();
+            cr.close();
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return arrayList;
+    }
+    public int getAmountInspections(){
+        Cursor cr;
+        int numInspections=0;
+        SQLiteDatabase localDB = getWritableDatabase();
+        localDB.beginTransaction();
+        try {
+            // get inspection from inspection table with matching inspection number
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME,null);
+            numInspections= cr.getCount();
+            cr.close();
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return numInspections;
+    }
     public ArrayList<Integer> getAllInspectionsDate() {
         Cursor cr;
         Inspection insp = null;
@@ -1496,13 +1531,13 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         localDB.beginTransaction();
         try {
             // get inspection from inspection table with matching inspection number
-            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_DATE + "=?", null);
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_DATE + " = ? ", null);
 
             // convert the row pointed to by Cursor to Inspection data structure
             if (cr.moveToFirst()) {
                 do{
-                    int currinspnum = cr.getInt(cr.getColumnIndex(InspectionContract.Inspection.COL_INSP_NUM));
-                    arrayList.add(currinspnum);
+                    int currinspdate = cr.getInt(cr.getColumnIndex(InspectionContract.Inspection.COL_INSP_DATE));
+                    arrayList.add(currinspdate);
                 }while (cr.moveToNext());
                 cr.close();
 
@@ -1534,7 +1569,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         return rows;
     }
 
-    public long addDefect(Defect newDefect, long inspID) {
+    public long addDefect(Defect newDefect) {
         long defectID;
         SQLiteDatabase localDB = getWritableDatabase();
 
@@ -1542,7 +1577,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         try {
             defectID = localDB.insert(InspectionContract.Defect.TABLE_NAME,
                                 null,
-                                defectToCV(newDefect, inspID));
+                                defectToCV(newDefect));
             localDB.setTransactionSuccessful();
         }
         finally {
@@ -1582,17 +1617,16 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         return defectList;
     }
 
-    public int updateDefect(Defect defect, long inspID) {
+    public int updateDefect(Defect defect) {
         int rows;
         SQLiteDatabase localDB = getWritableDatabase();
-
         localDB.beginTransaction();
         try {
             rows = localDB.update(InspectionContract.Defect.TABLE_NAME,
-                                        defectToCV(defect, inspID),
+                                        defectToCV(defect),
                                         InspectionContract.Defect.COL_INSPECTION_FK + " = ? AND "
                                                     + InspectionContract.Defect.COL_LINE_ITEM + " = ?",
-                                        new String[]{Long.toString(inspID), defect.lineItem});
+                                        new String[]{defect.inspection_id_num, defect.lineItem});
             // make sure only one defect is updated
             if (rows == 1)
                 localDB.setTransactionSuccessful();
@@ -1603,16 +1637,16 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         return rows;
     }
 
-    public int deleteDefect(String lineItem, long inspID) {
+    public int deleteDefect(String lineItem) {
         int rows;
         SQLiteDatabase localDB = getWritableDatabase();
 
         localDB.beginTransaction();
         try {
             rows = localDB.delete(InspectionContract.Defect.TABLE_NAME,
-                                        InspectionContract.Defect.COL_INSPECTION_FK + " = ? AND"
+                                        InspectionContract.Defect.COL_INSPECTION_FK + " = ? AND "
                                                     + InspectionContract.Defect.COL_LINE_ITEM + " = ?",
-                                        new String[]{Long.toString(inspID), lineItem});
+                                        new String[]{lineItem});
             // make sure only one defect is deleted
             if (rows == 1)
                 localDB.setTransactionSuccessful();

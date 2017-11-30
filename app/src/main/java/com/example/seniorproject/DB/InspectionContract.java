@@ -70,7 +70,7 @@ public class InspectionContract {
         // helper constants for SQL commands
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY, "
-                + COL_INSPECTOR_FK + " INTEGER REFERENCES " + User.TABLE_NAME + ", "
+                + COL_INSPECTOR_FK + " TEXT, "
                 + COL_INSP_NUM + " TEXT, "
                 + COL_INSP_DATE + " INTEGER, "
                 + COL_CUSTOMER + " TEXT, "
@@ -141,7 +141,7 @@ public class InspectionContract {
         // helper constants for SQL commands
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + _ID + " INTEGER PRIMARY KEY, "
-                + COL_INSPECTION_FK + " INTEGER NOT NULL REFERENCES " + Inspection.TABLE_NAME + " ON DELETE CASCADE, "
+                + COL_INSPECTION_FK + " TEXT, "
                 + COL_LINE_ITEM + " TEXT, "
                 + COL_TRACK + " TEXT, "
                 + COL_LOCATION + " TEXT, "

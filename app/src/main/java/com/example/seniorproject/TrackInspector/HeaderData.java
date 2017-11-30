@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.example.seniorproject.DB.AccountFields;
 import com.example.seniorproject.DB.Inspection;
 import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.DB.MasterFileObjects.MobilizationFile;
 import com.example.seniorproject.R;
 
 import java.text.DateFormat;
@@ -27,7 +28,6 @@ import java.util.Date;
 public class HeaderData extends AppCompatActivity {
     private Button goToMap;
 
-    private EditText inspectionidnum;
     private EditText companyname;
 
     private EditText locationadd;
@@ -41,6 +41,14 @@ public class HeaderData extends AppCompatActivity {
     private EditText telefax;
     private EditText email;
 
+    private EditText miles;
+    private EditText trips;
+    private EditText surftrips;
+
+
+
+    public static Inspection inspection;
+
     int j = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,6 @@ public class HeaderData extends AppCompatActivity {
         setContentView(R.layout.header_data_track_inspector);
         goToMap = (Button) findViewById(R.id.gotomap);
         companyname = (EditText) findViewById(R.id.companynamee);
-        inspectionidnum = (EditText) findViewById(R.id.inspectionidnum);
         locationadd= (EditText) findViewById(R.id.locationaddress);
         locationstate= (EditText) findViewById(R.id.locationstate);
         locationcity= (EditText) findViewById(R.id.locationcity);
@@ -58,7 +65,12 @@ public class HeaderData extends AppCompatActivity {
         telephone= (EditText) findViewById(R.id.contacttele);
         telefax= (EditText) findViewById(R.id.contacttelefax);
         email= (EditText) findViewById(R.id.contactemail);
-        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getApplicationContext());
+        miles = (EditText) findViewById(R.id.miles) ;
+        trips = (EditText) findViewById(R.id.trips) ;
+        surftrips = (EditText) findViewById(R.id.surfactingtrips) ;
+
+        inspection = new Inspection();
+        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(this);
         AccountFields accountFields = new AccountFields();
         try {
             accountFields = localDBHelper.getAccountByUser(LocalDBHelper.getDataInSharedPreference(this, "username"));
@@ -67,14 +79,12 @@ public class HeaderData extends AppCompatActivity {
         }
         String inspectionNumber = accountFields.initials.concat(getDate()).concat("-").concat(Integer.toString(j));
         inspectionNumber = checkInspectionNumUnique(inspectionNumber);
-        inspectionidnum.setText(inspectionNumber);
-        setTitle("Enter header information for this inspection below:");
 
+        setTitle("  Inspection ID Number: " + inspectionNumber);
         setButtons();
     }
     private void setEditTextNull(){
         companyname.setText(null);
-        inspectionidnum.setText(null);
         locationadd.setText(null);
         locationstate.setText(null);
         locationcity.setText(null);
@@ -89,18 +99,15 @@ public class HeaderData extends AppCompatActivity {
         goToMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Inspection inspection = getTexts();
+                getTexts();
                 Intent intent = new Intent(HeaderData.this, MapTI.class);
-                intent.putExtra("inspection", inspection);
-
                 startActivity(intent);
                 setEditTextNull();
 
             }
         });
     }
-    private Inspection getTexts(){
-        Inspection inspection = new Inspection();
+    private void getTexts(){
         inspection.address = locationadd.getText().toString().trim();
         inspection.telefax = telefax.getText().toString().trim();
         inspection.zip = locationzip.getText().toString().trim();
@@ -113,8 +120,25 @@ public class HeaderData extends AppCompatActivity {
         inspection.contact = companyname.getText().toString().trim();
         inspection.inspectionDate= getPreciseDate();
         inspection.inspectorID = getIntent().getStringExtra("Username");
-        inspection.inspectionNum = inspectionidnum.getText().toString().trim();
-        return inspection;
+        inspection.distance = Double.parseDouble(miles.getText().toString().trim());
+        inspection.trips = Integer.parseInt(trips.getText().toString().trim());
+        inspection.surfacingTrips = Integer.parseInt(surftrips.getText().toString().trim());
+        LocalDBHelper localDBHelper = LocalDBHelper.getInstance(this);
+        ArrayList<MobilizationFile> mobilizationFile = localDBHelper.getAllMobilizationFiles();
+        int mobilizationcoststandard=0;
+        int mobilizationcostsurf=0;
+        int standardmilestotal = (int)inspection.distance * inspection.trips;
+        int surfmilestotal = (int)inspection.distance * inspection.surfacingTrips;
+
+        for(int i = 0; i < mobilizationFile.size();i++){
+            if(mobilizationFile.get(i).equals("STANDARD")){
+                mobilizationcoststandard = (mobilizationFile.get(i).theMinimum) + (standardmilestotal * mobilizationFile.get(i).thetravel);
+            }else if(mobilizationFile.get(i).equals("SURFACING")) {
+                mobilizationcostsurf = (mobilizationFile.get(i).theMinimum) + (surfmilestotal * mobilizationFile.get(i).thetravel);
+
+            }
+        }
+        inspection.mobilization = mobilizationcoststandard + mobilizationcostsurf;
     }
     private String checkInspectionNumUnique(String inspectionID){
         String newinspectionID = inspectionID;

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ToggleButton;
 
 import com.example.seniorproject.DB.Inspection;
+import com.example.seniorproject.DB.LocalDBHelper;
 import com.example.seniorproject.MapActivitys;
 import com.example.seniorproject.R;
 import com.example.seniorproject.TempDB.TempDB;
@@ -57,6 +58,7 @@ public class MapTI extends MapActivitys {
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;
     public static boolean toggleMarkerOn = true;
     public static int currentNumberOfTrack = 0;
+    private LocalDBHelper localDBHelper;
     public static int currentNumberOfSwitches = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class MapTI extends MapActivitys {
         addDefect = (Button) findViewById(R.id.adddefect);
         toggleMarkerPlacement = (ToggleButton) findViewById(R.id.placemarkermode);
         saveInspection = (Button) findViewById(R.id.saveinspection);
+        localDBHelper = LocalDBHelper.getInstance(this);
 
         //for map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -95,6 +98,11 @@ public class MapTI extends MapActivitys {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                                generateReport();
+                                currentNumberOfSwitches=0;
+                                currentNumberOfTrack=0;
+
+                                localDBHelper.addInspection(HeaderData.inspection);
+                                LocalDBHelper.storeDataInSharedPreference(getBaseContext(),"inspection_id", HeaderData.inspection.inspectionNum);
                                 markers.clear();
                                 numOfMarker = 0;
 
@@ -138,8 +146,6 @@ public class MapTI extends MapActivitys {
                     final double lng = currMarker.getPosition().longitude;
                     intent.putExtra("lat", lat);
                     intent.putExtra("long", lng);
-                    Inspection inspection = (Inspection) getIntent().getSerializableExtra("inspection");
-                    intent.putExtra("inspection", inspection);
                     startActivity(intent);
 
                     Thread thread = new Thread() {
@@ -214,7 +220,6 @@ public class MapTI extends MapActivitys {
     }
     private void ifSavedInspection(){
         if(getIntent().getBooleanExtra("savedinspection",false)){
-            inspection = (Inspection)getIntent().getSerializableExtra("inspection");
             ArrayList<Marker> savedMarkers = new ArrayList<>();
             for(int i = 0; i < inspection.defectList.size();i++){
                 LatLng curLatLng = new LatLng(inspection.defectList.get(i).latitude, inspection.defectList.get(i).longitude);
@@ -226,7 +231,7 @@ public class MapTI extends MapActivitys {
 
         }
         else{
-            inspection = (Inspection)getIntent().getSerializableExtra("inspection");
+
         }
 
     }

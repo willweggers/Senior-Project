@@ -28,6 +28,7 @@ public class Defect implements Serializable
     public static final String longTag = "longitude";
 
     // Defect variables which hold values from Inspection Form text fields.
+    public String inspection_id_num;
     public String lineItem;
     public String trackNumber;
     public String location;

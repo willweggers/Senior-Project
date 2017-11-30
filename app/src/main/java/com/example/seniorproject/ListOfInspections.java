@@ -78,13 +78,15 @@ public class ListOfInspections extends Fragment {
         ArrayList<String> allInspectionIDNum = new ArrayList<>();
         ArrayList<Integer> aInspectionDates = new ArrayList<>();
         allInspectionIDNum = localDBHelper.getAllInspectionsIDNum();
+
         aInspectionDates = localDBHelper.getAllInspectionsDate();
         int numRows = allInspectionIDNum.size()*2;
+        AccountInfo.showMessage(Integer.toString(localDBHelper.getAmountInspections()),getContext());
         setTableRows(tableLayout, numRows, allInspectionIDNum, aInspectionDates);
 
         return view;
     }
-    private void setTableRows(final TableLayout tableLayout, final int numRows, final ArrayList<String> inspectionIDNumbers, final ArrayList<Integer> InspectionDates){
+    private void setTableRows(TableLayout tableLayout, int numRows, ArrayList<String> inspectionIDNumbers, ArrayList<Integer> InspectionDates){
         tableLayout.removeAllViews();
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
@@ -123,12 +125,16 @@ public class ListOfInspections extends Fragment {
             deleteButton.setText("DELETE");
             deleteButton.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.5f));
             final String currinspectionIDNum = inspectionIDNumbers.get(i-1);
+            final TableLayout tableLayout1 = tableLayout;
+            final int numRows1 = numRows;
+            final ArrayList<String> inspectionIDNumbers1 = inspectionIDNumbers;
+            final ArrayList<Integer> inspectionIDDates1 = InspectionDates;
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LocalDBHelper tempDB = LocalDBHelper.getInstance(getContext());
                     tempDB.deleteInspection(currinspectionIDNum);
-                    setTableRows(tableLayout, numRows,inspectionIDNumbers, InspectionDates);
+                    setTableRows(tableLayout1, numRows1,inspectionIDNumbers1, inspectionIDDates1);
                 }
             });
             tableRow.addView(deleteButton);

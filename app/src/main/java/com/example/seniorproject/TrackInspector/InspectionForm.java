@@ -100,7 +100,6 @@ public class InspectionForm extends AppCompatActivity {
     private Spinner catergoryEdit;
     private Spinner codeEdit;
     private Spinner priorityEdit;
-    private Spinner unitEdit;
     private EditText locationEdit;
 //    private EditText codeDescriptionEdit;
     private Button sumbitDefectButton;
@@ -117,6 +116,15 @@ public class InspectionForm extends AppCompatActivity {
     public static ArrayList<String> listunits = new ArrayList<>();
     public LocalDBHelper localDBHelper;
     public String[] categories;
+
+    private ArrayList<RailFile> railFiles;
+    private ArrayList<CrossingsFile> crossingsFiles;
+    private ArrayList<CrosstiesFile> crosstiesFiles;
+    private ArrayList<IssueFile> issueFiles;
+    private ArrayList<OtherFile> otherFiles;
+    private ArrayList<OTMFile> OTMFiles;
+    private ArrayList<SwitchTiesFile> switchFiles;
+    private ArrayList<TurnoutsFile> turnoutFiles;
 
 
 
@@ -251,6 +259,7 @@ public class InspectionForm extends AppCompatActivity {
                 if(trackCheck.isChecked()){
                     int currentNumTracks = MapTI.currentNumberOfTrack+ 1;
                     String theText = "T0".concat(Integer.toString(currentNumTracks));
+
                     trackIDs1.add(theText);
                     trackNumber1.add(trackString);
                     trackLocations1.add(locString);
@@ -279,9 +288,8 @@ public class InspectionForm extends AppCompatActivity {
                     defect.latitude =  getIntent().getDoubleExtra("lat", 0);
                     defect.longitude = getIntent().getDoubleExtra("long", 0);
                     defect.picture = LocalDBHelper.getBytes(mImageBitmap);
-                    defect.codeDescription = "code descp";
-                    Inspection currInspection = (Inspection)getIntent().getSerializableExtra("inspection");
-                    currInspection.defectList.add(defect);
+                    defect.codeDescription = codeDescriptionString;
+                    HeaderData.inspection.defectList.add(defect);
 
 
                     setEditTextsToNull();
@@ -293,7 +301,6 @@ public class InspectionForm extends AppCompatActivity {
                     MapTI.currentNumberOfTrack++;
                     emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
-                    intent.putExtra("inspection", currInspection);
                     startActivity(intent);
                 }
                 else if(switchCheck.isChecked()){
@@ -314,7 +321,7 @@ public class InspectionForm extends AppCompatActivity {
                     defect.lineItem = theText;
                     defect.location = locString;
                     defect.description = descriptionString;
-                    defect.unit = unitString;
+                    defect.unit = unitString ;
                     try {
                         defect.quantity = Integer.parseInt(quantityString);
                         defect.priority = Integer.parseInt(priorityString);
@@ -329,8 +336,8 @@ public class InspectionForm extends AppCompatActivity {
                     defect.latitude =  getIntent().getDoubleExtra("lat", 0);
                     defect.longitude = getIntent().getDoubleExtra("long", 0);
                     defect.picture = LocalDBHelper.getBytes(mImageBitmap);
-                    Inspection currInspection = (Inspection)getIntent().getSerializableExtra("inspection");
-                    currInspection.defectList.add(defect);
+                    defect.codeDescription = codeDescriptionString;
+                    HeaderData.inspection.defectList.add(defect);
                     setEditTextsToNull();
 
                     MapTI.currentNumberOfSwitches++;
@@ -340,7 +347,6 @@ public class InspectionForm extends AppCompatActivity {
                     }
                     emptyLists();
                     Intent intent = new Intent(InspectionForm.this, MapTI.class);
-                    intent.putExtra("inspection", currInspection);
                     startActivity(intent);
                 }
                 else{
@@ -391,6 +397,63 @@ public class InspectionForm extends AppCompatActivity {
             codeString = null;
             priorityString= null;
         }
+        if(categoryString.equals("RAIL")){
+           for(int i = 0; i < railFiles.size();i++){
+               if(railFiles.get(i).theID.equals(codeString)){
+                   unitString = railFiles.get(i).theUnit;
+                   codeDescriptionString = railFiles.get(i).thedescription;
+               }
+           }
+        }else if(categoryString.equals("CROSSTIES")){
+            for(int i = 0; i < crosstiesFiles.size();i++){
+                if(crosstiesFiles.get(i).theID.equals(codeString)){
+                    unitString = crosstiesFiles.get(i).theUnit;
+                    codeDescriptionString = crosstiesFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("CROSSINGS")){
+            for(int i = 0; i < crossingsFiles.size();i++){
+                if(crossingsFiles.get(i).theID.equals(codeString)){
+                    unitString = crossingsFiles.get(i).theUnit;
+                    codeDescriptionString = crossingsFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("OTM")){
+            for(int i = 0; i < OTMFiles.size();i++){
+                if(OTMFiles.get(i).theID.equals(codeString)){
+                    unitString = OTMFiles.get(i).theUnit;
+                    codeDescriptionString = OTMFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("OTHER")){
+            for(int i = 0; i < otherFiles.size();i++){
+                if(otherFiles.get(i).theID.equals(codeString)){
+                    unitString = otherFiles.get(i).theUnit;
+                    codeDescriptionString = otherFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("SWITCHETIE")){
+            for(int i = 0; i < switchFiles.size();i++){
+                if(switchFiles.get(i).theID.equals(codeString)){
+                    unitString = switchFiles.get(i).theUnit;
+                    codeDescriptionString = switchFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("ISSUES")){
+            for(int i = 0; i < issueFiles.size();i++){
+                if(issueFiles.get(i).theID.equals(codeString)){
+                    unitString = issueFiles.get(i).theUnit;
+                    codeDescriptionString = issueFiles.get(i).thedescription;
+                }
+            }
+        }else if(categoryString.equals("TURNOUT")){
+            for(int i = 0; i < turnoutFiles.size();i++){
+                if(turnoutFiles.get(i).theID.equals(codeString)){
+                    unitString = turnoutFiles.get(i).theUnit;
+                    codeDescriptionString = turnoutFiles.get(i).thedescription;
+                }
+            }
+        }
 
         locString= locationEdit.getText().toString().trim();
     }
@@ -412,51 +475,51 @@ public class InspectionForm extends AppCompatActivity {
                 }
                 if(selectedItem.equals("RAIL")){
                     listthatcategoryscodes.clear();
-                    ArrayList<RailFile> railFiles = localDBHelper.getAllRailFiles();
+                     railFiles = localDBHelper.getAllRailFiles();
                     for(int i = 0; i < railFiles.size();i++){
                         listthatcategoryscodes.add(railFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("CROSSTIES")){
                     listthatcategoryscodes.clear();
-                    ArrayList<CrosstiesFile> railFiles = localDBHelper.getAllCrosstiesFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    crosstiesFiles = localDBHelper.getAllCrosstiesFiles();
+                    for(int i = 0; i < crosstiesFiles.size();i++){
+                        listthatcategoryscodes.add(crosstiesFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("CROSSINGS")){
                     listthatcategoryscodes.clear();
-                    ArrayList<CrossingsFile> railFiles = localDBHelper.getAllCrossingsFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                     crossingsFiles = localDBHelper.getAllCrossingsFiles();
+                    for(int i = 0; i < crossingsFiles.size();i++){
+                        listthatcategoryscodes.add(crossingsFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("OTM")){
                     listthatcategoryscodes.clear();
-                    ArrayList<OTMFile> railFiles = localDBHelper.getAllOTMFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                     OTMFiles= localDBHelper.getAllOTMFiles();
+                    for(int i = 0; i < OTMFiles.size();i++){
+                        listthatcategoryscodes.add(OTMFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("OTHER")){
                     listthatcategoryscodes.clear();
-                    ArrayList<OtherFile> railFiles = localDBHelper.getAllOtherFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    otherFiles  = localDBHelper.getAllOtherFiles();
+                    for(int i = 0; i < otherFiles.size();i++){
+                        listthatcategoryscodes.add(otherFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("SWITCHETIE")){
                     listthatcategoryscodes.clear();
-                    ArrayList<SwitchTiesFile> railFiles = localDBHelper.getAllSwitchTiesFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    switchFiles = localDBHelper.getAllSwitchTiesFiles();
+                    for(int i = 0; i < switchFiles.size();i++){
+                        listthatcategoryscodes.add(switchFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("ISSUES")){
                     listthatcategoryscodes.clear();
-                    ArrayList<IssueFile> railFiles = localDBHelper.getAllIssuesFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    issueFiles = localDBHelper.getAllIssuesFiles();
+                    for(int i = 0; i < issueFiles.size();i++){
+                        listthatcategoryscodes.add(issueFiles.get(i).theID);
                     }
                 }else if(selectedItem.equals("TURNOUT")){
                     listthatcategoryscodes.clear();
-                    ArrayList<TurnoutsFile> railFiles = localDBHelper.getAllTurnoutFiles();
-                    for(int i = 0; i < railFiles.size();i++){
-                        listthatcategoryscodes.add(railFiles.get(i).theID);
+                    turnoutFiles = localDBHelper.getAllTurnoutFiles();
+                    for(int i = 0; i < turnoutFiles.size();i++){
+                        listthatcategoryscodes.add(turnoutFiles.get(i).theID);
                     }
                 }
                 codeEdit = (Spinner) findViewById(R.id.codecategorylist);

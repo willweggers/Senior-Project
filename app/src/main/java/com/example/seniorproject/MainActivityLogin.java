@@ -166,11 +166,18 @@ public class MainActivityLogin extends AppCompatActivity {
         }
         if(localDB.getAllMobilizationFiles().size() == 0){
             MobilizationFile stateFile = new MobilizationFile();
-            stateFile.theID = "id1";
-            stateFile.thedescription = "descp";
-            stateFile.thetravel = 1;
-            stateFile.theMinimum = 2;
+            stateFile.theID = "STANDARD";
+            stateFile.thedescription = "Standard Mobilization";
+            stateFile.thetravel = 7;
+            stateFile.theMinimum = 500;
+            MobilizationFile stateFile1 = new MobilizationFile();
+            stateFile.theID = "SURFACING";
+            stateFile.thedescription = "Surfacing Mobilization";
+            stateFile.thetravel = 12;
+            stateFile.theMinimum = 5000;
+            localDB.addMobilizationFiles(stateFile1);
             localDB.addMobilizationFiles(stateFile);
+
 
         }
         if(localDB.getAllLaborFiles().size() == 0){

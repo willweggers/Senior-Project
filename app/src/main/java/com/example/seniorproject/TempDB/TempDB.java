@@ -134,7 +134,7 @@ public class TempDB extends SQLiteOpenHelper {
         localDB.beginTransaction();
         try {
             // get inspection from inspection table with matching inspection number
-            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_NUM + "=?", null);
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_NUM + " =?", null);
 
             // convert the row pointed to by Cursor to Inspection data structure
             if (cr.moveToFirst()) {
@@ -162,7 +162,7 @@ public class TempDB extends SQLiteOpenHelper {
         localDB.beginTransaction();
         try {
             // get inspection from inspection table with matching inspection number
-            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_DATE + "=?", null);
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME + " WHERE " + InspectionContract.Inspection.COL_INSP_DATE + " = ? ", null);
 
             // convert the row pointed to by Cursor to Inspection data structure
             if (cr.moveToFirst()) {
@@ -247,7 +247,7 @@ public class TempDB extends SQLiteOpenHelper {
         try {
             defectID = localDB.insert(InspectionContract.Defect.TABLE_NAME,
                     null,
-                    LocalDBHelper.defectToCV(newDefect, inspID));
+                    LocalDBHelper.defectToCV(newDefect));
             localDB.setTransactionSuccessful();
         }
         finally {
@@ -294,7 +294,7 @@ public class TempDB extends SQLiteOpenHelper {
         localDB.beginTransaction();
         try {
             rows = localDB.update(InspectionContract.Defect.TABLE_NAME,
-                    LocalDBHelper.defectToCV(defect, inspID),
+                    LocalDBHelper.defectToCV(defect),
                     InspectionContract.Defect.COL_INSPECTION_FK + " = ? AND "
                             + InspectionContract.Defect.COL_LINE_ITEM + " = ?",
                     new String[]{Long.toString(inspID), defect.lineItem});
