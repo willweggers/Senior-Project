@@ -16,4 +16,10 @@ public class FindLocalDBInfo {
         theName = accountFields.firstName.concat(" ").concat(accountFields.lastName);
         return theName;
     }
+    public static String findType(LocalDBHelper localDBHelper,String username){
+        String type;
+        AccountFields accountFields= localDBHelper.getAccountByUser(username);
+        type = accountFields.accountType;
+        return type;
+    }
 }

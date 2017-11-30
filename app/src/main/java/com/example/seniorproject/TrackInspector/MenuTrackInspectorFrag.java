@@ -87,7 +87,7 @@ public class MenuTrackInspectorFrag extends Fragment  {
         }
         final ViewPager mViewPager = (ViewPager) view.findViewById(R.id.pager);
         TabLayout bottomLayout = (TabLayout) view.findViewById(R.id.inspectionstabtab);
-        bottomLayout.addTab(bottomLayout.newTab().setText("Current Inspections"));
+//        bottomLayout.addTab(bottomLayout.newTab().setText("Current Inspections"));
         bottomLayout.addTab(bottomLayout.newTab().setText("Old Inspections"));
         bottomLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         bottomLayout.setTabMode(TabLayout.MODE_FIXED);

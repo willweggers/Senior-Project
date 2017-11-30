@@ -445,9 +445,9 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         defect.location = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LOCATION));
         defect.description = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_DESCRIPTION));
         defect.picture = cr.getBlob(cr.getColumnIndex(InspectionContract.Defect.COL_PICTURE));
-        defect.labor = cr.getInt(cr.getColumnIndex(InspectionContract.Defect.COL_LABOR));
-        defect.category = cr.getInt(cr.getColumnIndex(InspectionContract.Defect.COL_CATEGORY));
-        defect.code = cr.getInt(cr.getColumnIndex(InspectionContract.Defect.COL_CODE));
+        defect.labor = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_LABOR));
+        defect.category = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_CATEGORY));
+        defect.code = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_CODE));
         defect.codeDescription = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_CODE_DESC));
         defect.quantity = cr.getInt(cr.getColumnIndex(InspectionContract.Defect.COL_QUANTITY));
         defect.unit = cr.getString(cr.getColumnIndex(InspectionContract.Defect.COL_UNIT));
@@ -1384,6 +1384,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
         return id;
     }
 
+
     // get an Inspection data structure from database with given inspection number
     // including associated defects
     public Inspection getInspection(String insp_num) {
@@ -1489,14 +1490,39 @@ public class LocalDBHelper extends SQLiteOpenHelper {
     }
     public ArrayList<Inspection> getAllInspections(){
         Cursor cr;
-        int numInspections=0;
         SQLiteDatabase localDB = getWritableDatabase();
         ArrayList<Inspection> arrayList = new ArrayList<>();
         localDB.beginTransaction();
         try {
             // get inspection from inspection table with matching inspection number
             cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Inspection.TABLE_NAME,null);
-            numInspections= cr.getCount();
+            if(cr.moveToFirst()) {
+                do {
+                    arrayList.add(cursorToInspection(cr));
+                } while (cr.moveToNext());
+            }
+            cr.close();
+            localDB.setTransactionSuccessful();
+        }
+        finally {
+            localDB.endTransaction();
+        }
+        return arrayList;
+    }
+    public ArrayList<Defect> getAllDefects(){
+        Cursor cr;
+        SQLiteDatabase localDB = getWritableDatabase();
+        ArrayList<Defect> arrayList = new ArrayList<>();
+        localDB.beginTransaction();
+        try {
+            // get inspection from inspection table with matching inspection number
+            cr = localDB.rawQuery("SELECT * FROM " + InspectionContract.Defect.TABLE_NAME,null);
+            if(cr.moveToFirst()) {
+                do {
+                    arrayList.add(cursorToDefect(cr));
+                } while (cr.moveToNext());
+
+            }
             cr.close();
             localDB.setTransactionSuccessful();
         }

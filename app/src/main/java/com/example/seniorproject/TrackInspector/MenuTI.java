@@ -31,7 +31,7 @@ import com.example.seniorproject.R;
 
 public class MenuTI extends AppCompatActivity implements MenuTrackInspectorFrag.OnFragmentInteractionListener,
         SettingsTIFrag.OnFragmentInteractionListener,
-        ListInspectionsCurrent.OnFragmentInteractionListener,
+        //ListInspectionsCurrent.OnFragmentInteractionListener,
         ListOfInspections.OnFragmentInteractionListener{
 
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;

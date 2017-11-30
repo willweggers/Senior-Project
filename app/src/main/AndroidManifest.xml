@@ -79,9 +79,13 @@
         <activity android:name=".TrackInspector.MapTI"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".Admin.ModiyMasterFiles"
+        <activity android:name=".ViewInspection"
             android:theme="@style/AppTheme.NoActionBar"
-            />
+            /><activity android:name=".ViewDefect"
+        android:theme="@style/AppTheme"
+        /><activity android:name=".ViewHeader"
+        android:theme="@style/AppTheme"
+        />
         <activity android:name=".Admin.AddAccount"
             android:theme="@style/AppTheme"
             />
@@ -89,10 +93,6 @@
         android:theme="@style/AppTheme.NoActionBar"
         />
 
-
-        <activity android:name=".ViewInspection"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
         <!-- api key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"

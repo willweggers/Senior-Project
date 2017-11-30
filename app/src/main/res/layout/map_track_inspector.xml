@@ -40,8 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_defect"
-        android:layout_below="@+id/saveinspection"
-        android:layout_alignEnd="@+id/saveinspection"
+        android:layout_below="@+id/endInspection"
+        android:layout_alignEnd="@+id/endInspection"
         android:layout_marginTop="23dp" />
 
 
@@ -55,14 +55,14 @@
         android:textOff="Marker Placement is Disabled"
         android:textOn="Marker Placement is Enabled" />
 
-    <Button
-        android:id="@+id/saveinspection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="Save Inspection"
-        android:layout_below="@+id/endInspection"
-        android:layout_alignEnd="@+id/endInspection" />
+    <!--<Button-->
+        <!--android:id="@+id/saveinspection"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="21dp"-->
+        <!--android:text="Save Inspection"-->
+        <!--android:layout_below="@+id/endInspection"-->
+        <!--android:layout_alignEnd="@+id/endInspection" />-->
 
 
 </RelativeLayout>

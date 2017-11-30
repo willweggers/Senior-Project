@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 
+import com.example.seniorproject.AccountInfo;
 import com.example.seniorproject.DB.Defect;
 import com.example.seniorproject.DB.Inspection;
 import com.example.seniorproject.DB.LocalDBHelper;
@@ -125,8 +127,10 @@ public class InspectionForm extends AppCompatActivity {
     private ArrayList<OTMFile> OTMFiles;
     private ArrayList<SwitchTiesFile> switchFiles;
     private ArrayList<TurnoutsFile> turnoutFiles;
+    private ArrayList<LaborInstallFile> allLaborFiles;
 
-
+    private int Crewrate;
+    private int production;
 
     public static String locationSetString;
     @Override
@@ -150,6 +154,11 @@ public class InspectionForm extends AppCompatActivity {
         listCommonDefects.add("Thermite Weld Boutet(Wide Gap");
         listCommonDefects.add("Vertical Split Head Joint Area(Outside Joint Area");
         listCommonDefects.add("Other");
+        if (android.os.Build.VERSION.SDK_INT >= 24){
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
+
 
         //temp adding arraylist for other spinners for testing remove when master data files are a thing
         ArrayList<LaborInstallFile> laborInstallFiles = localDBHelper.getAllLaborFiles();
@@ -256,111 +265,215 @@ public class InspectionForm extends AppCompatActivity {
             public void onClick(View v)
             {
                 setText();
-                if(trackCheck.isChecked()){
-                    int currentNumTracks = MapTI.currentNumberOfTrack+ 1;
-                    String theText = "T0".concat(Integer.toString(currentNumTracks));
+                if((descriptionString.isEmpty() && descriptionString.equals(null)) ||
+                    (laborString.isEmpty() && laborString.equals(null))||
+                            (categoryString.isEmpty() && categoryString.equals(null)) ||
+                    (codeString.isEmpty() && codeString.equals(null))||
+                (priorityString.isEmpty() && priorityString.equals(null))){
+                    AccountInfo.showMessage("Dropdown isnt set", getApplicationContext());
 
-                    trackIDs1.add(theText);
-                    trackNumber1.add(trackString);
-                    trackLocations1.add(locString);
-                    trackDescriptions1.add(descriptionString);
-                    allDefectsDescriptions.add(descriptionString);
-                    trackUnits1.add(unitString);
-                    trackQuantitys1.add(quantityString);
-                    trackPriority1.add(priorityString);
-                    alllinenumbers.add(theText);
-                    allpriorities.add(priorityString);
-                    Defect defect = new Defect();
-                    defect.trackNumber = trackString;
-                    defect.lineItem = theText;
-                    defect.location = locString;
-                    defect.description = descriptionString;
-                    defect.unit = unitString;
-                    try {
-                        defect.quantity = Integer.parseInt(quantityString);
-                        defect.priority = Integer.parseInt(priorityString);
-                    }
-                    catch (NumberFormatException e){
-                        defect.quantity = 1;
-                        defect.priority = 2;
-                        Log.e("NOTNUMQ", e.getMessage());
-                    }
-                    defect.latitude =  getIntent().getDoubleExtra("lat", 0);
-                    defect.longitude = getIntent().getDoubleExtra("long", 0);
-                    defect.picture = LocalDBHelper.getBytes(mImageBitmap);
-                    defect.codeDescription = codeDescriptionString;
-                    HeaderData.inspection.defectList.add(defect);
-
-
-                    setEditTextsToNull();
-
-                    MapActivitys.numOfMarker++;
-                    if(!MapTI.toggleMarkerOn){
-                        MapTI.toggleMarkerOn = true;
-                    }
-                    MapTI.currentNumberOfTrack++;
-                    emptyLists();
-                    Intent intent = new Intent(InspectionForm.this, MapTI.class);
-                    startActivity(intent);
                 }
-                else if(switchCheck.isChecked()){
-                    int currentNumSwitches = MapTI.currentNumberOfSwitches + 1;
-                    String theText = "S0".concat(Integer.toString(currentNumSwitches));
-                    switchIDs1.add(theText);
-                    switchNumber1.add(trackString);
-                    switchLocations1.add(locString);
-                    switchDescriptions1.add(descriptionString);
-                    allDefectsDescriptions.add(descriptionString);
-                    switchUnits1.add(unitString);
-                    switchQuantitys1.add(quantityString);
-                    switchPriority1.add(priorityString);
-                    alllinenumbers.add(theText);
-                    allpriorities.add(priorityString);
-                    Defect defect = new Defect();
-                    defect.trackNumber = trackString;
-                    defect.lineItem = theText;
-                    defect.location = locString;
-                    defect.description = descriptionString;
-                    defect.unit = unitString ;
-                    try {
-                        defect.quantity = Integer.parseInt(quantityString);
-                        defect.priority = Integer.parseInt(priorityString);
+                else {
+                    if(categoryString.equals("RAIL")){
+                        for(int i = 0; i < railFiles.size();i++){
+                            if(railFiles.get(i).theID.equals(codeString)){
+                                unitString = railFiles.get(i).theUnit;
+                                codeDescriptionString = railFiles.get(i).thedescription;
+                                production = railFiles.get(i).theProduction;
+                            }
+                        }
+                    }else if(categoryString.equals("CROSSTIES")){
+                        for(int i = 0; i < crosstiesFiles.size();i++){
+                            if(crosstiesFiles.get(i).theID.equals(codeString)){
+                                unitString = crosstiesFiles.get(i).theUnit;
+                                codeDescriptionString = crosstiesFiles.get(i).thedescription;
+                                production = crosstiesFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("CROSSINGS")){
+                        for(int i = 0; i < crossingsFiles.size();i++){
+                            if(crossingsFiles.get(i).theID.equals(codeString)){
+                                unitString = crossingsFiles.get(i).theUnit;
+                                codeDescriptionString = crossingsFiles.get(i).thedescription;
+                                production = crossingsFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("OTM")){
+                        for(int i = 0; i < OTMFiles.size();i++){
+                            if(OTMFiles.get(i).theID.equals(codeString)){
+                                unitString = OTMFiles.get(i).theUnit;
+                                codeDescriptionString = OTMFiles.get(i).thedescription;
+                                production = OTMFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("OTHER")){
+                        for(int i = 0; i < otherFiles.size();i++){
+                            if(otherFiles.get(i).theID.equals(codeString)){
+                                unitString = otherFiles.get(i).theUnit;
+                                codeDescriptionString = otherFiles.get(i).thedescription;
+                                production = otherFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("SWITCHETIE")){
+                        for(int i = 0; i < switchFiles.size();i++){
+                            if(switchFiles.get(i).theID.equals(codeString)){
+                                unitString = switchFiles.get(i).theUnit;
+                                codeDescriptionString = switchFiles.get(i).thedescription;
+                                production = switchFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("ISSUES")){
+                        for(int i = 0; i < issueFiles.size();i++){
+                            if(issueFiles.get(i).theID.equals(codeString)){
+                                unitString = issueFiles.get(i).theUnit;
+                                codeDescriptionString = issueFiles.get(i).thedescription;
+                                production = issueFiles.get(i).theProduction;
+
+                            }
+                        }
+                    }else if(categoryString.equals("TURNOUT")){
+                        for(int i = 0; i < turnoutFiles.size();i++){
+                            if(turnoutFiles.get(i).theID.equals(codeString)){
+                                unitString = turnoutFiles.get(i).theUnit;
+                                codeDescriptionString = turnoutFiles.get(i).thedescription;
+                                production = turnoutFiles.get(i).theProduction;
+
+                            }
+                        }
                     }
-                    catch (NumberFormatException e){
-                        defect.quantity = 1;
-                        defect.priority = 2;
-                        Log.e("NOTNUMQ", e.getMessage());
+                    allLaborFiles = localDBHelper.getAllLaborFiles();
+                    for (int i = 0; i < allLaborFiles.size(); i++) {
+                        if (allLaborFiles.get(i).theID.equals(laborString)) {
+                            Crewrate = allLaborFiles.get(i).theCrewRate;
+                        }
                     }
+                    if (trackCheck.isChecked()) {
+                        int currentNumTracks = MapTI.currentNumberOfTrack + 1;
+                        String theText = "T0".concat(Integer.toString(currentNumTracks));
+                        String inspectionIDNum = LocalDBHelper.getDataInSharedPreference(getApplicationContext(), "inspectionID");
+                        trackIDs1.add(theText);
+                        trackNumber1.add(trackString);
+                        trackLocations1.add(locString);
+                        trackDescriptions1.add(descriptionString);
+                        allDefectsDescriptions.add(descriptionString);
+                        trackUnits1.add(unitString);
+                        trackQuantitys1.add(quantityString);
+                        trackPriority1.add(priorityString);
+                        alllinenumbers.add(theText);
+                        allpriorities.add(priorityString);
+                        Defect defect = new Defect();
+                        defect.inspection_id_num = inspectionIDNum;
+                        defect.trackNumber = trackString;
+                        defect.lineItem = theText;
+                        defect.location = locString;
+                        defect.description = descriptionString;
+                        defect.unit = unitString;
+                        defect.category = categoryString;
+                        defect.code = codeString;
+                        defect.labor = laborString;
+                        if (production != 0) {
+                            defect.price = (Integer.parseInt(quantityString) * Crewrate) / production;
+                        } else {
+                            defect.price = 0;
+                        }
+                        try {
+                            defect.quantity = Integer.parseInt(quantityString);
+                            defect.priority = Integer.parseInt(priorityString);
+                        } catch (NumberFormatException e) {
+                            defect.quantity = 1;
+                            defect.priority = 2;
+                            Log.e("NOTNUMQ", e.getMessage());
+                        }
+                        defect.latitude = getIntent().getDoubleExtra("lat", 0);
+                        defect.longitude = getIntent().getDoubleExtra("long", 0);
+                        defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                        defect.codeDescription = codeDescriptionString;
+                        HeaderData.inspection.defectList.add(defect);
 
 
-                    defect.latitude =  getIntent().getDoubleExtra("lat", 0);
-                    defect.longitude = getIntent().getDoubleExtra("long", 0);
-                    defect.picture = LocalDBHelper.getBytes(mImageBitmap);
-                    defect.codeDescription = codeDescriptionString;
-                    HeaderData.inspection.defectList.add(defect);
-                    setEditTextsToNull();
+                        setEditTextsToNull();
 
-                    MapTI.currentNumberOfSwitches++;
-                    MapActivitys.numOfMarker++;
-                    if(!MapTI.toggleMarkerOn){
-                        MapTI.toggleMarkerOn = true;
+                        MapActivitys.numOfMarker++;
+                        if (!MapTI.toggleMarkerOn) {
+                            MapTI.toggleMarkerOn = true;
+                        }
+                        MapTI.currentNumberOfTrack++;
+                        emptyLists();
+                        Intent intent = new Intent(InspectionForm.this, MapTI.class);
+                        startActivity(intent);
+                    } else if (switchCheck.isChecked()) {
+                        int currentNumSwitches = MapTI.currentNumberOfSwitches + 1;
+                        String theText = "S0".concat(Integer.toString(currentNumSwitches));
+                        String inspectionIDNum = LocalDBHelper.getDataInSharedPreference(getApplicationContext(), "inspectionID");
+
+                        switchIDs1.add(theText);
+                        switchNumber1.add(trackString);
+                        switchLocations1.add(locString);
+                        switchDescriptions1.add(descriptionString);
+                        allDefectsDescriptions.add(descriptionString);
+                        switchUnits1.add(unitString);
+                        switchQuantitys1.add(quantityString);
+                        switchPriority1.add(priorityString);
+                        alllinenumbers.add(theText);
+                        allpriorities.add(priorityString);
+                        Defect defect = new Defect();
+                        defect.inspection_id_num = inspectionIDNum;
+                        defect.trackNumber = trackString;
+                        defect.lineItem = theText;
+                        defect.location = locString;
+                        defect.description = descriptionString;
+                        defect.unit = unitString;
+                        defect.category = categoryString;
+                        defect.code = codeString;
+                        defect.labor = laborString;
+                        if (production != 0) {
+                            defect.price = (Integer.parseInt(quantityString) * Crewrate) / production;
+                        } else {
+                            defect.price = 0;
+                        }
+                        try {
+                            defect.quantity = Integer.parseInt(quantityString);
+                            defect.priority = Integer.parseInt(priorityString);
+                        } catch (NumberFormatException e) {
+                            defect.quantity = 1;
+                            defect.priority = 2;
+                            Log.e("NOTNUMQ", e.getMessage());
+                        }
+
+
+                        defect.latitude = getIntent().getDoubleExtra("lat", 0);
+                        defect.longitude = getIntent().getDoubleExtra("long", 0);
+                        defect.picture = LocalDBHelper.getBytes(mImageBitmap);
+                        defect.codeDescription = codeDescriptionString;
+                        HeaderData.inspection.defectList.add(defect);
+                        setEditTextsToNull();
+
+                        MapTI.currentNumberOfSwitches++;
+                        MapActivitys.numOfMarker++;
+                        if (!MapTI.toggleMarkerOn) {
+                            MapTI.toggleMarkerOn = true;
+                        }
+                        emptyLists();
+                        Intent intent = new Intent(InspectionForm.this, MapTI.class);
+                        startActivity(intent);
+                    } else {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(InspectionForm.this);
+                        builder.setMessage("Check either track or switch checkbox.")
+                                .setCancelable(false)
+                                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                        ;
                     }
-                    emptyLists();
-                    Intent intent = new Intent(InspectionForm.this, MapTI.class);
-                    startActivity(intent);
-                }
-                else{
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(InspectionForm.this);
-                    builder.setMessage("Check either track or switch checkbox.")
-                            .setCancelable(false)
-                            .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                                public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    final AlertDialog alert = builder.create();
-                    alert.show();
-                    ;
                 }
 
 
@@ -397,63 +510,7 @@ public class InspectionForm extends AppCompatActivity {
             codeString = null;
             priorityString= null;
         }
-        if(categoryString.equals("RAIL")){
-           for(int i = 0; i < railFiles.size();i++){
-               if(railFiles.get(i).theID.equals(codeString)){
-                   unitString = railFiles.get(i).theUnit;
-                   codeDescriptionString = railFiles.get(i).thedescription;
-               }
-           }
-        }else if(categoryString.equals("CROSSTIES")){
-            for(int i = 0; i < crosstiesFiles.size();i++){
-                if(crosstiesFiles.get(i).theID.equals(codeString)){
-                    unitString = crosstiesFiles.get(i).theUnit;
-                    codeDescriptionString = crosstiesFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("CROSSINGS")){
-            for(int i = 0; i < crossingsFiles.size();i++){
-                if(crossingsFiles.get(i).theID.equals(codeString)){
-                    unitString = crossingsFiles.get(i).theUnit;
-                    codeDescriptionString = crossingsFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("OTM")){
-            for(int i = 0; i < OTMFiles.size();i++){
-                if(OTMFiles.get(i).theID.equals(codeString)){
-                    unitString = OTMFiles.get(i).theUnit;
-                    codeDescriptionString = OTMFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("OTHER")){
-            for(int i = 0; i < otherFiles.size();i++){
-                if(otherFiles.get(i).theID.equals(codeString)){
-                    unitString = otherFiles.get(i).theUnit;
-                    codeDescriptionString = otherFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("SWITCHETIE")){
-            for(int i = 0; i < switchFiles.size();i++){
-                if(switchFiles.get(i).theID.equals(codeString)){
-                    unitString = switchFiles.get(i).theUnit;
-                    codeDescriptionString = switchFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("ISSUES")){
-            for(int i = 0; i < issueFiles.size();i++){
-                if(issueFiles.get(i).theID.equals(codeString)){
-                    unitString = issueFiles.get(i).theUnit;
-                    codeDescriptionString = issueFiles.get(i).thedescription;
-                }
-            }
-        }else if(categoryString.equals("TURNOUT")){
-            for(int i = 0; i < turnoutFiles.size();i++){
-                if(turnoutFiles.get(i).theID.equals(codeString)){
-                    unitString = turnoutFiles.get(i).theUnit;
-                    codeDescriptionString = turnoutFiles.get(i).thedescription;
-                }
-            }
-        }
+
 
         locString= locationEdit.getText().toString().trim();
     }

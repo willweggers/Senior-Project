@@ -10,6 +10,9 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by willw on 11/3/2017.
@@ -51,5 +54,10 @@ public class AccountInfo{
     //so you dont have to use toast everytime
     public static void showMessage(String msg, Context context){
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+    public static String convertDate(Date date){
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String s = formatter.format(date);
+        return s;
     }
 }

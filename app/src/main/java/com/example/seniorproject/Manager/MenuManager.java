@@ -27,7 +27,7 @@ import com.example.seniorproject.TrackInspector.MenuTrackInspectorFrag;
 public class MenuManager extends AppCompatActivity implements MenuTrackInspectorFrag.OnFragmentInteractionListener,
         SettingsManager.OnFragmentInteractionListener,
         ListTrackInspectors.OnFragmentInteractionListener,
-        ListInspectionsCurrent.OnFragmentInteractionListener,
+        //ListInspectionsCurrent.OnFragmentInteractionListener,
         ListOfInspections.OnFragmentInteractionListener{
 
     private int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 99;

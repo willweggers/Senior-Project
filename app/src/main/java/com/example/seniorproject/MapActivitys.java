@@ -115,29 +115,35 @@ public class MapActivitys extends FragmentActivity implements
         mMap = googleMap;
 //        markerLatLong[0] = LATITUDE;
 //        markerLatLong[1] = LONGITUDE;
-        if(LATITUDE != 0.0 && LONGITUDE != 0.0){
-            curLoc = new LatLng(LATITUDE, LONGITUDE);
-        }
-        //remove this later
-        else{
-            curLoc = new LatLng(33.983076, -84.562506);
-        }
-        if(currLocMarker != null){
-            currLocMarker.remove();
-        }
-        currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
-        moveCamera();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(LATITUDE != 0.0 && LONGITUDE != 0.0){
+                    curLoc = new LatLng(LATITUDE, LONGITUDE);
+                }
+                //remove this later
+                else{
+                    curLoc = new LatLng(33.983076, -84.562506);
+                }
+                if(currLocMarker != null){
+                    currLocMarker.remove();
+                }
+                currLocMarker = mMap.addMarker(new MarkerOptions().position(curLoc).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)).title("Current Location."));
+                moveCamera();
+            }
+        }, 1000);
+
         if(markers.size() !=0){
             for(int i = 0; i < markers.size();i++){
                 if(InspectionForm.descriptionString != null) {
                     if (InspectionForm.trackCheck.isChecked()) {
-                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " "
-                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " "
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " | "
+                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " | "
                                 + "Priority: " + InspectionForm.allpriorities.get(i))).showInfoWindow();
                     }
                     else if(InspectionForm.switchCheck.isChecked()){
-                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " "
-                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " "
+                        mMap.addMarker(new MarkerOptions().position(markers.get(i).getPosition()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Line Number: " + InspectionForm.alllinenumbers.get(i) + " | "
+                                + "Description of defect: " +InspectionForm.allDefectsDescriptions.get(i) + " | "
                                 + "Priority: " + InspectionForm.allpriorities.get(i))).showInfoWindow();
 
 

@@ -34,9 +34,9 @@ public class Defect implements Serializable
     public String location;
     public String description;
     public byte[] picture;
-    public int labor;
-    public int category;
-    public int code;
+    public String labor;
+    public String category;
+    public String code;
     public String codeDescription;
     public int quantity;
     public String unit;

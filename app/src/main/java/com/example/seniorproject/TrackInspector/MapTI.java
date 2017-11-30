@@ -68,7 +68,7 @@ public class MapTI extends MapActivitys {
         setCurrLoc = (Button) findViewById(R.id.setcurrentlocation);
         addDefect = (Button) findViewById(R.id.adddefect);
         toggleMarkerPlacement = (ToggleButton) findViewById(R.id.placemarkermode);
-        saveInspection = (Button) findViewById(R.id.saveinspection);
+//        saveInspection = (Button) findViewById(R.id.saveinspection);
         localDBHelper = LocalDBHelper.getInstance(this);
 
         //for map
@@ -201,17 +201,17 @@ public class MapTI extends MapActivitys {
 
             }
         });
-        saveInspection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TempDB tempDB = TempDB.getInstance(getBaseContext());
-                tempDB.addInspection(inspection);
-                Intent intent = new Intent(MapTI.this, MenuTI.class);
-                markers.clear();
-                numOfMarker = 0;
-                startActivity(intent);
-            }
-        });
+//        saveInspection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TempDB tempDB = TempDB.getInstance(getBaseContext());
+//                tempDB.addInspection(inspection);
+//                Intent intent = new Intent(MapTI.this, MenuTI.class);
+//                markers.clear();
+//                numOfMarker = 0;
+//                startActivity(intent);
+//            }
+//        });
 
     }
     private void generateReport(){

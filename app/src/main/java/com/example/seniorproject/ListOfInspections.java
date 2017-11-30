@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.Space;
@@ -17,7 +18,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.seniorproject.DB.Inspection;
 import com.example.seniorproject.DB.LocalDBHelper;
+import com.example.seniorproject.TrackInspector.HeaderData;
 
 import java.util.ArrayList;
 
@@ -75,27 +78,38 @@ public class ListOfInspections extends Fragment {
         View view = inflater.inflate(R.layout.list_of_inspections, container, false);
         TableLayout tableLayout = (TableLayout) view.findViewById(R.id.currentinspectionlistold);
         LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getContext());
+        ArrayList<Inspection> allInspections = new ArrayList<>();
+        String userid = LocalDBHelper.getDataInSharedPreference(getContext(),"username");
+        allInspections = localDBHelper.getAllInspections();
         ArrayList<String> allInspectionIDNum = new ArrayList<>();
-        ArrayList<Integer> aInspectionDates = new ArrayList<>();
-        allInspectionIDNum = localDBHelper.getAllInspectionsIDNum();
+        ArrayList<String> allInspectionIDDate = new ArrayList<>();
+        int numrows = 0;
+        for(int i = 0; i < allInspections.size();i++){
+            if(allInspections.get(i).inspectorID.equals(userid)) {
+                numrows++;
+                allInspectionIDNum.add(allInspections.get(i).inspectionNum);
+                allInspectionIDDate.add(AccountInfo.convertDate(allInspections.get(i).inspectionDate));
+            }
 
-        aInspectionDates = localDBHelper.getAllInspectionsDate();
-        int numRows = allInspectionIDNum.size()*2;
-        AccountInfo.showMessage(Integer.toString(localDBHelper.getAmountInspections()),getContext());
-        setTableRows(tableLayout, numRows, allInspectionIDNum, aInspectionDates);
+        }
+        int numRows = numrows*2;
+//        AccountInfo.showMessage(Integer.toString(localDBHelper.getAmountInspections()),getContext());
+        setTableRows(tableLayout, numRows, allInspectionIDNum, allInspectionIDDate);
 
         return view;
     }
-    private void setTableRows(TableLayout tableLayout, int numRows, ArrayList<String> inspectionIDNumbers, ArrayList<Integer> InspectionDates){
+    private void setTableRows(TableLayout tableLayout, int numRows, ArrayList<String> inspectionIDNumbers, ArrayList<String> InspectionDates){
         tableLayout.removeAllViews();
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
+        final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
+        int count = 0;
         for(int i = 0; i< numRows;i++){
             //if even add space
             if(i==0 || i%2 == 0){
                 Space space = new Space(getContext());
                 space.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 30));
                 tableLayout.addView(space);
+                count++;
                 continue;
             }
             TableRow tableRow = new TableRow(getContext());
@@ -106,11 +120,11 @@ public class ListOfInspections extends Fragment {
             for (int j = 0; j < 2; j++) {
                 TextView textView = new TextView(getContext());
                 if (j == 0) {
-                    textView.setText(inspectionIDNumbers.get(i-1));
+                    textView.setText(inspectionIDNumbers.get(i-count));
                     textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
 
                 } else if (j == 1) {
-                    textView.setText(InspectionDates.get(i-1));
+                    textView.setText(InspectionDates.get(i-count));
                     textView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f));
                 }
                 textView.setTextSize(20f);
@@ -124,11 +138,11 @@ public class ListOfInspections extends Fragment {
             Button deleteButton = new Button(getContext());
             deleteButton.setText("DELETE");
             deleteButton.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 0.5f));
-            final String currinspectionIDNum = inspectionIDNumbers.get(i-1);
+            final String currinspectionIDNum = inspectionIDNumbers.get(i-count);
             final TableLayout tableLayout1 = tableLayout;
             final int numRows1 = numRows;
             final ArrayList<String> inspectionIDNumbers1 = inspectionIDNumbers;
-            final ArrayList<Integer> inspectionIDDates1 = InspectionDates;
+            final ArrayList<String> inspectionIDDates1 = InspectionDates;
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,15 +151,22 @@ public class ListOfInspections extends Fragment {
                     setTableRows(tableLayout1, numRows1,inspectionIDNumbers1, inspectionIDDates1);
                 }
             });
-            tableRow.addView(deleteButton);
+           // tableRow.addView(deleteButton);
             final TableRow currTableRow = tableRow;
             tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currTableRow.setBackground(clickDrawable);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            currTableRow.setBackground(drawable);
+                        }
+                    }, 1000);
                     LocalDBHelper tempDB = LocalDBHelper.getInstance(getContext());
-                    Intent intent = new Intent(getActivity(), ViewInspection.class);
-                    intent.putExtra("inspection", tempDB.getInspection(currinspectionIDNum));
+                    Intent intent = new Intent(getActivity(), ViewHeader.class);
+                    LocalDBHelper.storeDataInSharedPreference(getContext(),"inspectionID", currinspectionIDNum);
                     startActivity(intent);
                 }
             });

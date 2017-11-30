@@ -97,7 +97,7 @@ public class ListTrackInspectors extends Fragment {
     }
     private void setTableRows(TableLayout tableLayout,  int numRows, ArrayList<String> alltrackinspecids, ArrayList<String> alltrackinspecNames){
         tableLayout.removeAllViews();
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
+        final Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborder, null);
         final Drawable clickDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.tablerowborderclick, null);
         int count = 0;
         for(int i = 0; i< numRows;i++){

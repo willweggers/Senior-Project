@@ -117,13 +117,7 @@ public class MainActivityLogin extends AppCompatActivity {
                         startActivity(intent);
                         AccountFields accountFields= localDB.getAccountByUser(currentUsername);
                         TempDB tempDB = TempDB.getInstance(this);
-//                        if(tempDB.isUserTableEmpty()){
-//                            tempDB.addAccount(accountFields);
-//                        }
-//                        else{
-//                            tempDB.deleteAllEntriesInAccountTable();
-//                            tempDB.addAccount(accountFields);
-//                        }
+
                         enterUserName.setText(null);
                         enterPass.setText(null);
                         break;
@@ -149,20 +143,49 @@ public class MainActivityLogin extends AppCompatActivity {
     private void tempAddRowsMasterFiles(){
         if(localDB.getAllStateFiles().size() == 0){
             StateFile stateFile = new StateFile();
-            stateFile.theID = "id1";
-            stateFile.thedescription = "descp";
-            stateFile.theOtherTaxPerc = 1;
-            stateFile.theOtherTaxOn = "okokok";
-            stateFile.theLaborTax = "each";
+            stateFile.theID = "AK";
+            stateFile.thedescription = "Alaska";
+            stateFile.theOtherTaxPerc = 0;
+            stateFile.theOtherTaxOn = "ALL";
+            stateFile.theLaborTax = "No";
+            localDB.addStateFiles(stateFile);
+            stateFile = new StateFile();
+            stateFile.theID = "HI";
+            stateFile.thedescription = "Hawaii";
+            stateFile.theOtherTaxPerc = 0;
+            stateFile.theOtherTaxOn = "ALL";
+            stateFile.theLaborTax = "Yes";
+            localDB.addStateFiles(stateFile);
+            stateFile = new StateFile();
+            stateFile.theID = "MS";
+            stateFile.thedescription = "Mississippi";
+            stateFile.theOtherTaxPerc = 3;
+            stateFile.theOtherTaxOn = "ALL";
+            stateFile.theLaborTax = "No";
             localDB.addStateFiles(stateFile);
 
         }
         if(localDB.getAllPriorityFiles().size() == 0){
             PriorityFile stateFile = new PriorityFile();
             stateFile.theID = 1;
-            stateFile.thedescription = "high";
+            stateFile.thedescription = "Emergency Condition - Replace Immediately";
             localDB.addPriorityFiles(stateFile);
-
+            stateFile = new PriorityFile();
+            stateFile.theID = 2;
+            stateFile.thedescription = "High Priority - Repair in 30 days";
+            localDB.addPriorityFiles(stateFile);
+            stateFile = new PriorityFile();
+            stateFile.theID = 3;
+            stateFile.thedescription = "Medium Priority - Repair in 90 days";
+            localDB.addPriorityFiles(stateFile);
+            stateFile = new PriorityFile();
+            stateFile.theID = 4;
+            stateFile.thedescription = "Low Priority - Repair in 180 days";
+            localDB.addPriorityFiles(stateFile);
+            stateFile = new PriorityFile();
+            stateFile.theID = 5;
+            stateFile.thedescription = "Very Low Priority - Budget for Next Year Maintenance";
+            localDB.addPriorityFiles(stateFile);
         }
         if(localDB.getAllMobilizationFiles().size() == 0){
             MobilizationFile stateFile = new MobilizationFile();
@@ -182,97 +205,177 @@ public class MainActivityLogin extends AppCompatActivity {
         }
         if(localDB.getAllLaborFiles().size() == 0){
             LaborInstallFile stateFile = new LaborInstallFile();
-            stateFile.theID = "id1";
-            stateFile.thedescription = "descp";
-            stateFile.theCrewRate = 1;
-            stateFile.thePerDiem = 11;
+            stateFile.theID = "CR-TC-OT-LO";
+            stateFile.thedescription = "Track Crew, Overtime, Local";
+            stateFile.theCrewRate = 3700;
+            stateFile.thePerDiem = 0;
             localDB.addLaborFiles(stateFile);
-
+            stateFile = new LaborInstallFile();
+            stateFile.theID = "CR-WL-OT-TV";
+            stateFile.thedescription = "Welding Crew, Overtime, Travel";
+            stateFile.theCrewRate = 1000;
+            stateFile.thePerDiem = 150;
+            localDB.addLaborFiles(stateFile);
         }
         if(localDB.getAllCrossingsFiles().size()==0){
             CrossingsFile crossingsFile = new CrossingsFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12121;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
-            crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theID = "COMPOSITE";
+            crossingsFile.thedescription = "Crossing-Composite";
+            crossingsFile.theBillingRate = 155;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 60;
+            crossingsFile.theUnit = "TF";
+            crossingsFile.theUnitCost = 135;
+            localDB.addCrossingFiles(crossingsFile);
+            crossingsFile = new CrossingsFile();
+            crossingsFile.theID = "PVCPIPE";
+            crossingsFile.thedescription = "PVC-Pipe";
+            crossingsFile.theBillingRate = 11;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 1000;
+            crossingsFile.theUnit = "TF";
+            crossingsFile.theUnitCost = 10;
             localDB.addCrossingFiles(crossingsFile);
         }
         if(localDB.getAllCrosstiesFiles().size()==0){
             CrosstiesFile crossingsFile = new CrosstiesFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12100021;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
+            crossingsFile.theID = "CT6-G3";
+            crossingsFile.thedescription = "6\" x 8\"Grade 3 Crossties";
+            crossingsFile.theBillingRate = 51;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 80;
             crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theUnitCost = 45;
+            localDB.addCrosstiesFiles(crossingsFile);
+             crossingsFile = new CrosstiesFile();
+            crossingsFile.theID = "CT7-RX";
+            crossingsFile.thedescription = "7\" x 9\"Relay Crosstie";
+            crossingsFile.theBillingRate = 35;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 60;
+            crossingsFile.theUnit = "LF";
+            crossingsFile.theUnitCost = 30;
             localDB.addCrosstiesFiles(crossingsFile);
         } if(localDB.getAllIssuesFiles().size()==0){
             IssueFile crossingsFile = new IssueFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12111121;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
-            crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theID = "CRIBMUD";
+            crossingsFile.thedescription = "Crib out Mud";
+            crossingsFile.theBillingRate = 0;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 200;
+            crossingsFile.theUnit = "TF";
+            crossingsFile.theUnitCost = 0;
+            localDB.addIssueFiles(crossingsFile);
+             crossingsFile = new IssueFile();
+            crossingsFile.theID = "REGULATE";
+            crossingsFile.thedescription = "Regulate Track";
+            crossingsFile.theBillingRate = 0;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 1000;
+            crossingsFile.theUnit = "TF";
+            crossingsFile.theUnitCost = 0;
             localDB.addIssueFiles(crossingsFile);
         } if(localDB.getAllOTMFiles().size()==0){
             OTMFile crossingsFile = new OTMFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12222121;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
+            crossingsFile.theID = "AN-05-N";
+            crossingsFile.thedescription = "Rail Anchors - 5\" Base - New";
+            crossingsFile.theBillingRate = 2;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 1000;
             crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theUnitCost = 2;
+            localDB.addOTMFiles(crossingsFile);
+            crossingsFile = new OTMFile();
+            crossingsFile.theID = "TS-200";
+            crossingsFile.thedescription = "Track Spikes - 200 lb Keg";
+            crossingsFile.theBillingRate = 150;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 1000;
+            crossingsFile.theUnit = "Keg";
+            crossingsFile.theUnitCost = 130;
             localDB.addOTMFiles(crossingsFile);
 
         } if(localDB.getAllOtherFiles().size()==0){
             OtherFile crossingsFile = new OtherFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12333121;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
-            crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theID = "ASPHALT";
+            crossingsFile.thedescription = "Asphalt Work";
+            crossingsFile.theBillingRate = 115;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 80;
+            crossingsFile.theUnit = "Ton";
+            crossingsFile.theUnitCost = 100;
+            localDB.addOtherFiles(crossingsFile);
+            crossingsFile = new OtherFile();
+            crossingsFile.theID = "WALBAL";
+            crossingsFile.thedescription = "Walkway Ballst";
+            crossingsFile.theBillingRate = 86;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 500;
+            crossingsFile.theUnit = "Ton";
+            crossingsFile.theUnitCost = 75;
             localDB.addOtherFiles(crossingsFile);
 
         } if(localDB.getAllRailFiles().size()==0){
             RailFile crossingsFile = new RailFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12144421;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
-            crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theID = "RA-60 AS-N";
+            crossingsFile.thedescription = "60 AS ASCE Rail - New";
+            crossingsFile.theBillingRate = 359;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 8;
+            crossingsFile.theUnit = "EACH";
+            crossingsFile.theUnitCost = 312;
+            localDB.addRailFiles(crossingsFile);
+             crossingsFile = new RailFile();
+            crossingsFile.theID = "RA-155 PS-X";
+            crossingsFile.thedescription = "155 PS PS Rail - Relay";
+            crossingsFile.theBillingRate = 811;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 8;
+            crossingsFile.theUnit = "EACH";
+            crossingsFile.theUnitCost = 705;
             localDB.addRailFiles(crossingsFile);
 
         } if(localDB.getAllSwitchTiesFiles().size()==0){
+
             SwitchTiesFile crossingsFile = new SwitchTiesFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12155521;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
+            crossingsFile.theID = "ST09-N";
+            crossingsFile.thedescription = "7\" x 9\" x 9' Switch Tie - New";
+            crossingsFile.theBillingRate = 81;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 20;
             crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theUnitCost = 71;
             localDB.addSwitchFtiles(crossingsFile);
+            crossingsFile = new SwitchTiesFile();
+            crossingsFile.theID = "ST17-X";
+            crossingsFile.thedescription = "7\" x 9\" x 17' Switch Tie - Relay";
+            crossingsFile.theBillingRate = 92;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 10;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 80;
+            localDB.addSwitchFtiles(crossingsFile);
+
+
 
         } if(localDB.getAllTurnoutFiles().size()==0){
             TurnoutsFile crossingsFile = new TurnoutsFile();
-            crossingsFile.theID = "id";
-            crossingsFile.thedescription = "askdjhadsh";
-            crossingsFile.theBillingRate = 12166621;
-            crossingsFile.theMarkup = 1298;
-            crossingsFile.theProduction = 12;
+            crossingsFile.theID = "BR-AD-N";
+            crossingsFile.thedescription = "Brace, Adjustable, New";
+            crossingsFile.theBillingRate = 35;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 500;
             crossingsFile.theUnit = "Each";
-            crossingsFile.theUnitCost = 1292198;
+            crossingsFile.theUnitCost = 30;
+            localDB.addTuroutFiles(crossingsFile);
+             crossingsFile = new TurnoutsFile();
+            crossingsFile.theID = "SS-SH-N";
+            crossingsFile.thedescription = "Switch Stand, Shims";
+            crossingsFile.theBillingRate = 3;
+            crossingsFile.theMarkup = 15;
+            crossingsFile.theProduction = 200;
+            crossingsFile.theUnit = "Each";
+            crossingsFile.theUnitCost = 3;
             localDB.addTuroutFiles(crossingsFile);
 
         }

@@ -27,10 +27,10 @@ public class PageAdapterInspections extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch(position)
         {
+//            case 0:
+//                ListInspectionsCurrent listInspectionsCurrent = new ListInspectionsCurrent();
+//                return listInspectionsCurrent;
             case 0:
-                ListInspectionsCurrent listInspectionsCurrent = new ListInspectionsCurrent();
-                return listInspectionsCurrent;
-            case 1:
                 ListOfInspections oldInspections = new ListOfInspections();
                 return oldInspections;
             default:

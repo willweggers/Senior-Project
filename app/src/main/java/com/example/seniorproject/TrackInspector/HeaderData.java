@@ -79,6 +79,8 @@ public class HeaderData extends AppCompatActivity {
         }
         String inspectionNumber = accountFields.initials.concat(getDate()).concat("-").concat(Integer.toString(j));
         inspectionNumber = checkInspectionNumUnique(inspectionNumber);
+        inspection.inspectionNum = inspectionNumber;
+        LocalDBHelper.storeDataInSharedPreference(getApplicationContext(),"inspectionID", inspectionNumber);
 
         setTitle("  Inspection ID Number: " + inspectionNumber);
         setButtons();
@@ -119,7 +121,7 @@ public class HeaderData extends AppCompatActivity {
         inspection.state = locationstate.getText().toString().trim();
         inspection.contact = companyname.getText().toString().trim();
         inspection.inspectionDate= getPreciseDate();
-        inspection.inspectorID = getIntent().getStringExtra("Username");
+        inspection.inspectorID = LocalDBHelper.getDataInSharedPreference(getApplicationContext(),"username");
         inspection.distance = Double.parseDouble(miles.getText().toString().trim());
         inspection.trips = Integer.parseInt(trips.getText().toString().trim());
         inspection.surfacingTrips = Integer.parseInt(surftrips.getText().toString().trim());
@@ -143,11 +145,15 @@ public class HeaderData extends AppCompatActivity {
     private String checkInspectionNumUnique(String inspectionID){
         String newinspectionID = inspectionID;
         LocalDBHelper localDBHelper = LocalDBHelper.getInstance(getApplicationContext());
-       ArrayList<String> arrayList = localDBHelper.getAllInspectionsIDNum();
-        for (int i = 0; i< arrayList.size();i++){
-            if(arrayList.get(i).equals(inspectionID)){
+       ArrayList<Inspection> arrayList = localDBHelper.getAllInspections();
+        ArrayList<String> allids = new ArrayList<>();
+        for(int i = 0; i < arrayList.size();i++){
+            allids.add(arrayList.get(i).inspectionNum);
+        }
+        for (int i = 0; i< allids.size();i++){
+            if(allids.get(i).equals(inspectionID)){
                 j++;
-                newinspectionID =  removeAfterDashChar(inspectionID).concat(Integer.toString(j));
+                newinspectionID =  removeAfterDashChar(inspectionID).concat(" - ").concat(Integer.toString(j));
                 checkInspectionNumUnique(newinspectionID);
             }
         }
